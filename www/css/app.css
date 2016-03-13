@@ -1,0 +1,139 @@
+html {
+	height: 100%;
+}
+body {
+	background-image: url("../images/page-light.png");
+	font-family: 'Ubuntu';
+	height: 100%;
+	position: relative;
+}
+
+.header {
+	float:left;
+	position: relative;
+	background-image: url("../images/page-light.png");
+	background-color: rgba(198, 18, 125, 1);
+	background-blend-mode: multiply;
+	width: 100%;
+	color: white;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.header .menu {
+	font-weight: 300;
+	text-decoration: none;
+	padding: 0 0 0 0;
+}
+
+.header .menu li {
+	display: inline;
+	margin-right: 8px;
+}
+
+.header .menu li a {
+	color: white;
+}
+
+.header .channels {
+	float: left;
+	position: absolute;
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
+	bottom: 0;
+	text-decoration: none;
+	list-style-type: none;
+  display: block;
+  box-sizing: border-box;
+}
+
+.channels .cleft, .channels .cright {
+	background-color: #3498DB;
+	padding: 2px 10px;
+	margin-right: 5px;
+}
+
+.channels .cadd {
+	background-color: #F1C40F;
+	padding: 2px 10px;
+	margin-right: 5px;
+}
+
+.channels .closetab {
+	position: relative;
+	left: -4px;
+	background-color: #F36594;
+	padding: 2px 10px;
+	margin-right: 5px;
+}
+
+.channels .closetab a {
+	font-weight: 400;
+	font-style: italic;
+}
+
+.channels li {
+  background-color: #F04DAE;
+  display: inline-block;
+  position: relative;
+  padding: 2px 42px;
+  transform: skew(-15deg);
+}
+
+.channels li a {
+	color: white;
+	font-weight: 700;
+	transform: skew(15deg);
+  display: inline-block;
+}
+
+
+.header .userInfo {
+	float: right;
+}
+
+.userInfo .info {
+	display: inline;
+	vertical-align: middle;
+	text-align: right;
+	float: left;
+	padding-right: 8px;
+	padding-bottom: 6px;
+}
+
+.userInfo .avatar{
+	float: right;
+	width: 64px;
+	border-radius: 5px;
+	box-shadow: 0px 0px 8px 0px black;
+}
+
+.container {
+	width: 100%;
+	height: 100%;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+.content {
+	width: 100%;
+	height: 100%;
+}
+
+.chat {
+	width: 100%;
+	height: 100%;
+	background-color: purple;
+}
+
+.chat .leftpart {
+	float: left;
+	
+}
+
+.chat .rightpart {
+	float: right;
+	width: 200px;
+}
