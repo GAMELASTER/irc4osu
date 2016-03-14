@@ -6,6 +6,7 @@ body {
 	font-family: 'Ubuntu';
 	height: 100%;
 	position: relative;
+	overflow: hidden;
 }
 
 .header {
@@ -123,17 +124,29 @@ body {
 }
 
 .chat {
+	display: table;
 	width: 100%;
 	height: 100%;
-	background-color: purple;
+	padding: 12px 20px 116px 20px;
 }
 
 .chat .leftpart {
-	float: left;
-	
+	width: 100%;
+	margin: 0 0 0 0;
+	display: table-cell;
+	padding: 0 0 0 0;
+}
+
+.leftpart .chatArea {
+	height: 100%;
+}
+
+.rightpart .thingsContainer {
+	height: 100%;
 }
 
 .chat .rightpart {
-	float: right;
 	width: 200px;
+	height: 100%;
+	display: table-cell;
 }
