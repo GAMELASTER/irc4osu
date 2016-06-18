@@ -89,7 +89,7 @@ ipcMain.on("closeChannel", (event, arg) => {
 
 function createMainWindow () {
 
-  mainWindow = new BrowserWindow({width: 800, height: 600, useContentSize: true, titleBarStyle: "hidden", autoHideMenuBar: true, icon: "./www/images/logo.ico"});
+  mainWindow = new BrowserWindow({width: 800, height: 600, useContentSize: true, autoHideMenuBar: true, icon: "./www/images/logo.ico"});
   mainWindow.loadURL('file://' + __dirname + '/www/index.html');
   mainWindow.webContents.openDevTools({detach: true});
 
@@ -100,7 +100,7 @@ function createMainWindow () {
 
 function createLoginWindow()
 {
-  loginWindow = new BrowserWindow({width: 350, height: 275, useContentSize: true, titleBarStyle: "hidden", autoHideMenuBar: true, icon: "./www/images/logo.ico"});
+  loginWindow = new BrowserWindow({width: 350, height: 275, useContentSize: true, autoHideMenuBar: true, icon: "./www/images/logo.ico"});
   loginWindow.loadURL('file://' + __dirname + '/www/login.html');
 }
 
