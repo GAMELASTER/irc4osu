@@ -1,0 +1,32 @@
+{
+  "name": "irc4osu",
+  "version": "1.0.0",
+  "description": "A IRC client for osu!",
+  "main": "app.js",
+  "dependencies": {
+    "electron-json-storage": "^2.0.0",
+    "irc": "^0.5.0",
+    "request": "^2.72.0"
+  },
+  "devDependencies": {
+    "electron-packager": "^7.0.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "electron-packager ./ irc4osu --platform=win32 --arch=x64 --version=1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GAMELASTER/OsuIRC.git"
+  },
+  "keywords": [
+    "IRC",
+    "osu"
+  ],
+  "author": "GAMELASTER & Noobish",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/GAMELASTER/OsuIRC/issues"
+  },
+  "homepage": "https://github.com/GAMELASTER/OsuIRC#readme"
+}

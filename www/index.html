@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>irc4osu!</title>
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+		<link href='https://fonts.googleapis.com/css?family=Ubuntu:400,400italic,300,700' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="css/app.css">
+		<link rel="stylesheet" href="css/split-pane.css">
+  </head>
+  <body>
+    <div id="statussign" class="statussign" style="display:none;">
+      <img src="">
+    </div>
+  	<div class="joinchannelcontainer" style="display: none;" id="channelDialog">
+  		<div class="joinchannelpanel">
+  			<div class="header">
+  				Select a channel
+  			</div>
+  			<ul class="channels" id="channelsList">
+  			</ul>
+  		</div>
+  	</div>
+		<div class="container">
+			<div class="header" id="header">
+				<div id="userInfoArea" class="userInfo">
+					<div class="info">
+						Logged in as<br>
+						<span id="nickname">...</a>
+					</div>
+					<img id="avatar" class="avatar" src="./images/loading.gif"/>
+				</div>
+				<ul class="menu">
+					<li><a href="">Settings</a></li>
+					<li><a href="">About</a></li>
+					<li><a href="">Logout</a></li>
+				</ul>
+				<div class="clearfix"></div>
+				<ul class="channels" id="channels">
+
+				</ul>
+			</div>
+			<div class="chat">
+				<div class="split-pane fixed-bottom">
+					<div class="split-pane-component" id="top-component">
+						<div class="split-pane fixed-right">
+		          <div class="split-pane-component" id="left-component">
+		            <div class="chatArea">
+		            	<div class="chatWrapper" id="chatArea">
+
+		            	</div>
+		            </div>
+		          </div>
+		          <div class="split-pane-divider" id="horizontal-divider"></div>
+		          <div class="split-pane-component" id="right-component">
+		            
+		          </div>
+		        </div>
+					</div>
+					<div class="split-pane-divider" id="vertical-divider"></div>
+					<div class="split-pane-component" id="bottom-component" style="overflow:hidden;">
+						<div class="textArea">
+							<input type="text" class="textInput" id="textInput" placeholder="Click here to type message...">
+						</div>
+						<button onClick="sendMessage();" class="sendButton btn-osu btn-osu-pink">Send message</button>
+					</div>
+	      </div>
+			</div>
+		</div>
+		<script>window.$ = window.jQuery = require('./js/jquery.js');</script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+		<script src="./js/split-pane.js"></script>
+		<script>
+			$(function() {
+        $('div.split-pane').splitPane();
+      });
+		</script>
+		<script src="./js/chatmanagment.js"></script>
+		<script src="./js/client.js"></script>
+  </body>
+</html>

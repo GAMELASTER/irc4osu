@@ -1,0 +1,440 @@
+html {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+	height: 100%;
+}
+body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+	background-image: url("../images/page-light.png");
+	font-family: 'Ubuntu';
+	height: 100%;
+	position: relative;
+	overflow: hidden;
+}
+
+.header {
+	position: relative;
+	background-image: url("../images/page-light.png");
+	background-color: rgba(198, 18, 125, 1);
+	background-blend-mode: multiply;
+	width: 100%;
+	color: white;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	padding-left: 20px;
+	padding-right: 20px;
+  -webkit-box-shadow: 0px 1px 12px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 1px 12px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 1px 12px 0px rgba(0,0,0,0.75);
+}
+
+#nickname {
+	font-weight: 800;
+}
+
+.header .menu {
+	font-weight: 300;
+	text-decoration: none;
+	padding: 0 0 0 0;
+}
+
+.header .menu li {
+	display: inline;
+	margin-right: 8px;
+  color: white;
+}
+
+.header .menu li a {
+	color: white;
+}
+
+.header .channels {
+	float: left;
+	position: absolute;
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
+	bottom: 0;
+	text-decoration: none;
+	list-style-type: none;
+  display: block;
+  box-sizing: border-box;
+}
+
+.header .channels .cleft, .header  .channels .cright {
+	background-color: #3498DB;
+	padding: 2px 10px;
+	margin-right: 2px;
+  width: auto;
+}
+
+.header .channels .cadd {
+	background-color: #F1C40F;
+	padding: 2px 10px;
+	margin-right: 2px;
+  width: auto;
+}
+
+.header .channels .closetab {
+	position: relative;
+	left: -4px;
+	background-color: #F36594;
+	padding: 2px 10px;
+	margin-right: 2px;
+  width: auto;
+}
+
+.header .channels .closetab a {
+	font-weight: 400;
+	font-style: italic;
+}
+
+.header .channels li {
+  background-color: #F04DAE;
+  display: inline-block;
+  position: relative;
+  padding: 2px 0px;
+  transform: skew(-15deg);
+  cursor: pointer;
+  text-align: center;
+  width: 100px;
+}
+
+.header .channels .selected {
+  font-weight: bold;
+}
+
+.header .channels li a {
+  display: block;
+	color: white;
+	font-weight: 700;
+	transform: skew(15deg);
+  /*display: inline-block;*/
+
+}
+
+
+.header .userInfo {
+	float: right;
+}
+
+.userInfo .info {
+	display: inline;
+	vertical-align: middle;
+	text-align: right;
+	float: left;
+	padding-right: 8px;
+	padding-top: 11px;
+}
+
+.userInfo .avatar{
+	float: right;
+	width: 64px;
+	border-radius: 5px;
+	box-shadow: 0px 0px 8px 0px black;
+}
+
+.container {
+	width: 100%;
+	height: 100%;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+.content {
+	width: 100%;
+	height: 100%;
+}
+
+.chat {
+	width: 100%;
+	height: 100%;
+	padding: 12px 12px 87px 12px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-button {
+    width: 8px;
+    height:5px;
+}
+::-webkit-scrollbar-track {
+    /*background:#eee;
+    border: thin solid lightgray;
+    box-shadow: 0px 0px 3px #dfdfdf inset;
+    border-radius:10px;*/
+    background: rgba(0,0,0,0.0);
+}
+::-webkit-scrollbar-thumb {
+    background:#999;
+    /*border: thin solid gray;*/
+    border-radius:10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background:#7d7d7d;
+}    
+
+.chat .chatArea {
+	background-color: white;
+	border-radius: 6px;
+	border: #F8F8F8 solid 1px;
+	padding: 10px 10px 10px 10px;
+	box-shadow: inset 16px 16px 12px -14px rgba(229,229,229,1);
+	height: 100%;
+  cursor: text;
+}
+
+.chatWrapper {
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	word-wrap: break-word;
+}
+
+.chat .textArea {
+	padding-right: 162px;
+	position: relative;
+}
+
+.chat .textInput {
+	outline: none;
+	float: left;
+	display: inline-block;
+	width: 100%;
+	/*margin-top: 8px;*/
+	height: 37px;
+	/*padding: 0 8px;*/
+	border: #F8F8F8 solid 1px;
+	border-radius: 6px;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
+  vertical-align:middle;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.sendButton {
+	margin-left: 12px;
+	float: right;
+	display: inline-block;
+	width: 150px;
+	height: 26px;
+}
+
+#left-component {
+  right: 200px; 
+}
+#horizontal-divider {
+  right: 200px; 
+  width: 5px;
+}
+#right-component {
+	margin-left: 5px; 
+	width: 200px;
+}
+
+#top-component {
+	bottom: 37px;
+	margin-bottom: 5px;
+	min-height: 5em;
+}
+
+#vertical-divider {
+	bottom: 37px;
+	height: 5px;
+}
+#bottom-component {
+	height: 37px;
+	min-height: 37px;
+}
+
+/*thx new.ppy.sh*/
+
+.btn-osu {
+	outline: none;
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 5px 10px;
+  font-size: 16px;
+  line-height: 1.25;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none
+}
+
+.btn-osu,.btn-osu.focus,.btn-osu:focus,.btn-osu:hover {
+  color: #fff
+}
+
+.btn-osu {
+	background-image: url("../images/button.svg");
+	background-size: 200px;
+	background-position: 50% 50%;
+}
+
+.btn-osu-default {
+  background-color: #4ad;
+  box-shadow: 0 10px #29b,0 7px 10px rgba(0,0,0,.8);
+  margin-bottom: 10px;
+  transition: all .1s ease-in-out
+}
+
+.btn-osu-default.disabled,.btn-osu-default[disabled] {
+  background-color: #9ad1ed;
+  box-shadow: 0 10px #8cd5ea,0 7px 10px rgba(0,0,0,.6)
+}
+
+.btn-osu-default:focus {
+  background-color: #2ea0d9;
+  box-shadow: 0 10px #1e87a5,0 7px 10px rgba(0,0,0,.8)
+}
+
+.btn-osu-default:hover {
+  background-color: #2592c9;
+  box-shadow: 0 10px #1a7690,0 7px 10px rgba(0,0,0,.8)
+}
+
+.btn-osu-default:active {
+  transform: translateY(5px);
+  background-color: #2592c9;
+  box-shadow: 0 5px #1a7690,0 5px 5px rgba(0,0,0,.8)
+}
+
+.btn-osu-pink {
+  background-color: #e31591;
+  box-shadow: 0 10px #bc1177,0 7px 10px rgba(0,0,0,.8);
+  margin-bottom: 10px;
+  transition: all .1s ease-in-out
+}
+
+.btn-osu-pink.disabled,.btn-osu-pink[disabled] {
+  background-color: #9ad1ed;
+  box-shadow: 0 10px #8cd5ea,0 7px 10px rgba(0,0,0,.6)
+}
+
+.btn-osu-pink:focus {
+  background-color: #e31591;
+  box-shadow: 0 10px #bc1177,0 7px 10px rgba(0,0,0,.8)
+}
+
+.btn-osu-pink:hover {
+  background-color: #d71389;
+  box-shadow: 0 10px #ac106d,0 7px 10px rgba(0,0,0,.8)
+}
+
+.btn-osu-pink:active {
+  transform: translateY(5px);
+  background-color: #d71389;
+  box-shadow: 0 5px #ac106d,0 5px 5px rgba(0,0,0,.8)
+}
+
+.infomessage {
+	color: silver;
+	font-weight: bold;
+}
+
+.errormessage {
+	color: red;
+	font-weight: bold;
+}
+.successmessage {
+	color: gold;
+	font-weight: bold;
+}
+
+.chatprefix {
+	color: silver;
+}
+
+.chattext {
+	color: black;
+}
+
+.joinchannelcontainer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 10000;
+}
+
+.joinchannelpanel {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  margin: auto;
+  top: 0; bottom: 0; left: 0; right: 0;
+  background-image: url("../images/page-light.png");
+}
+
+.joinchannelpanel .header {
+  text-align: center;
+  height: 50px;
+  font-size: 18px;
+  line-height: 38px;
+}
+
+.joinchannelpanel ul {
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  margin: auto;
+  top: 50px; bottom: 0; left: 0; right: 0;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 2px 2px white;
+  text-decoration: none;
+  list-style-type: none;
+  padding: 0;
+  overflow-y: scroll;
+}
+
+.joinchannelpanel ul li {
+  padding: 10px 10px;
+  border-bottom: 1px solid silver;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.joinchannelpanel ul li:hover {
+  background-color: #ce1383;
+  color: white;
+}
+
+.joinchannelpanel ul li a {
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.joinchannelpanel ul li a b {
+  color: rgb(191, 17, 121);
+}
+
+.joinchannelpanel ul li:hover a b {
+  color: inherit;
+}
+
+.statussign {
+  z-index: 9999999;
+  padding: 8px;
+  border-radius: 5px;
+  position: absolute;
+}

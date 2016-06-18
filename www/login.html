@@ -1,0 +1,41 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>irc4osu! login</title>
+    <link href="styles.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <div id="wrapper">
+
+    <header>irc4osu! Login</header>
+    <form>
+      <input id="username" type="text" placeholder="Username" value="">
+      <input id="password" type="password" placeholder="••••••••" value="">
+
+      <div class="btn">
+        <input type="button" onClick="login();" placeholder="Log in" value="Log in">
+        <div class="btn_shadow"></div>
+      </div>
+      <p>Don’t have an IRC password?<br/>
+      <span class="clickhere"><a href="https://osu.ppy.sh/p/irc">CLICK HERE</a></span> to get your IRC password.</p>
+    </form>
+    </div>
+    <script>window.$ = window.jQuery = require('./js/jquery.js');</script>
+    <script>
+      var ipcRenderer = require('electron').ipcRenderer;
+      function login()
+      {
+        ipcRenderer.send("login", { user: $("#username").val(), password: $("#password").val()});
+      }
+
+      ipcRenderer.on("onLogin", (event, arg) => {
+        if(arg.err)
+        {
+          alert(arg.err);
+        }
+      });
+    </script>
+  </body>
+</html>
