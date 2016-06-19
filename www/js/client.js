@@ -29,9 +29,8 @@ client.addListener('error', function(message) {
   console.log('error: ', message);
 });
 
-client.addListener('action', function (from, to, text, message) {
-  userAction(from, to, text, message);
-});
+
+
 
 client.addListener('message', function (from, to, message) {
   userMessage(from, to, message);
@@ -81,6 +80,10 @@ function sendMessage() {
 
 ipcRenderer.on("onMessage", (event, arg) => {
   userMessage(arg.from, arg.to, arg.message);
+});
+
+ipcRenderer.on('onAction', function (event, arg) {
+  userAction(arg.from, arg.to, arg.text, arg.message);
 });
 
 ipcRenderer.on("onJoinedChannel", (event, arg) => {

@@ -97,22 +97,41 @@ function infoMessage(to, type, message)
 
 function updateChatArea()
 {
-  if(autoScroll) $("#chatArea").scrollTop($("#chatArea")[0].scrollHeight);
   $("#chatArea").html(chatAreas[selectedChannel]);
+  if(autoScroll) $("#chatArea").scrollTop($("#chatArea")[0].scrollHeight);
 }
 
 function userMessage(from, to, message)
 {
   var date = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-  chatAreas[to] += "<span class='chatprefix'>["+date+"]</span> <span onmouseover='onSignMouseOver(event,\""+from+"\");' onmouseout='onSignMouseOut(\""+from+"\");' style='color: gold; font-weight:bold;'>"+from+"</span>: <span class='chattext'>"+message+"</span><br>";
+  var formattedMessage = formatMessage(message);
+  chatAreas[to] += "<span class='chatprefix'>["+date+"]</span> <a href='javascript:openProfile(\""+from+"\")' onmouseover='onSignMouseOver(event,\""+from+"\");' onmouseout='onSignMouseOut(\""+from+"\");' style='color: gold; font-weight:bold;'>"+from+"</a>: <span class='chattext'>"+formattedMessage+"</span><br>";
   updateChatArea();
 }
 
 function userAction(from, to, text, message)
 {
   var date = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-  chatAreas[to] += "<span class='chatprefix'>["+date+"]</span> <span onmouseover='onSignMouseOver(event,\""+from+"\");' onmouseout='onSignMouseOut(\""+from+"\");' style='color: gold; font-weight:bold;'>"+from+"</span> <span class='chattext'>"+text+"</span><br>";
+  var formattedMessage = formatMessage(text);
+  chatAreas[to] += "<span class='chatprefix'>["+date+"]</span> <a href='javascript:openProfile(\""+from+"\")' onmouseover='onSignMouseOver(event,\""+from+"\");' onmouseout='onSignMouseOut(\""+from+"\");' style='color: gold; font-weight:bold;'>"+from+"</a> <span class='chattext'>"+formattedMessage+"</span><br>";
   updateChatArea();
+}
+
+function formatMessage(message) {
+  return message.replace(/\[(http(?:.*?))\ (.*)\]/, "<a href='javascript:openLink(\"$1\")'>$2</a>")
+    .replace(/((?:http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*))/gi, "<a href='javascript:openLink(\"$1\")'>$1</a>");
+}
+
+const {shell} = require('electron');
+function openProfile(profile)
+{
+  shell.openExternal('https://osu.ppy.sh/u/' + profile);
+}
+
+function openLink(url)
+{
+  if(url.indexOf("http") == -1) url = "http://" + url;
+  shell.openExternal(url);
 }
 
 function switchChannel(channel)

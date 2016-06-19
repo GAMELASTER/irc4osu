@@ -17,7 +17,8 @@ function logIn(arg)
 {
   client = new irc.Client('irc.ppy.sh', arg.user, {
     password: arg.password,
-    autoConnect: false
+    autoConnect: false,
+    //debug: true
   });
   client.connect(0, function(message) {
     if(loginWindow != null)
@@ -35,6 +36,10 @@ function logIn(arg)
 
   client.addListener('message', function (from, to, message) {
     mainWindow.webContents.send("onMessage", { from, to, message });
+  });
+
+  client.addListener('action', function (from, to, text, message) {
+    mainWindow.webContents.send("onAction", { from, to, text, message });
   });
 
   client.addListener("error", function(message) {
@@ -68,7 +73,19 @@ ipcMain.on('login', (event, arg) => {
 });
 
 ipcMain.on("sendMessage", (event, arg) => {
-  client.say(arg.channel, arg.message);
+  if(arg.message[0] === "/")
+  {
+    var args = arg.message.split(" ");
+    switch(args[0])
+    {
+      case "/me":
+        client.action(arg.channel, arg.message.substring(4));
+        break;
+    }
+  }
+  else {
+    client.say(arg.channel, arg.message);
+  }
 });
 
 ipcMain.on("listChannels", (event, arg) => {
