@@ -1,0 +1,330 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	background-image: url("../images/bg-light.png");
+	width: 100%;
+	height: 100%;
+	font-family: exo-main;
+	display: flex;
+  flex-direction: column;
+}
+
+#header {
+	position: relative;
+	background-image: url("../images/bg-light.png");
+	background-color: rgba(198, 18, 125, 1);
+	background-blend-mode: multiply;
+	/*width: 100%;*/
+	color: white;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	padding-left: 20px;
+	padding-right: 20px;
+	box-shadow: 0px 1px 12px 0px rgba(0,0,0,0.75);
+	-webkit-user-select: none;
+}
+
+#header #top-menu {
+	font-weight: 300;
+	text-decoration: none;
+	padding: 0;
+	margin: 0;
+}
+
+#header #top-menu li {
+	display: inline;
+	margin-right: 8px;
+  color: white;
+}
+
+#header #top-menu a {
+  color: white;
+	text-decoration: none;
+}
+
+#header #top-menu a:hover {
+  color: gold;
+}
+
+@font-face {
+	font-family: exo-main;
+	src: url("../fonts/Exo2-Light.otf") format("opentype");
+}
+
+@font-face {
+	font-family: exo-main;
+	font-weight: bold;
+	src: url("../fonts/Exo2-Medium.otf") format("opentype");
+}
+
+#header #user-info {
+	float: right;
+	text-align: right;
+}
+
+#header #user-info #avatar {
+	float: right;
+	width: 64px;
+	border-radius: 5px;
+	box-shadow: 0px 0px 8px 0px black;
+}
+
+#header #user-info #name-text {
+	float: left;
+	margin-right: 6px;
+	padding-top: 11px;
+}
+
+#header #user-info #user-name {
+	font-weight: bold;
+}
+
+.clear-fix {
+	clear: both;
+}
+
+#header #tabs-container {
+	float: left;
+	position: absolute;
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
+	bottom: 0;
+	text-decoration: none;
+	list-style-type: none;
+  display: block;
+  box-sizing: border-box;
+}
+
+#tabs-container .tab {
+	display: inline-block;
+	height: 23px;
+	/*sorry for ugly workaround*/
+	/*padding: 2px 10px;
+	padding-left: 8px;*/
+	line-height: 16px;
+	width: auto;
+	transform: skew(-15deg);
+	cursor: pointer;
+}
+
+#tabs-container #tab-slider {
+	display: inline-block;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	vertical-align:top;
+	width: 500px;
+	transform: skew(-15deg);
+}
+
+.tab span {
+	color: white;
+	transform: skew(15deg);
+	display: block;
+	padding: 2px 10px;
+	white-space: nowrap;
+	overflow-x: hidden;
+	font-weight: bold;
+}
+
+.tab span.close {
+	background-color: rgb(243, 101, 148);
+	transform: skew(0deg) !important;
+	float: right;
+	height: 20px;
+	padding: 2px 7px;
+	font-weight: normal;
+	font-size: 12px;
+}
+
+.tab.default {
+	transform: skew(0deg) !important;
+	background-color: rgb(240, 77, 174);
+}
+
+.tab.navigate {
+	background-color: rgb(52, 152, 219);
+}
+
+.tab.add {
+	background-color: rgb(241, 196, 15);
+}
+
+.container {
+	padding: 6px 6px;
+	flex-grow:1;
+	display: flex;
+}
+
+.left-side {
+	flex-grow: 1;
+	display: flex;
+	flex-flow: column;
+}
+
+.right-side {
+	display: flex;
+	flex-wrap: wrap;
+	min-width: 125px;
+	width: 125px;
+}
+
+#splitter {
+	padding-left: 6px;
+	cursor: e-resize;
+}
+
+.chat-container {
+	background-color: white;
+	border-radius: 6px;
+	border: #F8F8F8 solid 1px;
+	box-shadow: inset 16px 16px 12px -14px rgba(229,229,229,1);
+  cursor: text;
+	flex: 1;
+	margin: 0 0 6px 0;
+	padding: 5px 10px 10px 10px;
+}
+
+#text-input {
+	outline: none;
+	/*margin-top: 8px;*/
+	height: 37px;
+	/*padding: 0 8px;*/
+	border: #F8F8F8 solid 1px;
+	border-radius: 6px;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
+  vertical-align:middle;
+	font-family: exo-main;
+	padding: 6px 6px;
+}
+
+.right-side .panel {
+	align-self: flex-start;
+	width: 100%;
+}
+
+.right-side .info-panel {
+	width: 100%;
+	background-color: rgb(255, 255, 255);
+	padding: 10px 0px;
+	text-align: center;
+	margin-bottom: 6px;
+	border: 1px solid rgb(242, 242, 242);
+	border-radius: 2px;
+}
+
+.info-panel .info-title {
+	font-size: 12px;
+	color: rgb(184, 184, 184);
+}
+
+.info-panel .info-text {
+	font-weight: bold;
+	font-size: 18px;
+	color: rgb(195, 18, 123);
+}
+
+.right-side button {
+	width: 100%;
+	align-self: flex-start;
+}
+
+/*thx new.ppy.sh*/
+
+.btn-osu {
+	font-family: exo-main;
+	outline: none;
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 5px 10px;
+  font-size: 16px;
+  line-height: 1.25;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none
+}
+
+.btn-osu,.btn-osu.focus,.btn-osu:focus,.btn-osu:hover {
+  color: #fff
+}
+
+.btn-osu {
+	background-image: url("../images/button.svg");
+	background-size: 200px;
+	background-position: 50% 50%;
+}
+
+.btn-osu-default {
+  background-color: #4ad;
+  box-shadow: 0 6px #29b,0 7px 10px rgba(0,0,0,.8);
+  margin-bottom: 10px;
+  transition: all .1s ease-in-out
+}
+
+.btn-osu-default.disabled,.btn-osu-default[disabled] {
+  background-color: #9ad1ed;
+  box-shadow: 0 10px #8cd5ea,0 7px 10px rgba(0,0,0,.6)
+}
+
+.btn-osu-default:focus {
+  background-color: #2ea0d9;
+  box-shadow: 0 6px #1e87a5,0 7px 6px rgba(0,0,0,.8)
+}
+
+.btn-osu-default:hover {
+  background-color: #2592c9;
+  box-shadow: 0 6px #1a7690,0 7px 6px rgba(0,0,0,.8)
+}
+
+.btn-osu-default:active {
+  transform: translateY(5px);
+  background-color: #2592c9;
+  box-shadow: 0 2px #1a7690,0 3px 5px rgba(0,0,0,.8)
+}
+
+.btn-osu-pink {
+  background-color: #e31591;
+  box-shadow: 0 5px #bc1177,0 7px 5px rgba(0,0,0,.8);
+  margin-bottom: 10px;
+  transition: all .1s ease-in-out
+}
+
+.btn-osu-pink.disabled,.btn-osu-pink[disabled] {
+  background-color: #9ad1ed;
+  box-shadow: 0 5px #8cd5ea,0 7px 5px rgba(0,0,0,.6)
+}
+
+.btn-osu-pink:focus {
+  background-color: #e31591;
+  box-shadow: 0 5px #bc1177,0 7px 5px rgba(0,0,0,.8)
+}
+
+.btn-osu-pink:hover {
+  background-color: #d71389;
+  box-shadow: 0 5px #ac106d,0 7px 5px rgba(0,0,0,.8)
+}
+
+.btn-osu-pink:active {
+  transform: translateY(5px);
+  background-color: #d71389;
+  box-shadow: 0 2px #ac106d,0 2px 2px rgba(0,0,0,.8)
+}
+
+/*and now again mine css :3 */
+#send-button {
+	align-self: flex-end;
+	margin-bottom: 5px !important;
+}

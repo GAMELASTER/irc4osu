@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>irc4osu!</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div id="header">
+      <div id="user-info">
+        <span id="name-text">Logged in as<br><span id="user-name">gamelaster</span></span>
+        <img id="avatar" src="https://a.ppy.sh/6506667_1466029352.png">
+      </div>
+      <ul id="top-menu">
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Logout</a></li>
+      </ul>
+      <div class="clear-fix"></div>
+      <div id="tabs-container">
+        <div class="tab navigate"><span>&laquo;</span></div>
+        <div id="tab-slider">
+          <div class="tab default"><span class="close">X</span><span>#osu</span></div>
+          <div class="tab default"><span class="close">X</span><span>#english</span></div>
+          <div class="tab default"><span class="close">X</span><span>Claire_Farron</span></div>
+        </div>
+        <div class="tab navigate"><span>&raquo;</span></div>
+        <div class="tab add"><span>+</span></div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="left-side">
+        <div class="chat-container">
+          cau
+        </div>
+        <input type="text" id="text-input">
+      </div>
+      <div id="splitter"></div>
+      <div class="right-side">
+        <div class="panel">
+          <div class="info-panel">
+            <div class="info-title">Online users:</div>
+            <div class="info-text">411</div>
+          </div>
+          <div class="info-panel">
+            <div class="info-title">Online time:</div>
+            <div class="info-text">00:00:00</div>
+          </div>
+          <button class="btn-osu btn-osu-default">View users</button>
+        </div>
+        <button id="send-button" class="btn-osu btn-osu-pink">Send message</button>
+      </div>
+    </div>
+    <script>window.$ = window.jQuery = require('./js/jquery-3.1.0.js');</script>
+    <script src="js/splitter.js"></script>
+  </body>
+</html>
