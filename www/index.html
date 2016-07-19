@@ -1,9 +1,10 @@
 <html>
   <head>
     <title>irc4osu!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="css/style.css">
   </head>
-  <body>
+  <body class="night">
     <div id="header">
       <div id="user-info">
         <span id="name-text">Logged in as<br><span id="user-name">gamelaster</span></span>
@@ -29,7 +30,10 @@
     <div class="container">
       <div class="left-side">
         <div class="chat-container">
-          cau
+          <span class="time-tag">[14:29]</span> <a class="user-tag normal-user" href="#">gamelaster</a>: Hakase da nyan! :3<br>
+          <span class="time-tag">[14:30]</span> <a class="user-tag supporter-user" href="#">Claire_Farron</a>: The loli Lightning is really pawnsome! :3<br>
+          <span class="time-tag">[14:32]</span> <a class="user-tag moderator-user" href="#">Yukko</a>: しゃけだー！！(。>д<) <span class="mention-tag">gamelaster</span><br>
+          <span class="time-tag">[14:42]</span> <a class="user-tag normal-user" href="#">gamelaster</a> silently laughning (che che chee!)<br>
         </div>
         <input type="text" id="text-input">
       </div>
@@ -40,11 +44,12 @@
             <div class="info-title">Online users:</div>
             <div class="info-text">411</div>
           </div>
-          <div class="info-panel">
-            <div class="info-title">Online time:</div>
-            <div id="online-time-text" class="info-text">00:00:00</div>
-          </div>
           <button class="btn-osu btn-osu-default">View users</button>
+          <div class="info-panel">
+            <div class="info-title">Friends online:</div>
+            <div id="online-time-text" class="info-text">9</div>
+          </div>
+          <button class="btn-osu btn-osu-default">Friends</button>
         </div>
         <button id="send-button" class="btn-osu btn-osu-pink">Send message</button>
       </div>

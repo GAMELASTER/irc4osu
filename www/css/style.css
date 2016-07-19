@@ -9,6 +9,11 @@ html, body {
   flex-direction: column;
 }
 
+.night {
+	background-color: rgba(39, 39, 39,0.75);
+	background-blend-mode: multiply;
+}
+
 #header {
 	position: relative;
 	background-image: url("../images/bg-light.png");
@@ -183,6 +188,15 @@ html, body {
 	flex: 1;
 	margin: 0 0 6px 0;
 	padding: 5px 10px 10px 10px;
+	color: #666464;
+}
+
+.night .chat-container {
+	background-color: rgb(40, 40, 40);
+	box-shadow: inset 16px 16px 12px -14px rgb(39, 39, 39);
+	color: white;
+	border: rgb(39, 39, 39) solid 1px;
+	color: #dfdfdf;
 }
 
 #text-input {
@@ -200,6 +214,13 @@ html, body {
 	padding: 6px 6px;
 }
 
+.night #text-input {
+	background-color: rgb(40, 40, 40);
+	box-shadow: inset 16px 16px 12px -14px rgb(39, 39, 39);
+	color: white;
+	border: rgb(39, 39, 39) solid 1px;
+}
+
 .right-side .panel {
 	align-self: flex-start;
 	width: 100%;
@@ -213,6 +234,13 @@ html, body {
 	margin-bottom: 6px;
 	border: 1px solid rgb(242, 242, 242);
 	border-radius: 2px;
+}
+
+.night .right-side .info-panel {
+	background-color: rgb(40, 40, 40);
+	box-shadow: inset 16px 16px 12px -14px rgb(39, 39, 39);
+	color: white;
+	border: rgb(39, 39, 39) solid 1px;
 }
 
 .info-panel .info-title {
@@ -270,7 +298,7 @@ html, body {
 .btn-osu-default {
   background-color: #4ad;
   box-shadow: 0 6px #29b,0 7px 10px rgba(0,0,0,.8);
-  margin-bottom: 10px;
+  margin-bottom: 14px;
   transition: all .1s ease-in-out
 }
 
@@ -327,4 +355,30 @@ html, body {
 #send-button {
 	align-self: flex-end;
 	margin-bottom: 5px !important;
+}
+
+.time-tag {
+	color: #b2b2b2;
+}
+
+.user-tag {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.normal-user {
+	color: #ffdb9d;
+}
+
+.supporter-user {
+	color: #ffc561;
+}
+
+.moderator-user {
+	color: limegreen;
+}
+
+.mention-tag {
+	color: #f04dae;
+	font-weight: bold;
 }
