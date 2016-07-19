@@ -30,9 +30,13 @@
     <div class="container">
       <div class="left-side">
         <div class="chat-container">
+          <span class="info-tag">Attempting to join channel...</span><br>
+          <span class="success-tag">Joined #english!</span><br>
           <span class="time-tag">[14:29]</span> <a class="user-tag normal-user" href="#">gamelaster</a>: Hakase da nyan! :3<br>
           <span class="time-tag">[14:30]</span> <a class="user-tag supporter-user" href="#">Claire_Farron</a>: The loli Lightning is really pawnsome! :3<br>
           <span class="time-tag">[14:32]</span> <a class="user-tag moderator-user" href="#">Yukko</a>: しゃけだー！！(。>д<) <span class="mention-tag">gamelaster</span><br>
+          <span class="error-tag">Connection lost! Reconnecting...</span><br>
+          <span class="success-tag">Reconnected!</span><br>
           <span class="time-tag">[14:42]</span> <a class="user-tag normal-user" href="#">gamelaster</a> silently laughning (che che chee!)<br>
         </div>
         <input type="text" id="text-input">
@@ -53,6 +57,9 @@
         </div>
         <button id="send-button" class="btn-osu btn-osu-pink">Send message</button>
       </div>
+    </div>
+    <div class="modal-dialog-container">
+
     </div>
     <script>window.$ = window.jQuery = require('./js/jquery-3.1.0.js');</script>
     <script src="js/splitter.js"></script>

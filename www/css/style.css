@@ -382,3 +382,17 @@ html, body {
 	color: #f04dae;
 	font-weight: bold;
 }
+
+.info-tag {
+	color: #b2b2b2;
+}
+
+.success-tag {
+	color: #f1c40f;
+	font-weight: bold;
+}
+
+.error-tag {
+	color: darkred;
+	font-weight: bold;
+}
