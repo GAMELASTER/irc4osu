@@ -8,7 +8,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({width: 800, height: 600, useContentSize: true, titleBarStyle: "hidden", autoHideMenuBar: true, icon: "./www/images/logo.ico"});
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
   mainWindow.webContents.openDevTools({ detach: true });
-  mainWindow.setMenu(null);
+  //mainWindow.setMenu(null);
 
   mainWindow.on('closed', function () {
     mainWindow = null;
