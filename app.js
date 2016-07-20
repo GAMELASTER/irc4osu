@@ -5,7 +5,17 @@ const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
 
 function createWindow () {
-  mainWindow = new BrowserWindow({width: 800, height: 600, useContentSize: true, titleBarStyle: "hidden", autoHideMenuBar: true, icon: "./www/images/logo.ico"});
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    useContentSize: true,
+    titleBarStyle: "hidden",
+    autoHideMenuBar: true,
+    icon: "./www/images/logo.ico",
+    webPreferences: {
+      experimentalFeatures: true,
+    }
+  });
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
   mainWindow.webContents.openDevTools({ detach: true });
   //mainWindow.setMenu(null);

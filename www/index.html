@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="css/style.css">
   </head>
-  <body class="night">
+  <body>
     <div id="header">
       <div id="user-info">
         <span id="name-text">Logged in as<br><span id="user-name">gamelaster</span></span>
@@ -20,7 +20,7 @@
         <div class="tab navigate"><span>&laquo;</span></div>
         <div id="tab-slider">
           <div class="tab default"><span class="close">X</span><span>#osu</span></div>
-          <div class="tab default"><span class="close">X</span><span>#english</span></div>
+          <div class="tab default active"><span class="close">X</span><span>#english</span></div>
           <div class="tab default"><span class="close">X</span><span>Claire_Farron</span></div>
         </div>
         <div class="tab navigate"><span>&raquo;</span></div>
@@ -49,17 +49,69 @@
             <div class="info-text">411</div>
           </div>
           <button class="btn-osu btn-osu-default">View users</button>
-          <div class="info-panel">
+          <!--<div class="info-panel">
             <div class="info-title">Friends online:</div>
             <div id="online-time-text" class="info-text">9</div>
           </div>
-          <button class="btn-osu btn-osu-default">Friends</button>
+          <button class="btn-osu btn-osu-default">Friends</button>-->
         </div>
         <button id="send-button" class="btn-osu btn-osu-pink">Send message</button>
       </div>
     </div>
-    <div class="modal-dialog-container">
-
+    <div id="login-modal" style="display: none;" class="modal-container">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          Login
+        </div>
+        <form id="login-form">
+          <input type="text" name="username" placeholder="Username"/><br>
+          <input type="password" name="password" placeholder="IRC Password"/><br>
+          <button class="btn-osu btn-osu-pink">Log in</button>
+          <div>Don’t have an IRC password?<br>
+          <a href="#">CLICK HERE</a> to get your IRC password.</div>
+        </form>
+      </div>
+    </div>
+    <div id="select-channel-modal" style="display: none;" data-close="true" class="modal-container">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          Select channel <a href="#">x</a>
+        </div>
+        <input type="text" name="friend-name" placeholder="Friend name"/><br>
+        <button type="button" class="btn-osu btn-osu-pink">Add</button><br>
+        <span>- or -</span>
+        <div id="channels-list">
+          <input id="channels-filter" placeholder="Filter"/>
+          <div class="channel-row">
+            <h1>#english</h1>
+            <p>A engriš rúm <span class="active-users">69 users</span></p>
+          </div>
+          <div class="channel-row">
+            <h1>#english</h1>
+            <p>A engriš rúm <span class="active-users">69 users</span></p>
+          </div>
+          <div class="channel-row">
+            <h1>#english</h1>
+            <p>A engriš rúm <span class="active-users">69 users</span></p>
+          </div>
+          <div class="channel-row">
+            <h1>#english</h1>
+            <p>A engriš rúm <span class="active-users">69 users</span></p>
+          </div>
+          <div class="channel-row">
+            <h1>#english</h1>
+            <p>A engriš rúm <span class="active-users">69 users</span></p>
+          </div>
+          <div class="channel-row">
+            <h1>#english</h1>
+            <p>A engriš rúm <span class="active-users">69 users</span></p>
+          </div>
+          <div class="channel-row">
+            <h1>#english</h1>
+            <p>A engriš rúm <span class="active-users">69 users</span></p>
+          </div>
+        </div>
+      </div>
     </div>
     <script>window.$ = window.jQuery = require('./js/jquery-3.1.0.js');</script>
     <script src="js/splitter.js"></script>
