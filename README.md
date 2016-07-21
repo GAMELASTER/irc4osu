@@ -28,7 +28,7 @@ If you want to help with testing, you can download the testing builds of new ver
 Coming soon:
 - iOS/Android/Windows Phone Support
 - Friendlist / Friend management
-- Much more features
+- Much more features (depends on feedback from you)
 
 # Support us
 If you want to support this project, just star this project or write in [project topic](https://osu.ppy.sh/forum/t/430741)! :-)
