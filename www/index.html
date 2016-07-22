@@ -19,12 +19,12 @@
       <div id="tabs-container">
         <div onClick="swipeLeft();" class="tab navigate"><span>&laquo;</span></div>
         <div id="tab-slider">
-          <div class="tab default"><span class="close">X</span><span>#osu</span></div>
+          <!--<div class="tab default"><span class="close">X</span><span>#osu</span></div>
           <div class="tab default active"><span class="close">X</span><span>#english</span></div>
           <div class="tab default"><span class="close">X</span><span>Claire_Farron</span></div>
           <div class="tab default"><span class="close">X</span><span>#osu</span></div>
           <div class="tab default active"><span class="close">X</span><span>#english</span></div>
-          <div class="tab default"><span class="close">X</span><span>Claire_Farron</span></div>
+          <div class="tab default"><span class="close">X</span><span>Claire_Farron</span></div>-->
         </div>
         <div onClick="swipeRight();" class="tab navigate"><span>&raquo;</span></div>
         <div onClick="openChannelsDialog();" class="tab add"><span>+</span></div>
@@ -80,8 +80,8 @@
         <div class="modal-header">
           Select channel <a href="#">x</a>
         </div>
-        <input type="text" name="friend-name" placeholder="Friend name"/><br>
-        <button type="button" class="btn-osu btn-osu-pink">Add</button><br>
+        <input type="text" id="friend-name" name="friend-name" placeholder="Friend name"/><br>
+        <button type="button" id="open-friend" class="btn-osu btn-osu-pink">Add</button><br>
         <span>- or -</span>
         <div id="channels-list">
           <input id="channels-filter" placeholder="Filter"/>

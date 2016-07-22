@@ -1,7 +1,8 @@
 const {shell} = require('electron');
 const {ipcRenderer} = require('electron');
+const notifier = require('node-notifier');
 
-var channelsInfo = {};
+var channelsInfo = null;
 
 var tabsList = [];
 var selectedTab = null;
@@ -83,36 +84,68 @@ function getChannelNameID(channel) {
 }
 
 function createChat(name) {
-  $(".chat-container").css("display", "none");
+ tabsList[name] = {
+    name: name,
+    autoScroll: true
+  }
+  //$(".chat-container").css("display", "none");
   var channelId = getChannelNameID(name);
-  $("#chat-area").prepend(`<div id='${channelId}-container' class="chat-container"></div>`);
-  $("#tab-slider").append(`<div data-channel="${name}" onClick="changeSelectedTab(this);" class="tab default active"><span class="close">X</span><span>${name}</span></div>`);
-  selectedTab = name;
+  $("#chat-area").prepend(`<div onmousewheel='onChatMouseWheel(event, "${name}");' id='${channelId}-container' class="chat-container"></div>`);
+  console.log("created");
+  var element = $(`<div data-channel="${name}" onClick="changeSelectedTab(this);" class="tab default active"><span class="close">X</span><span>${name}</span></div>`).appendTo($("#tab-slider"));
+  changeSelectedTab(element);
+  //selectedTab = name;
 }
 
 function addMessage(channel, options) {
   var channelId = getChannelNameID(channel);
   var date = new Date();
   var html = "<span class='time-tag'>["+pad(date.getHours(), 2)+":"+pad(date.getMinutes(), 2)+"]</span> ";
-  html += `<a class="user-tag normal-user" href="#">${options.from}</a>`;
-  html += ": ";
-  html += options.message;
+  html += `<a class="user-tag normal-user" href="#">${options.nick}</a>`;
+  if(options.type == "message") html += ": ";
+  else html += " ";
+  html += processMessage(options, options.text);
   html += "<br>";
   $(`#${channelId}-container`).append(html);
+  if(tabsList[channel].autoScroll) $(`#${channelId}-container`).scrollTop($(`#${channelId}-container`)[0].scrollHeight);
+}
+
+function processMessage(options, message) {
+  message = message.replace(/\[(http(?:.*?))\ (.*)\]/, "<a href='javascript:openPage(\"$1\")'>$2</a>")
+    //.replace(/((?:http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*))/gi, "<a href='javascript:openLink(\"$1\")'>$1</a>")
+  ;
+
+  if(message.indexOf(credentials.username) != -1)
+  {
+    notifier.notify({
+      'title': `${options.nick} mention you in ${options.to}`,
+      'message': options.text
+    });
+    message = message.replace(credentials.username, `<span class="mention-tag">${credentials.username}</span>`);
+  }
+  return message;
 }
 
 function addSystemMessage(channel, type, message) {
   var channelId = getChannelNameID(channel);
   $(`#${channelId}-container`).append(`<span class="${type}-tag">${message}</span><br>`);
+  if(tabsList[channel].autoScroll) $(`#${channelId}-container`).scrollTop($(`#${channelId}-container`)[0].scrollHeight);  
+}
+
+function sendMessage() {
+  if($("#text-input").val() == "") return;
+  ipcRenderer.send("sendMessage", { channel: selectedTab, from: credentials.username, message: $("#text-input").val() });
+  $("#text-input").val("");
 }
 
 $("#send-button").click(function() {
-  addMessage(selectedTab, {
-    from: credentials.username,
-    message: $("#text-input").val()
-  });
-  ipcRenderer.send("sendMessage", { channel: selectedTab, message: $("#text-input").val() });
-  $("#text-input").val("");
+  sendMessage();
+});
+
+$("#text-input").keyup(function(e) {
+  if (e.keyCode == 13) {
+    sendMessage();
+  }
 });
 
 function openChannelsDialog() {
@@ -154,7 +187,7 @@ function changeSelectedTab(element) {
   var channelId = getChannelNameID(name);
   $(`#${channelId}-container`).css("display", "block");
   selectedTab = name;
-  $("#online-users").text(channelsInfo[selectedTab].users);
+  if(channelsInfo != null && channelsInfo[selectedTab] != null) $("#online-users").text(channelsInfo[selectedTab].users);
 }
 
 function swipeLeft() {
@@ -164,3 +197,20 @@ function swipeLeft() {
 function swipeRight() {
   $("#tab-slider").animate({scrollLeft: $("#tab-slider").scrollLeft() + 100}, 200);
 }
+
+function onChatMouseWheel(e, channel) {
+  var channelId = getChannelNameID(channel); 
+  if(e.wheelDelta / 120 > 0) {
+      tabsList[channel].autoScroll = false;
+  }
+  else {
+    if($(`#${channelId}-container`).scrollTop() + $(`#${channelId}-container`).innerHeight() >= $(`#${channelId}-container`)[0].scrollHeight) {
+      tabsList[channel].autoScroll = true;
+    }
+  }
+}
+
+$("#open-friend").click(function() {
+  $("#select-channel-modal").fadeOut(1000);  
+  createChat($("#friend-name").val());
+});

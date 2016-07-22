@@ -8,10 +8,18 @@ ipcRenderer.on("onJoinedChannel", (event, args) => {
 });
 
 ipcRenderer.on("onMessage", (event, args) => {
+  if(args.to == credentials.username) {
+    args.to = args.nick;
+    notifier.notify({
+      'title': `${args.nick}`,
+      'message': args.text
+    });
+  }
   addMessage(args.to, args);
 });
 
 ipcRenderer.on("onChannelList", (event, args) => {
+  if(channelsInfo == null) channelsInfo = [];
   args.channel_list.sort(function(a, b) {
     var x = a.name.substring(1), y = b.name.substring(1);
     return x < y ? -1 : x > y ? 1 : 0;

@@ -9,6 +9,10 @@ html, body {
   flex-direction: column;
 }
 
+a {
+	color: #3498db;
+}
+
 ::-webkit-scrollbar {
 	width: 8px;
 }
@@ -146,7 +150,7 @@ html, body {
 }
 
 #tab-slider .tab {
-	margin-right: 3px;
+	margin-right: 4px;
 }
 
 .tab span {

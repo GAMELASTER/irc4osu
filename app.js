@@ -74,11 +74,13 @@ ipcMain.on("sendMessage", (event, arg) => {
     {
       case "/me":
         client.action(arg.channel, arg.message.substring(4));
+        mainWindow.webContents.send("onMessage", { nick: arg.from, to: arg.channel, text: arg.message.substring(4), type: "action" });
         break;
     }
   }
   else {
     client.say(arg.channel, arg.message);
+    mainWindow.webContents.send("onMessage", { nick: arg.from, to: arg.channel, text: arg.message, type: "message" });
   }
 });
 
@@ -94,10 +96,10 @@ function logIn(credentials) {
     //debug: true
   });
   client.connect(0, function(message) {
+    client.list();
     var sendInfo = function() {
       mainWindow.webContents.send("changeLoginFormState", {state: "hide", credentials: credentials});
       joinChannel("#english");
-      client.list();
     }
     setInterval(function() {
       client.list();
@@ -127,8 +129,12 @@ function logIn(credentials) {
     console.log(message);
   });
 
-  client.addListener('message', function (from, to, message) {
-    mainWindow.webContents.send("onMessage", { from, to, message });
+  client.addListener('message', function (nick, to, text, message) {
+    mainWindow.webContents.send("onMessage", { nick: nick, to: to, text: text, message: message, type: "message" });
+  });
+
+  client.addListener('action', function (nick, to, text, message) {
+    mainWindow.webContents.send("onMessage", { nick: nick, to: to, text: text, message: message, type: "action" });
   });
 
   client.addListener("channellist", function(channel_list) {
