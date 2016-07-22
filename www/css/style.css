@@ -145,6 +145,10 @@ html, body {
 	transform: skew(-15deg);
 }
 
+#tab-slider .tab {
+	margin-right: 3px;
+}
+
 .tab span {
 	color: white;
 	transform: skew(15deg);
@@ -216,6 +220,7 @@ html, body {
 	margin: 0 0 6px 0;
 	padding: 5px 10px 10px 10px;
 	color: #666464;
+	overflow-y: scroll;
 }
 
 .night .chat-container {
@@ -497,6 +502,14 @@ html, body {
 	background-position: 5px 5px;
 	background-repeat: no-repeat;
 	display: inline-block;
+}
+
+#login-form input[disabled] {
+	background-color: silver !important;
+}
+
+#login-form input.error {
+	color: darkred;
 }
 
 #login-form input[type="text"] {

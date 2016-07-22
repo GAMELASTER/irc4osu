@@ -7,8 +7,8 @@
   <body>
     <div id="header">
       <div id="user-info">
-        <span id="name-text">Logged in as<br><span id="user-name">gamelaster</span></span>
-        <img id="avatar" src="https://a.ppy.sh/6506667_1466029352.png">
+        <span id="name-text">Logged in as<br><span id="user-name">loading...</span></span>
+        <img id="avatar" src="./images/loading.gif">
       </div>
       <ul id="top-menu">
         <li><a href="#">Settings</a></li>
@@ -17,19 +17,22 @@
       </ul>
       <div class="clear-fix"></div>
       <div id="tabs-container">
-        <div class="tab navigate"><span>&laquo;</span></div>
+        <div onClick="swipeLeft();" class="tab navigate"><span>&laquo;</span></div>
         <div id="tab-slider">
           <div class="tab default"><span class="close">X</span><span>#osu</span></div>
           <div class="tab default active"><span class="close">X</span><span>#english</span></div>
           <div class="tab default"><span class="close">X</span><span>Claire_Farron</span></div>
+          <div class="tab default"><span class="close">X</span><span>#osu</span></div>
+          <div class="tab default active"><span class="close">X</span><span>#english</span></div>
+          <div class="tab default"><span class="close">X</span><span>Claire_Farron</span></div>
         </div>
-        <div class="tab navigate"><span>&raquo;</span></div>
-        <div class="tab add"><span>+</span></div>
+        <div onClick="swipeRight();" class="tab navigate"><span>&raquo;</span></div>
+        <div onClick="openChannelsDialog();" class="tab add"><span>+</span></div>
       </div>
     </div>
     <div class="container">
-      <div class="left-side">
-        <div class="chat-container">
+      <div id="chat-area" class="left-side">
+        <!--<div class="chat-container">
           <span class="info-tag">Attempting to join channel...</span><br>
           <span class="success-tag">Joined #english!</span><br>
           <span class="time-tag">[14:29]</span> <a class="user-tag normal-user" href="#">gamelaster</a>: Hakase da nyan! :3<br>
@@ -38,7 +41,7 @@
           <span class="error-tag">Connection lost! Reconnecting...</span><br>
           <span class="success-tag">Reconnected!</span><br>
           <span class="time-tag">[14:42]</span> <a class="user-tag normal-user" href="#">gamelaster</a> silently laughning (che che chee!)<br>
-        </div>
+        </div>-->
         <input type="text" id="text-input">
       </div>
       <div id="splitter"></div>
@@ -46,7 +49,7 @@
         <div class="panel">
           <div class="info-panel">
             <div class="info-title">Online users:</div>
-            <div class="info-text">411</div>
+            <div id="online-users" class="info-text">411</div>
           </div>
           <button class="btn-osu btn-osu-default">View users</button>
           <!--<div class="info-panel">
@@ -55,10 +58,10 @@
           </div>
           <button class="btn-osu btn-osu-default">Friends</button>-->
         </div>
-        <button id="send-button" class="btn-osu btn-osu-pink">Send message</button>
+        <button type="button" id="send-button" class="btn-osu btn-osu-pink" placeholder="Click here to type a message...">Send message</button>
       </div>
     </div>
-    <div id="login-modal" style="display: none;" class="modal-container">
+    <div id="login-modal" class="modal-container">
       <div class="modal-dialog">
         <div class="modal-header">
           Login
@@ -68,7 +71,7 @@
           <input type="password" name="password" placeholder="IRC Password"/><br>
           <button class="btn-osu btn-osu-pink">Log in</button>
           <div>Don’t have an IRC password?<br>
-          <a href="#">CLICK HERE</a> to get your IRC password.</div>
+          <a href="javascript:openPage('https://osu.ppy.sh/p/irc');">CLICK HERE</a> to get your IRC password.</div>
         </form>
       </div>
     </div>
@@ -82,7 +85,7 @@
         <span>- or -</span>
         <div id="channels-list">
           <input id="channels-filter" placeholder="Filter"/>
-          <div class="channel-row">
+          <!--<div class="channel-row">
             <h1>#english</h1>
             <p>A engriš rúm <span class="active-users">69 users</span></p>
           </div>
@@ -110,11 +113,12 @@
             <h1>#english</h1>
             <p>A engriš rúm <span class="active-users">69 users</span></p>
           </div>
-        </div>
+        </div>-->
       </div>
     </div>
     <script>window.$ = window.jQuery = require('./js/jquery-3.1.0.js');</script>
     <script src="js/splitter.js"></script>
     <script src="js/ui.js"></script>
+    <script src="js/irc-handler.js"></script>
   </body>
 </html>
