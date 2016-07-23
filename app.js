@@ -16,7 +16,7 @@ function createWindow () {
     width: 800,
     height: 600,
     useContentSize: true,
-    titleBarStyle: "hidden",
+    //titleBarStyle: "hidden",
     autoHideMenuBar: true,
     icon: "./www/images/logo.ico",
     webPreferences: {
@@ -26,11 +26,11 @@ function createWindow () {
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
   //mainWindow.webContents.openDevTools({ detach: true });
   //mainWindow.setMenu(null);
-  storage.has('login', function(error, hasKey) {
+  storage.has('irc4osu-login', function(error, hasKey) {
     if(error) throw error;
     if(hasKey)
     {
-      storage.get('login', function(error, data) {
+      storage.get('irc4osu-login', function(error, data) {
         if (error) throw error;
         logIn(data);
       });
@@ -130,7 +130,7 @@ function logIn(credentials) {
     {
       request({ url: 'http://185.91.116.205/irc4osu/getUserBasic.php?username=' + credentials.username, json: true}, function (error, response, body) {
         credentials.userID = body[0].user_id;
-        storage.set('login', credentials, function(error) {
+        storage.set('irc4osu-login', credentials, function(error) {
           if (error) throw error;
           sendInfo();
         });
