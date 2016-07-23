@@ -2,6 +2,7 @@ const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const {ipcMain} = require('electron');
+const {dialog} = require('electron');
 const storage = require('electron-json-storage');
 const irc = require("irc");
 const request = require("request");
@@ -35,6 +36,27 @@ function createWindow () {
       });
     }
     else saveUserID = true;
+  });
+
+  request({
+    url: "https://api.github.com/repos/gamelaster/irc4osu/releases/latest",
+    json: true,
+    headers: {
+      'User-Agent': 'irc4osu'
+    }
+  }, function(err, resp, body) {
+    if(body.tag_name != "v0.0.2") {
+      dialog.showMessageBox(null, {
+        type: "info",
+        buttons: [ "Yes", "No" ],
+        title: "New update is available",
+        message: `A new version of irc4osu! ${body.tag_name} has been released!\n\nDid you want to download it?`
+      }, (response) => {
+        if(response == 0) {
+          require('electron').shell.openExternal("https://github.com/gamelaster/irc4osu/releases/latest");
+        }
+      });
+    }
   });
 
   mainWindow.on('closed', function () {
@@ -140,6 +162,10 @@ function logIn(credentials) {
   client.addListener("channellist", function(channel_list) {
     mainWindow.webContents.send("onChannelList", { channel_list });
   });
+
+  client.addListener("names", function(channel, nicks) {
+    console.log(channel, nicks);
+  })
 }
 
 function joinChannel(name) {
