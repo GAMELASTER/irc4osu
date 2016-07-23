@@ -45,7 +45,7 @@ function createWindow () {
       'User-Agent': 'irc4osu'
     }
   }, function(err, resp, body) {
-    if(body.tag_name != "v0.0.2") {
+    if(body.tag_name != "v0.0.3") {
       dialog.showMessageBox(null, {
         type: "info",
         buttons: [ "Yes", "No" ],
