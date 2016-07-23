@@ -42,3 +42,5 @@ typings
 
 # VScode
 .vscode
+
+build/

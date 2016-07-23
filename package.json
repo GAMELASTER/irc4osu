@@ -1,10 +1,11 @@
 {
   "name": "irc4osu",
-  "version": "0.0.1",
+  "version": "v0.0.2",
   "description": "A unofficial IRC client for Osu! game",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron app.js"
   },
   "repository": {
     "type": "git",

@@ -24,7 +24,7 @@ function createWindow () {
     }
   });
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
-  mainWindow.webContents.openDevTools({ detach: true });
+  //mainWindow.webContents.openDevTools({ detach: true });
   //mainWindow.setMenu(null);
   storage.has('login', function(error, hasKey) {
     if(error) throw error;
