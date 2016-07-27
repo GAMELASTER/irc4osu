@@ -110,6 +110,11 @@ ipcMain.on("joinChannel", (event, arg) => {
   joinChannel(arg.channel);
 });
 
+ipcMain.on("partChannel", (event, arg) => {
+  console.log("parting " + arg.channel);
+  client.part(arg.channel);
+});
+
 function logIn(credentials) {
   mainWindow.webContents.send("changeLoginFormState", {state: "loading", credentials: credentials});
   client = new irc.Client('irc.ppy.sh', credentials.username, {

@@ -86,13 +86,14 @@ function getChannelNameID(channel) {
 function createChat(name) {
  tabsList[name] = {
     name: name,
-    autoScroll: true
+    autoScroll: true,
+    isChannel: name[0] == "#" ? true : false
   }
   //$(".chat-container").css("display", "none");
   var channelId = getChannelNameID(name);
   $("#chat-area").prepend(`<div onmousewheel='onChatMouseWheel(event, "${name}");' id='${channelId}-container' class="chat-container"></div>`);
   console.log("created");
-  var element = $(`<div data-channel="${name}" onClick="changeSelectedTab(this);" class="tab default active"><span class="close">X</span><span>${name}</span></div>`).appendTo($("#tab-slider"));
+  var element = $(`<div data-channel="${name}" onClick="changeSelectedTab(this);" class="tab default active"><span onClick="closeTab(this);" class="close">X</span><span>${name}</span></div>`).appendTo($("#tab-slider"));
   changeSelectedTab(element);
   //selectedTab = name;
 }
@@ -196,6 +197,18 @@ function swipeLeft() {
 
 function swipeRight() {
   $("#tab-slider").animate({scrollLeft: $("#tab-slider").scrollLeft() + 100}, 200);
+}
+
+function closeTab(element) {
+  var tab = $(element).parent();
+  var channel = tab.data("channel");
+  if(tabsList[channel].isChannel) {
+    ipcRenderer.send("partChannel", { channel });
+  }
+  tab.remove();
+  var channelId = getChannelNameID(channel);
+  $(`#${channelId}-container`).remove();
+  delete tabsList[channel];
 }
 
 function onChatMouseWheel(e, channel) {
