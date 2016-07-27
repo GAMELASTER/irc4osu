@@ -9,6 +9,8 @@ ipcRenderer.on("onJoinedChannel", (event, args) => {
 
 ipcRenderer.on("onMessage", (event, args) => {
   if(args.to == credentials.username) {
+    if(!(args.nick in tabsList))
+      createChat(args.nick);
     args.to = args.nick;
     notifier.notify({
       'title': `${args.nick}`,
