@@ -227,3 +227,7 @@ $("#open-friend").click(function() {
   $("#select-channel-modal").fadeOut(1000);  
   createChat($("#friend-name").val());
 });
+
+function logOut() {
+  ipcRenderer.send("logOut");
+}

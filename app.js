@@ -115,6 +115,13 @@ ipcMain.on("partChannel", (event, arg) => {
   client.part(arg.channel);
 });
 
+ipcMain.on("logOut", (event, arg) => {
+  storage.remove('irc4osu-login', function(error) {
+    if(error) throw error;
+    mainWindow.reload();
+  });
+});
+
 function logIn(credentials) {
   mainWindow.webContents.send("changeLoginFormState", {state: "loading", credentials: credentials});
   client = new irc.Client('irc.ppy.sh', credentials.username, {
