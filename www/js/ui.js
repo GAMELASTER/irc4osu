@@ -47,10 +47,6 @@ $("#login-form").submit(function(e) {
 });
 
 ipcRenderer.on("changeLoginFormState", (event, args) => {
-  changeLoginFormState(args);
-});
-
-function changeLoginFormState(args) {
   if(args.state == "loading") {
     $("input[name='username']").prop("disabled", true).val(args.credentials.username);
     $("input[name='password']").prop("disabled", true).val(args.credentials.password);
@@ -77,7 +73,7 @@ function changeLoginFormState(args) {
     $("#avatar").prop("src", "https://a.ppy.sh/"+args.credentials.userID+"_"+Date.now()+".jpg");
     $("#login-modal").fadeOut(1000);
   }
-}
+});
 
 function getChannelNameID(channel) {
   return channel.replace("#","hash_");
@@ -235,3 +231,7 @@ function logOut() {
 function Settings() {
   $("#settings-modal").fadeIn(1000);
 }
+
+$("#nightModeChecbkox").change(function() {
+
+});

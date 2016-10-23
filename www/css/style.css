@@ -225,6 +225,7 @@ a {
 	padding: 5px 10px 10px 10px;
 	color: #666464;
 	overflow-y: scroll;
+	word-wrap: break-word;
 }
 
 .night .chat-container {
@@ -456,6 +457,11 @@ a {
 	z-index: 10001;
 }
 
+.modal-dialog-big {
+	width: 600px;
+	height: 400px;
+}
+
 .night .modal-dialog {
 	background-color: rgba(39, 39, 39,0.75);
 	background-blend-mode: color-burn;
@@ -632,4 +638,40 @@ a {
 
 .channel-row .active-users {
 	float: right;
+}
+
+input[type=checkbox] {
+	display: block;
+	width: 72px;
+	height: 32px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: contain;
+	-webkit-appearance: none;
+	outline: 0;
+	margin-right: 16px;	
+}
+ 
+input[type=checkbox]:checked {
+	background-image: url("../images/switch_on.png");
+}
+input[type=checkbox]:not(:checked) {
+	background-image: url("../images/switch_off.png");
+}
+
+#settings-modal input[type=checkbox] {
+	float: right;
+}
+
+#settings-modal label {
+	float: left;
+	display: block;
+	font-size: 18px;
+	padding-top: 6px;
+	padding-left: 20px;
+}
+
+#settings-modal .row {
+	clear: both;
+	margin-top: 5px;
 }

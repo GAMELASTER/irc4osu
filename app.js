@@ -141,7 +141,7 @@ function logIn(credentials) {
     }, 60000);
     if(saveUserID)
     {
-      request({ url: 'http://185.91.116.205/irc4osu/getUserBasic.php?username=' + credentials.username, json: true}, function (error, response, body) {
+      request({ url: 'https://marekkraus.sk/irc4osu/getUserBasic.php?username=' + credentials.username, json: true}, function (error, response, body) {
         credentials.userID = body[0].user_id;
         storage.set('irc4osu-login', credentials, function(error) {
           if (error) throw error;
