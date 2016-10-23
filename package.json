@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/GAMELASTER/irc4osu#readme",
   "devDependencies": {
-    "electron-prebuilt": "^1.2.7"
+    "electron": "^1.4.4"
   },
   "dependencies": {
     "electron-json-storage": "^2.0.0",
