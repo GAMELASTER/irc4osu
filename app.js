@@ -39,7 +39,7 @@ function createWindow () {
   });
 
   request({
-    url: "https://api.github.com/repos/gamelaster/irc4osu/releases/latest",
+    url: "https://api.github.com/repos/arogan-group/irc4osu/releases/latest",
     json: true,
     headers: {
       'User-Agent': 'irc4osu'
@@ -53,7 +53,7 @@ function createWindow () {
         message: `A new version of irc4osu! ${body.tag_name} has been released!\n\nDid you want to download it?`
       }, (response) => {
         if(response == 0) {
-          require('electron').shell.openExternal("https://github.com/gamelaster/irc4osu/releases/latest");
+          require('electron').shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
         }
       });
     }
