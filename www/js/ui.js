@@ -231,3 +231,7 @@ $("#open-friend").click(function() {
 function logOut() {
   ipcRenderer.send("logOut");
 }
+
+function Settings() {
+  $("#settings-modal").fadeIn(1000);
+}

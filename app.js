@@ -123,6 +123,7 @@ ipcMain.on("logOut", (event, arg) => {
 });
 
 function logIn(credentials) {
+  return false;
   mainWindow.webContents.send("changeLoginFormState", {state: "loading", credentials: credentials});
   client = new irc.Client('irc.ppy.sh', credentials.username, {
     password: credentials.password,

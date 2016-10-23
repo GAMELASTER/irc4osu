@@ -11,8 +11,8 @@
         <img id="avatar" src="./images/loading.gif">
       </div>
       <ul id="top-menu">
-        <li><a href="#">Settings</a></li>
-        <li><a href="#">About</a></li>
+        <li><a href="javascript:Settings()">Settings</a></li>
+        <li><a href="javascript:About()">About</a></li>
         <li><a href="javascript:logOut()">Logout</a></li>
       </ul>
       <div class="clear-fix"></div>
@@ -61,7 +61,7 @@
         <button type="button" id="send-button" class="btn-osu btn-osu-pink" placeholder="Click here to type a message...">Send message</button>
       </div>
     </div>
-    <div id="login-modal" class="modal-container">
+    <div id="login-modal" class="modal-container" style="display: none;">
       <div class="modal-dialog">
         <div class="modal-header">
           Login
@@ -112,8 +112,15 @@
           <div class="channel-row">
             <h1>#english</h1>
             <p>A engriš rúm <span class="active-users">69 users</span></p>
-          </div>
-        </div>-->
+          </div>-->
+        </div>
+      </div>
+    </div>
+    <div id="settings-modal" style="display: none;" data-close="true" class="modal-container">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          Settings <a href="#">x</a>
+        </div>
       </div>
     </div>
     <script>window.$ = window.jQuery = require('./js/jquery-3.1.0.js');</script>
