@@ -44,3 +44,5 @@ typings
 .vscode
 
 build/
+
+.DS_store
