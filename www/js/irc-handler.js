@@ -12,10 +12,13 @@ ipcRenderer.on("onMessage", (event, args) => {
     if(!(args.nick in tabsList))
       createChat(args.nick);
     args.to = args.nick;
-    notifier.notify({
-      'title': `${args.nick}`,
-      'message': args.text
-    });
+    if(settings.notifications)
+    {
+      notifier.notify({
+        'title': `${args.nick}`,
+        'message': args.text
+      });
+    }
   }
   addMessage(args.to, args);
 });

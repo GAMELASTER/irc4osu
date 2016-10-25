@@ -1,6 +1,7 @@
 const {shell} = require('electron');
 const {ipcRenderer} = require('electron');
 const notifier = require('node-notifier');
+ipcRenderer.send("init");
 
 var channelsInfo = null;
 
@@ -122,10 +123,13 @@ function processMessage(options, message) {
 
   if(message.indexOf(credentials.username) != -1)
   {
-    notifier.notify({
-      'title': `${options.nick} mention you in ${options.to}`,
-      'message': options.text
-    });
+    if(settings.notifications)
+    {
+      notifier.notify({
+        'title': `${options.nick} mention you in ${options.to}`,
+        'message': options.text
+      });
+    }
     message = message.replace(credentials.username, `<span class="mention-tag">${credentials.username}</span>`);
   }
   return message;
