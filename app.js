@@ -85,7 +85,7 @@ function createWindow () {
         type: "info",
         buttons: [ "Yes", "No" ],
         title: "New update is available",
-        message: `A new version of irc4osu! ${body.tag_name} has been released!\n\nDid you want to download it?`
+        message: `A new version of irc4osu! ${body.tag_name} has been released!\n\nDo you want to download it?`
       }, (response) => {
         if(response == 0) {
           require('electron').shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
