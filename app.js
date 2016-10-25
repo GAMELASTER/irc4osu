@@ -156,11 +156,11 @@ ipcMain.on("joinChannel", (event, arg) => {
 });
 
 ipcMain.on("partChannel", (event, arg) => {
-  console.log("parting " + arg.channel);
   client.part(arg.channel);
 });
 
 ipcMain.on("logOut", (event, arg) => {
+  
   storage.remove('irc4osu-login', function(error) {
     if(error) throw error;
     mainWindow.reload();
@@ -168,7 +168,6 @@ ipcMain.on("logOut", (event, arg) => {
 });
 
 function logIn(credentials) {
-  return false;
   mainWindow.webContents.send("changeLoginFormState", {state: "loading", credentials: credentials});
   client = new irc.Client('irc.ppy.sh', credentials.username, {
     password: credentials.password,
@@ -178,7 +177,6 @@ function logIn(credentials) {
   client.connect(0, function(message) {
     client.list();
     var sendInfo = function() {
-      mainWindow.webContents.send("changeLoginFormState", {state: "hide", credentials: credentials});
       logInData = {state: "hide", credentials: credentials, settings: settings};
       mainWindow.webContents.send("changeLoginFormState", logInData);
       joinChannel("#english");
