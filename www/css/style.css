@@ -225,7 +225,7 @@ a {
 	padding: 5px 10px 10px 10px;
 	color: #666464;
 	overflow-y: scroll;
-	word-wrap: break-word;
+	word-break: break-word;
 }
 
 .night .chat-container {

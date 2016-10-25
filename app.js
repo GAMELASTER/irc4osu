@@ -6,6 +6,8 @@ const {dialog} = require('electron');
 const storage = require('electron-json-storage');
 const irc = require("irc");
 const request = require("request");
+const fs = require("fs");
+const path = require("path");
 
 let mainWindow;
 let client;
@@ -25,6 +27,10 @@ function createWindow () {
       experimentalFeatures: true,
     }
   });
+  if(fs.existsSync(app.getPath('userData') + path.sep + "avatarCache") == false)
+  {
+    fs.mkdir(app.getPath('userData') + path.sep + "avatarCache" + path.sep);
+  }
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
   //mainWindow.webContents.openDevTools({ detach: true });
   //mainWindow.setMenu(null);
@@ -37,7 +43,7 @@ function createWindow () {
         
         storage.get('irc4osu-login', function(error, data) {
           if (error) throw error;
-          //logIn(data);
+          logIn(data);
         });
       }
       else saveUserID = true;

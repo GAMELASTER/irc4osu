@@ -1,7 +1,10 @@
 const {shell} = require('electron');
+const app = require('electron').remote.app;
 const {ipcRenderer} = require('electron');
 const notifier = require('node-notifier');
-ipcRenderer.send("init");
+const request = require('request');
+const fs = require('fs');
+const path = require('path');
 
 var channelsInfo = null;
 
@@ -116,6 +119,26 @@ function addMessage(channel, options) {
   if(tabsList[channel].autoScroll) $(`#${channelId}-container`).scrollTop($(`#${channelId}-container`)[0].scrollHeight);
 }
 
+function getUserAvatar(username, callback) {
+  var avatarPath = app.getPath('userData') + path.sep + "avatarCache" + path.sep + username + ".png";
+  var downloadAvatar = function() {
+    request
+    .get('http://marekkraus.sk/irc4osu/getUserAvatar.php?username=' + username)
+    .on('end', function() {
+      callback(avatarPath);
+    })
+    .pipe(fs.createWriteStream(avatarPath));
+  };
+  fs.stat(avatarPath, (err, stat) => {
+    if(err) return downloadAvatar();
+    now = new Date().getTime();
+    endTime = new Date(stat.ctime).getTime() + (1 * 24 * 60 * 60 * 1000);
+    if (now > endTime)
+      return downloadAvatar();
+    callback(avatarPath);
+  });
+}
+
 function processMessage(options, message) {
   message = message.replace(/\[(http(?:.*?))\ (.*)\]/, "<a href='javascript:openPage(\"$1\")'>$2</a>")
     //.replace(/((?:http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*))/gi, "<a href='javascript:openLink(\"$1\")'>$1</a>")
@@ -125,9 +148,12 @@ function processMessage(options, message) {
   {
     if(settings.notifications)
     {
-      notifier.notify({
-        'title': `${options.nick} mention you in ${options.to}`,
-        'message': options.text
+      getUserAvatar(options.nick, (avatarPath) => {
+        notifier.notify({
+          'icon': avatarPath,
+          'title': `${options.nick} mention you in ${options.to}`,
+          'message': options.text
+        });
       });
     }
     message = message.replace(credentials.username, `<span class="mention-tag">${credentials.username}</span>`);
@@ -258,3 +284,5 @@ $("#notificationsCheckbox").change(function() {
   settings.notifications = !settings.notifications;
   ipcRenderer.send("saveSettings", settings);
 });
+
+ipcRenderer.send("init");

@@ -14,9 +14,12 @@ ipcRenderer.on("onMessage", (event, args) => {
     args.to = args.nick;
     if(settings.notifications)
     {
-      notifier.notify({
-        'title': `${args.nick}`,
-        'message': args.text
+      getUserAvatar(args.nick, (avatarPath) => {
+        notifier.notify({
+          'icon': avatarPath,
+          'title': `${args.nick}`,
+          'message': args.text
+        });
       });
     }
   }
