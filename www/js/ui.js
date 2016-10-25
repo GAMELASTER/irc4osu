@@ -10,6 +10,8 @@ var channelsInfo = null;
 
 var settings = null;
 
+var initialized = false;
+
 var tabsList = [];
 var selectedTab = null;
 var credentials = null;
@@ -74,6 +76,7 @@ ipcRenderer.on("changeLoginFormState", (event, args) => {
     $("#login-form button").prop("disabled", false);
   }
   else if(args.state == "hide") {
+    initialized = true;
     credentials = args.credentials;
     settings = args.settings;
     $("#user-name").text(args.credentials.username);
@@ -285,4 +288,8 @@ $("#notificationsCheckbox").change(function() {
   ipcRenderer.send("saveSettings", settings);
 });
 
-ipcRenderer.send("init");
+if(initialized == false)
+{
+  initialized = true;
+  ipcRenderer.send("init");  
+}
