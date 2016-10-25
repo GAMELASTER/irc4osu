@@ -240,6 +240,17 @@ function Settings() {
   $("#settings-modal").fadeIn(1000);
 }
 
-$("#nightModeChecbkox").change(function() {
+function About() {
+  $("#about-modal").fadeIn(1000);
+}
 
+$("#nightModeCheckbox").change(function() {
+  settings.nightMode = !settings.nightMode;
+  setNigthMode(settings.nightMode);
+  ipcRenderer.send("saveSettings", settings);
+});
+
+$("#notificationsCheckbox").change(function() {
+  settings.notifications = !settings.notifications;
+  ipcRenderer.send("saveSettings", settings);
 });

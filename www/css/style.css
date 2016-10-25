@@ -675,3 +675,41 @@ input[type=checkbox]:not(:checked) {
 	clear: both;
 	margin-top: 5px;
 }
+
+#about-logo {
+	text-align: center;
+}
+
+#about-logo img {
+	width: 120px;
+	vertical-align: middle;	
+}
+
+#about-logo .appname {
+	font-size: 32px;
+	font-weight: bold;
+}
+
+.developer {
+	width: 280px;
+	text-align: left;
+}
+
+#about-modal .row {
+	padding: 5px 15px;
+}
+
+.developer img {
+	float: left;
+	width: 64px;
+	margin-right: 5px;
+}
+
+.developer p {
+	float: right;
+}
+
+.developer h1 {
+	margin: 0;
+	padding: 0;
+}

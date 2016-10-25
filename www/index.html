@@ -131,6 +131,50 @@
         </div>
       </div>
     </div>
+    <div id="about-modal" style="display: none;" data-close="true" class="modal-container">
+      <div class="modal-dialog modal-dialog-big">
+        <div class="modal-header">
+          About <a href="#">x</a>
+        </div>
+        <div id="about-logo">
+          <img src="./images/logo.ico"> <span class="appname">IRC4OSU!</span> <span class="version"><script>document.write(require('../package.json').version);</script></span>
+        </div>
+        <div class="row">
+          <div class="developer" style="float: left;">
+            <img src="https://a.ppy.sh/4167678_1476773984.jpg">
+            <p>
+              <h1>Claire Farron</h1>
+              Project Leader & Designer c:
+            </p>
+          </div>
+          <div class="developer" style="float: right;">
+            <img src="https://a.ppy.sh/6506667_1477423614988.jpg">
+            <p>
+              <h1>GAMELASTER</h1>
+              Lazy programmer ^^
+            </p>
+          </div>
+          <div class="clear-fix"></div>
+        </div>
+        <div class="row">
+          <div class="developer" style="float: left;">
+            <img src="https://new.ppy.sh/images/layout/osu-logo.png">
+            <p>
+              <h1>osu! team</h1>
+              osu! graphic concept
+            </p>
+          </div>
+          <div class="developer" style="float: right;">
+            <img src="https://a.ppy.sh/4656511_1470363474.png">
+            <p>
+              <h1>Lemmmy</h1>
+              Osu!sign author
+            </p>
+          </div>
+          <div class="clear-fix"></div>
+        </div>
+      </div>
+    </div>
     <script>window.$ = window.jQuery = require('./js/jquery-3.1.0.js');</script>
     <script src="js/splitter.js"></script>
     <script src="js/ui.js"></script>
