@@ -4,6 +4,8 @@ const notifier = require('node-notifier');
 
 var channelsInfo = null;
 
+var settings = null;
+
 var tabsList = [];
 var selectedTab = null;
 var credentials = null;
@@ -69,9 +71,15 @@ ipcRenderer.on("changeLoginFormState", (event, args) => {
   }
   else if(args.state == "hide") {
     credentials = args.credentials;
+    settings = args.settings;
     $("#user-name").text(args.credentials.username);
     $("#avatar").prop("src", "https://a.ppy.sh/"+args.credentials.userID+"_"+Date.now()+".jpg");
     $("#login-modal").fadeOut(1000);
+    {
+      $("#nightModeCheckbox").prop("checked", settings.nightMode);
+      $("#notificationsCheckbox").prop("checked", settings.notifications);
+      setNigthMode(settings.nightMode);      
+    }
   }
 });
 

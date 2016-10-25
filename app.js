@@ -10,6 +10,8 @@ const request = require("request");
 let mainWindow;
 let client;
 let saveUserID = false;
+let settings;
+let logInData;
 
 function createWindow () {
   mainWindow = new BrowserWindow({
@@ -26,16 +28,43 @@ function createWindow () {
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
   //mainWindow.webContents.openDevTools({ detach: true });
   //mainWindow.setMenu(null);
-  storage.has('irc4osu-login', function(error, hasKey) {
+
+  var checkCredentials = function() {
+    storage.has('irc4osu-login', function(error, hasKey) {
+      if(error) throw error;
+      if(hasKey)
+      {
+        
+        storage.get('irc4osu-login', function(error, data) {
+          if (error) throw error;
+          //logIn(data);
+        });
+      }
+      else saveUserID = true;
+    });
+  }
+  
+  storage.has('irc4osu-settings', function(error, hasKey) {
     if(error) throw error;
-    if(hasKey)
-    {
-      storage.get('irc4osu-login', function(error, data) {
+    if(hasKey) {
+      
+      storage.get('irc4osu-settings', function(error, data) {
         if (error) throw error;
-        logIn(data);
+        settings = data;
+        checkCredentials();
       });
     }
-    else saveUserID = true;
+    else {
+      settings = {
+        notifications: true,
+        nightMode: false
+      };
+      
+      storage.set('irc4osu-settings', settings ,function(error) {
+        if(error) throw error;        
+        checkCredentials();
+      });
+    }
   });
 
   request({
@@ -84,6 +113,14 @@ app.on('activate', function () {
   }
 });
 
+ipcMain.on("init", (event, args) => {
+  if(logInData != null)
+  {
+    mainWindow.webContents.send("changeLoginFormState", logInData);
+    joinChannel("#english");    
+  }
+});
+
 ipcMain.on("logIn", (event, credentials) => {
   logIn(credentials);
 });
@@ -104,6 +141,14 @@ ipcMain.on("sendMessage", (event, arg) => {
     client.say(arg.channel, arg.message);
     mainWindow.webContents.send("onMessage", { nick: arg.from, to: arg.channel, text: arg.message, type: "message" });
   }
+});
+
+ipcMain.on("saveSettings", (event, newSettings) => {
+  settings = newSettings;
+  
+  storage.set("irc4osu-settings", newSettings, function(error) {
+    if(error) throw error;
+  });
 });
 
 ipcMain.on("joinChannel", (event, arg) => {
@@ -134,6 +179,8 @@ function logIn(credentials) {
     client.list();
     var sendInfo = function() {
       mainWindow.webContents.send("changeLoginFormState", {state: "hide", credentials: credentials});
+      logInData = {state: "hide", credentials: credentials, settings: settings};
+      mainWindow.webContents.send("changeLoginFormState", logInData);
       joinChannel("#english");
     }
     setInterval(function() {
@@ -143,6 +190,7 @@ function logIn(credentials) {
     {
       request({ url: 'https://marekkraus.sk/irc4osu/getUserBasic.php?username=' + credentials.username, json: true}, function (error, response, body) {
         credentials.userID = body[0].user_id;
+        
         storage.set('irc4osu-login', credentials, function(error) {
           if (error) throw error;
           sendInfo();
@@ -153,6 +201,7 @@ function logIn(credentials) {
       sendInfo();
     }
   });
+  
   client.addListener("error", function(message) {
     switch(message.command)
     {
@@ -161,7 +210,6 @@ function logIn(credentials) {
         mainWindow.webContents.send("changeLoginFormState", { state: "error", reason: "credentials" });
         break;
     }
-    console.log(message);
   });
 
   client.addListener('message', function (nick, to, text, message) {
@@ -177,7 +225,7 @@ function logIn(credentials) {
   });
 
   client.addListener("names", function(channel, nicks) {
-    console.log(channel, nicks);
+    //console.log(channel, nicks);
   })
 }
 
