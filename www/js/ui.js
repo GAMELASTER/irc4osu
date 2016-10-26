@@ -117,7 +117,7 @@ function addMessage(channel, options) {
   var channelId = getChannelNameID(channel);
   var date = new Date();
   var html = "<span class='time-tag'>["+pad(date.getHours(), 2)+":"+pad(date.getMinutes(), 2)+"]</span> ";
-  html += `<a href="javascript:openUser('${options.nick}')" class="user-tag normal-user" href="#">${options.nick}</a>`;
+  html += `<a onMouseOver="nickMouseOver(event, '${options.nick}')" onMouseOut="nickMouseOut(event, '${options.nick}')" href="javascript:openUser('${options.nick}')" class="user-tag normal-user" href="#">${options.nick}</a>`;
   if(options.type == "message") html += ": ";
   else html += " ";
   html += processMessage(options, options.text);
@@ -304,4 +304,23 @@ if(initialized == false)
 {
   initialized = true;
   ipcRenderer.send("init");  
+}
+
+var userSignTimer = [];
+
+function nickMouseOut(event, nick) {
+  $("#user-sign").fadeOut(1000);
+  clearTimeout(userSignTimer[nick]);
+  delete userSignTimer[nick];
+}
+
+function nickMouseOver(event, nick) {
+  $("#user-sign").css({
+   left:  event.pageX,
+   top:   event.pageY
+  });
+  userSignTimer[nick] = setTimeout(function() {
+    $("#user-sign img").attr("src", `http://marekkraus.sk/irc4osu/getStatusBar.php?nick=${nick}`);
+    $("#user-sign").fadeIn(1000);
+  }, 2000);
 }

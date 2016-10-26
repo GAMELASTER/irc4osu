@@ -713,3 +713,17 @@ input[type=checkbox]:not(:checked) {
 	margin: 0;
 	padding: 0;
 }
+
+.user-sign {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 338px;
+	height: 94px;
+	z-index: 10000000;
+	display: none;
+	background-image: url("../images/loading.gif");
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: 94px;
+}
