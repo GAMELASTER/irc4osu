@@ -46,6 +46,10 @@ function openPage(url) {
   shell.openExternal(url);
 }
 
+function openUser(nick) {
+  shell.openExternal("https://osu.ppy.sh/u/" + nick);
+}
+
 $("#login-form").submit(function(e) {
   e.preventDefault();
   ipcRenderer.send("logIn", {
@@ -113,7 +117,7 @@ function addMessage(channel, options) {
   var channelId = getChannelNameID(channel);
   var date = new Date();
   var html = "<span class='time-tag'>["+pad(date.getHours(), 2)+":"+pad(date.getMinutes(), 2)+"]</span> ";
-  html += `<a class="user-tag normal-user" href="#">${options.nick}</a>`;
+  html += `<a href="javascript:openUser('${options.nick}')" class="user-tag normal-user" href="#">${options.nick}</a>`;
   if(options.type == "message") html += ": ";
   else html += " ";
   html += processMessage(options, options.text);
