@@ -1,5 +1,6 @@
 $("#splitter").mousedown(function() {
   var mouseMove = function(event) {
+  	event.preventDefault();
     $(".right-side").width(window.innerWidth - event.clientX - 7);
   }
 

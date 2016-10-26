@@ -352,7 +352,7 @@ function logIn(credentials) {
   });
 
   client.addListener("names", function(channel, nicks) {
-    //console.log(channel, nicks);
+    console.log(channel, nicks);
   })
 }
 
