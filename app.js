@@ -3,6 +3,7 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const {ipcMain} = require('electron');
 const {dialog} = require('electron');
+const {Menu} = require('electron');
 const storage = require('electron-json-storage');
 const irc = require("irc");
 const request = require("request");
@@ -15,20 +16,143 @@ let saveUserID = false;
 let settings;
 let logInData;
 
-function createWindow () {
+function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    useContentSize: true,
-    //titleBarStyle: "hidden",
+    useContentSize: true, //titleBarStyle: "hidden",
     autoHideMenuBar: true,
     icon: "./www/images/logo.ico",
     webPreferences: {
       experimentalFeatures: true,
     }
   });
-  if(fs.existsSync(app.getPath('userData') + path.sep + "avatarCache") == false)
-  {
+  const template = [{
+    label: 'Edit',
+    submenu: [{
+      role: 'undo'
+    }, {
+      role: 'redo'
+    }, {
+      type: 'separator'
+    }, {
+      role: 'cut'
+    }, {
+      role: 'copy'
+    }, {
+      role: 'paste'
+    }, {
+      role: 'pasteandmatchstyle'
+    }, {
+      role: 'delete'
+    }, {
+      role: 'selectall'
+    }]
+  }, {
+    label: 'View',
+    submenu: [{
+      label: 'Reload',
+      accelerator: 'CmdOrCtrl+R',
+      click(item, focusedWindow) {
+        if (focusedWindow) focusedWindow.reload()
+      }
+    }, {
+      label: 'Toggle Developer Tools',
+      accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+      click(item, focusedWindow) {
+        if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+      }
+    }, {
+      type: 'separator'
+    }, {
+      role: 'resetzoom'
+    }, {
+      role: 'zoomin'
+    }, {
+      role: 'zoomout'
+    }, {
+      type: 'separator'
+    }, {
+      role: 'togglefullscreen'
+    }]
+  }, {
+    role: 'window',
+    submenu: [{
+      role: 'minimize'
+    }, {
+      role: 'close'
+    }]
+  }, {
+    role: 'help',
+    submenu: [{
+      label: 'Learn More',
+      click() {
+        require('electron')
+          .shell.openExternal('http://electron.atom.io')
+      }
+    }]
+  }]
+
+  if (process.platform === 'darwin') {
+    template.unshift({
+        label: app.getName(),
+        submenu: [{
+          role: 'about'
+        }, {
+          type: 'separator'
+        }, {
+          role: 'services',
+          submenu: []
+        }, {
+          type: 'separator'
+        }, {
+          role: 'hide'
+        }, {
+          role: 'hideothers'
+        }, {
+          role: 'unhide'
+        }, {
+          type: 'separator'
+        }, {
+          role: 'quit'
+        }]
+      })
+      // Edit menu.
+    template[1].submenu.push({
+        type: 'separator'
+      }, {
+        label: 'Speech',
+        submenu: [{
+          role: 'startspeaking'
+        }, {
+          role: 'stopspeaking'
+        }]
+      })
+      // Window menu.
+    template[3].submenu = [{
+      label: 'Close',
+      accelerator: 'CmdOrCtrl+W',
+      role: 'close'
+    }, {
+      label: 'Minimize',
+      accelerator: 'CmdOrCtrl+M',
+      role: 'minimize'
+    }, {
+      label: 'Zoom',
+      role: 'zoom'
+    }, {
+      type: 'separator'
+    }, {
+      label: 'Bring All to Front',
+      role: 'front'
+    }]
+  }
+
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
+
+
+  if (fs.existsSync(app.getPath('userData') + path.sep + "avatarCache") == false) {
     fs.mkdir(app.getPath('userData') + path.sep + "avatarCache" + path.sep);
   }
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
@@ -37,37 +161,34 @@ function createWindow () {
 
   var checkCredentials = function() {
     storage.has('irc4osu-login', function(error, hasKey) {
-      if(error) throw error;
-      if(hasKey)
-      {
-        
+      if (error) throw error;
+      if (hasKey) {
+
         storage.get('irc4osu-login', function(error, data) {
           if (error) throw error;
           logIn(data);
         });
-      }
-      else saveUserID = true;
+      } else saveUserID = true;
     });
   }
-  
+
   storage.has('irc4osu-settings', function(error, hasKey) {
-    if(error) throw error;
-    if(hasKey) {
-      
+    if (error) throw error;
+    if (hasKey) {
+
       storage.get('irc4osu-settings', function(error, data) {
         if (error) throw error;
         settings = data;
         checkCredentials();
       });
-    }
-    else {
+    } else {
       settings = {
         notifications: true,
         nightMode: false
       };
-      
-      storage.set('irc4osu-settings', settings ,function(error) {
-        if(error) throw error;        
+
+      storage.set('irc4osu-settings', settings, function(error) {
+        if (error) throw error;
         checkCredentials();
       });
     }
@@ -80,21 +201,23 @@ function createWindow () {
       'User-Agent': 'irc4osu'
     }
   }, function(err, resp, body) {
-    if(body.tag_name != require('./package.json').version) {
+    if (body.tag_name != require('./package.json')
+      .version) {
       dialog.showMessageBox(null, {
         type: "info",
-        buttons: [ "Yes", "No" ],
+        buttons: ["Yes", "No"],
         title: "New update is available",
         message: `A new version of irc4osu! ${body.tag_name} has been released!\n\nDo you want to download it?`
       }, (response) => {
-        if(response == 0) {
-          require('electron').shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
+        if (response == 0) {
+          require('electron')
+            .shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
         }
       });
     }
   });
 
-  mainWindow.on('closed', function () {
+  mainWindow.on('closed', function() {
     mainWindow = null;
   });
 }
