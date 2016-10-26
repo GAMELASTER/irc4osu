@@ -171,8 +171,16 @@ function addSystemMessage(channel, type, message) {
 }
 
 function sendMessage() {
-  if($("#text-input").val() == "") return;
-  ipcRenderer.send("sendMessage", { channel: selectedTab, from: credentials.username, message: $("#text-input").val() });
+  var text = $("#text-input").val();
+  if(text == "") return;
+  if(text.indexOf("/pm") == 0) {
+    var datas = text.split(" ");
+    if(datas[1] in tabsList)
+      changeSelectedTab(datas[1]);
+    else createChat(datas[1]);
+    text = datas.slice(2, datas.length).join(" ");
+  }
+  ipcRenderer.send("sendMessage", { channel: selectedTab, from: credentials.username, message: text });
   $("#text-input").val("");
 }
 
