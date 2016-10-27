@@ -16,6 +16,8 @@ var tabsList = [];
 var selectedTab = null;
 var credentials = null;
 
+const modalAnimationDuration = 150;
+
 function pad(n, width, z) {
   z = z || '0';
   n = n + '';
@@ -33,13 +35,13 @@ $(".modal-container").click(function(e) {
   if(e.target !== e.currentTarget) return;
   var container = $(this);
   if(container.data("close") == true)
-    container.fadeOut(1000);
+    container.fadeOut(modalAnimationDuration);
 });
 
 $(".modal-container .modal-header a").click(function() {
   var container = $(this).parent().parent().parent();
   if(container.data("close") == true)
-    container.fadeOut(1000);
+    container.fadeOut(modalAnimationDuration);
 });
 
 function openPage(url) {
@@ -85,7 +87,7 @@ ipcRenderer.on("changeLoginFormState", (event, args) => {
     settings = args.settings;
     $("#user-name").text(args.credentials.username);
     $("#avatar").prop("src", "https://a.ppy.sh/"+args.credentials.userID+"_"+Date.now()+".jpg");
-    $("#login-modal").fadeOut(1000);
+    $("#login-modal").fadeOut(modalAnimationDuration);
     {
       $("#nightModeCheckbox").prop("checked", settings.nightMode);
       $("#notificationsCheckbox").prop("checked", settings.notifications);
@@ -200,7 +202,7 @@ $("#text-input").keyup(function(e) {
 
 function openChannelsDialog() {
   $("#select-channel-modal .channel-row").remove();
-  $("#select-channel-modal").fadeIn(1000);
+  $("#select-channel-modal").fadeIn(modalAnimationDuration);
   $("#channels-filter").val("");
   for(var i in channelsInfo) {
     var channelInfo = channelsInfo[i];
@@ -224,7 +226,7 @@ $("#channels-filter").keyup(function() {
 });
 
 function joinChannel(name) {
-  $("#select-channel-modal").fadeOut(1000);
+  $("#select-channel-modal").fadeOut(modalAnimationDuration);
   ipcRenderer.send("joinChannel", {channel: name});
 }
 
@@ -273,7 +275,7 @@ function onChatMouseWheel(e, channel) {
 }
 
 $("#open-friend").click(function() {
-  $("#select-channel-modal").fadeOut(1000);  
+  $("#select-channel-modal").fadeOut(modalAnimationDuration);  
   createChat($("#friend-name").val());
 });
 
@@ -282,11 +284,11 @@ function logOut() {
 }
 
 function Settings() {
-  $("#settings-modal").fadeIn(1000);
+  $("#settings-modal").fadeIn(modalAnimationDuration);
 }
 
 function About() {
-  $("#about-modal").fadeIn(1000);
+  $("#about-modal").fadeIn(modalAnimationDuration);
 }
 
 $("#nightModeCheckbox").change(function() {
@@ -309,7 +311,7 @@ if(initialized == false)
 var userSignTimer = [];
 
 function nickMouseOut(event, nick) {
-  $("#user-sign").fadeOut(1000);
+  $("#user-sign").fadeOut(modalAnimationDuration);
   clearTimeout(userSignTimer[nick]);
   delete userSignTimer[nick];
 }
@@ -321,6 +323,6 @@ function nickMouseOver(event, nick) {
   });
   userSignTimer[nick] = setTimeout(function() {
     $("#user-sign img").attr("src", `http://marekkraus.sk/irc4osu/getStatusBar.php?nick=${nick}`);
-    $("#user-sign").fadeIn(1000);
+    $("#user-sign").fadeIn(modalAnimationDuration);
   }, 2000);
 }
