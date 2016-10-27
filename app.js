@@ -20,6 +20,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    minWidth: 650, 
+    minHeight: 400,
     useContentSize: true, //titleBarStyle: "hidden",
     autoHideMenuBar: true,
     icon: "./www/images/logo.ico",
