@@ -149,9 +149,16 @@ function getUserAvatar(username, callback) {
 }
 
 function processMessage(options, message) {
-  message = message.replace(/\[(http(?:.*?))\ (.*)\]/, "<a href='javascript:openPage(\"$1\")'>$2</a>")
-    //.replace(/((?:http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*))/gi, "<a href='javascript:openLink(\"$1\")'>$1</a>")
-  ;
+
+  // Search for all links in a message
+  var pattern = /\[(http.*?) (.*?\]?)\]/g;
+  var match = pattern.exec(message);
+
+  // Replace each match with a functional link
+  while (match) {
+      message = message.replace(match[0], `<a href='javascript:openPage("${match[1]}")' title='${match[1]}'>${match[2]}</a>`);
+      match = pattern.exec(message);
+  }
 
   if(message.indexOf(credentials.username) != -1)
   {
