@@ -251,6 +251,20 @@ a {
 	padding: 6px 6px;
 }
 
+#chat-area .link {
+	text-decoration: none;
+	background-color: #204ACB;
+	color: white;
+	padding: 1px 2px;
+    border-radius: 4px;
+    transition-duration: .15s;
+	-webkit-transition-duration: .15s;
+}
+
+#chat-area .link:hover {
+	background-color: #4D69BF;
+}
+
 .night #text-input {
 	background-color: rgb(40, 40, 40);
 	box-shadow: inset 16px 16px 12px -14px rgb(39, 39, 39);
