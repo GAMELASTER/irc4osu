@@ -37,6 +37,6 @@ ipcRenderer.on("onChannelList", (event, args) => {
     var channelInfo = args.channel_list[i];
     channelsInfo[channelInfo.name] = channelInfo;
   }
-  if((selectedTab in channelsInfo)) return;
+  if(!(selectedTab in channelsInfo)) return;
   $("#online-users").text(channelsInfo[selectedTab].users);
 });

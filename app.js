@@ -309,6 +309,7 @@ function logIn(credentials) {
       logInData = {state: "hide", credentials: credentials, settings: settings};
       mainWindow.webContents.send("changeLoginFormState", logInData);
       joinChannel("#english");
+      client.list();
     }
     setInterval(function() {
       client.list();
