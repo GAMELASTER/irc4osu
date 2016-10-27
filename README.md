@@ -1,9 +1,9 @@
 irc4osu!
 ==============================
 
-is multi-platform unofficial IRC client for [Osu! game](http://osu.ppy.sh) running under [Electron](https://github.com/electron/electron). 
+irc4osu is a multi-platform unofficial IRC client for [osu! game](http://osu.ppy.sh) powered by [Electron](https://github.com/electron/electron). 
 
-We are working on remake of this project, but you can test the old version in [old branch](https://github.com/arogan-group/irc4osu/tree/old).
+We are working on a remake of this project, but you can test the old version in the [old branch](https://github.com/arogan-group/irc4osu/tree/old).
 
 # Downloads
 
@@ -29,7 +29,7 @@ Coming soon:
 - Much more features (depends on feedback from you)
 
 # Support us
-If you want to support this project, just star this project or write in [project topic](https://osu.ppy.sh/forum/t/430741)! :-)
+If you want to support this project, just star this project or leave a post in the [project topic](https://osu.ppy.sh/forum/t/430741)! :-)
 
 # Screenshots
 (concept screenshot, it shows how it should look like in the final version. These will also be updated when a we implement some new features, stay tuned!
