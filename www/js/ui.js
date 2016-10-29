@@ -25,10 +25,7 @@ function pad(n, width, z) {
 }
 
 function setNigthMode(enable) {
-  if(enable)
-    $("body").addClass("night");
-  else
-    $("body").removeClass("night");
+    $("body").toggleClass("night");
 }
 
 $(".modal-container").click(function(e) {
