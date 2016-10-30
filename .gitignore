@@ -43,6 +43,7 @@ typings
 # VScode
 .vscode
 
-build/
-
+#OS X
 .DS_store
+
+build/irc4osu-*/
