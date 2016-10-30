@@ -24,10 +24,7 @@ function createWindow() {
     minHeight: 400,
     useContentSize: true, //titleBarStyle: "hidden",
     autoHideMenuBar: true,
-    icon: "./www/images/logo.ico",
-    webPreferences: {
-      experimentalFeatures: true,
-    }
+    icon: "./www/images/logo.ico"
   });
 
   if (fs.existsSync(app.getPath('userData') + path.sep + "avatarCache") == false) {
