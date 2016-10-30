@@ -1,0 +1,1 @@
+electron-packager .. irc4osu --platform=win32 --arch=ia32 --asar --icon=../www/images/logo.ico --overwrite --prune --ignore=build/

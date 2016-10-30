@@ -47,3 +47,4 @@ typings
 .DS_store
 
 build/irc4osu-*/
+build/Output/
