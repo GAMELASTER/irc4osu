@@ -149,9 +149,18 @@ function createWindow() {
 
   // Initialize the tray item
   tray = new Tray("./www/images/logo.ico");
+
+  // TODO: Add settings item
   const trayMenu = Menu.buildFromTemplate([
     {
-      label: "Close",
+      label: "Open irc4osu",
+      type: "normal",
+      click: function () {
+        mainWindow.show();
+      }
+    },
+    {
+      label: "Exit",
       type: "normal",
       click: function () {
         mainWindow.destroy();
