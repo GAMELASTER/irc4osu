@@ -186,7 +186,7 @@ function addSystemMessage(channel, type, message) {
 function sendMessage() {
   var text = $("#text-input").val();
   if(text == "") return;
-  if(text.indexOf("/pm") == 0) {
+  if(text.indexOf("/pm") == 0 || text.indexOf("/msg") == 0) {
     var datas = text.split(" ");
     if(datas[1] in tabsList)
       changeSelectedTab(datas[1]);
