@@ -1,31 +1,42 @@
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-const {ipcMain} = require('electron');
-const {dialog} = require('electron');
-const {Menu} = require('electron');
-const storage = require('electron-json-storage');
+
+// Electron includes
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  dialog,
+  Menu,
+  Tray
+} = require("electron");
+
+const storage = require("electron-json-storage");
 const irc = require("irc");
 const request = require("request");
 const fs = require("fs");
 const path = require("path");
+const notifier = require('node-notifier');
 
 let mainWindow;
 let client;
 let saveUserID = false;
 let settings;
 let logInData;
+let tray = null;
 
 function createWindow() {
+
+  // Initialize the main window
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     minWidth: 650, 
     minHeight: 400,
-    useContentSize: true, //titleBarStyle: "hidden",
+    useContentSize: true,
     autoHideMenuBar: true,
     icon: "./www/images/logo.ico"
   });
+
+  // Initialize the menu
   const template = [{
     label: 'Edit',
     submenu: [{
@@ -90,8 +101,9 @@ function createWindow() {
           .shell.openExternal('http://electron.atom.io')
       }
     }]
-  }]
+  }];
 
+  // Initialize the menu for Mac
   if (process.platform === 'darwin') {
     template.unshift({
         label: app.getName(),
@@ -144,19 +156,39 @@ function createWindow() {
     }, {
       label: 'Bring All to Front',
       role: 'front'
-    }]
+    }];
   }
 
-  const menu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(menu)
+  // Initialize the tray item
+  tray = new Tray("./www/images/logo.ico");
+  const trayMenu = Menu.buildFromTemplate([
+    {
+      label: "Close",
+      type: "normal",
+      click: function () {
+        mainWindow.destroy();
+      }
+    }
+  ]);
 
+  tray.on('click', () => {
+    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+  });
 
+  tray.setToolTip("irc4osu!");
+  tray.setContextMenu(trayMenu);
+
+  // Set the menu to the app
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
+
+  // Make sure cache exists
   if (fs.existsSync(app.getPath('userData') + path.sep + "avatarCache") == false) {
     fs.mkdir(app.getPath('userData') + path.sep + "avatarCache" + path.sep);
   }
+
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
   //mainWindow.webContents.openDevTools({ detach: true });
-  //mainWindow.setMenu(null);
 
   var checkCredentials = function() {
     storage.has('irc4osu-login', function(error, hasKey) {
@@ -218,6 +250,15 @@ function createWindow() {
 
   mainWindow.on('closed', function() {
     mainWindow = null;
+  });
+
+  mainWindow.on('close', function (event) {
+    if (!app.isQuiting) {
+      event.preventDefault()
+      mainWindow.hide();
+      // TODO: add message telling user that app minimized to tray
+    }
+    return false;
   });
 }
 
