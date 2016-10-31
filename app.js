@@ -61,18 +61,6 @@ function createWindow() {
   }, {
     label: 'View',
     submenu: [{
-      label: 'Reload',
-      accelerator: 'CmdOrCtrl+R',
-      click(item, focusedWindow) {
-        if (focusedWindow) focusedWindow.reload()
-      }
-    }, {
-      label: 'Toggle Developer Tools',
-      accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-      click(item, focusedWindow) {
-        if (focusedWindow) focusedWindow.webContents.toggleDevTools()
-      }
-    }, {
       type: 'separator'
     }, {
       role: 'resetzoom'
@@ -171,14 +159,16 @@ function createWindow() {
     }
   ]);
 
+  // Click event should open or hide the window
   tray.on('click', () => {
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
   });
 
+  // Set the tray in the app
   tray.setToolTip("irc4osu!");
   tray.setContextMenu(trayMenu);
 
-  // Set the menu to the app
+  // Set the menu in the app
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 
