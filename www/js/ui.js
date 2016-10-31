@@ -96,6 +96,10 @@ ipcRenderer.on("changeLoginFormState", (event, args) => {
   }
 });
 
+ipcRenderer.on("showNotification", (event, options) => {
+  notifier.notify(options);
+});
+
 function getChannelNameID(channel) {
   return channel.replace("#","hash_");
 }

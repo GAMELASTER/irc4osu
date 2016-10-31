@@ -254,9 +254,12 @@ function createWindow() {
 
   mainWindow.on('close', function (event) {
     if (!app.isQuiting) {
-      event.preventDefault()
+      event.preventDefault();
+      mainWindow.webContents.send("showNotification", {
+        title: "irc4osu!",
+        message: "irc4osu! has been minimized to the tray!"
+      });
       mainWindow.hide();
-      // TODO: add message telling user that app minimized to tray
     }
     return false;
   });
