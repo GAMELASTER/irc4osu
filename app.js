@@ -148,7 +148,7 @@ function createWindow() {
   }
 
   // Initialize the tray item
-  tray = new Tray("./www/images/logo.ico");
+  tray = new Tray("./www/images/tray.png");
 
   // TODO: Add settings item
   const trayMenu = Menu.buildFromTemplate([
