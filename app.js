@@ -164,6 +164,9 @@ function createWindow() {
       type: "normal",
       click: function () {
         mainWindow.destroy();
+        if (process.platform == 'darwin') {
+          app.quit();
+        }
       }
     }
   ]);
