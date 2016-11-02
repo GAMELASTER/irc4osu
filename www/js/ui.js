@@ -23,12 +23,6 @@ var credentials = null;
 
 const modalAnimationDuration = 150;
 
-function pad(n, width, z) {
-  z = z || '0';
-  n = n + '';
-  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
-
 function setNigthMode(enable) {
   if(enable)
     $("body").addClass("night");
@@ -127,7 +121,9 @@ function createChat(name) {
 function addMessage(channel, options) {
   var channelId = getChannelNameID(channel);
   var date = new Date();
-  var html = "<span class='time-tag'>["+pad(date.getHours(), 2)+":"+pad(date.getMinutes(), 2)+"]</span> ";
+  var hours = ("0" + date.getHours()).slice(-2);
+  var minutes = ("0" + date.getMinutes()).slice(-2);
+  var html = `<span class='time-tag'>[${hours}:${minutes}]</span>`;
   html += `<a onMouseOver="nickMouseOver(event, '${options.nick}')" onMouseOut="nickMouseOut(event, '${options.nick}')" href="javascript:openUser('${options.nick}')" class="user-tag normal-user" href="#">${options.nick}</a>`;
   if(options.type == "message") html += ": ";
   else html += " ";
