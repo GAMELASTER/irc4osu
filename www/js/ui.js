@@ -6,23 +6,97 @@ const {
 } = require('electron');
 const app = require('electron').remote.app;
 
+// Constants
 const notifier = require('node-notifier');
 const request = require('request');
 const fs = require('fs');
 const path = require('path');
+const irc = require('irc');
 
-var channelsInfo = null;
+const client = {
 
-var settings = null;
+  tabs: [],
+  activeTab: 0,
 
-var initialized = false;
+  defaultChannels: ["#english"],
 
-var tabsList = [];
-var selectedTab = null;
-var credentials = null;
+  // Holds the irc client
+  irc: null,
 
-const modalAnimationDuration = 150;
+  // Initializes the client
+  init: function (credentials) {
+    // Start the client
+    this.irc = new irc.Client("irc.ppy.sh", credentials.username, {
+      password: credentials.password,
+      autoConnect: false
+    });
 
+    // Listeners
+    this.irc.connect(0, this.onConnected);
+
+    this.irc.addListener("error", this.onError);
+
+    this.irc.addListener("message", (nick, to, text, message) => {
+      this.onMessage({
+        nick: nick,
+        to: to,
+        text: text,
+        message: message
+      });
+    });
+
+    this.irc.addListener("action", (nick, to, text, message) => {
+      this.onAction({
+        nick: nick,
+        to: to,
+        text: text,
+        message: message
+      });
+    });
+  },
+
+  // Fires when we connect
+  onConnected: function (args) {
+    console.log("We're connected lul");
+  },
+
+  // Fires whenever we receive a message
+  onMessage: function (args) {
+
+  },
+
+  // Fires whenever we receive an action
+  onAction: function (args) {
+
+  },
+
+  // Fires whenever we receive an action
+  onError: function (error) {
+    console.log("Holy error!");
+  },
+
+  // Send message through irc client
+  sendMessage: function () {
+
+  },
+
+  // Joins a channel
+  joinChannel: function (channelName) {
+
+  },
+
+  // Leaves a channel
+  leaveChannel: function () {
+
+  }
+}
+
+client.init({
+  username: "dddfs",
+  password: "skasdfk"
+});
+
+/*
 function setNigthMode(enable) {
   if(enable)
     $("body").addClass("night");
@@ -347,3 +421,4 @@ function nickMouseOver(event, nick) {
     $("#user-sign").fadeIn(modalAnimationDuration);
   }, 2000);
 }
+*/

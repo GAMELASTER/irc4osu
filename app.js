@@ -184,7 +184,7 @@ function createWindow() {
   }
 
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
-  //mainWindow.webContents.openDevTools({ detach: true });
+  mainWindow.webContents.openDevTools({ detach: true });
   
   mainWindow.on('closed', function() {
     mainWindow = null;
