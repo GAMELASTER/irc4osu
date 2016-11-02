@@ -1,6 +1,11 @@
-const {shell} = require('electron');
+
+// Electron includes
+const {
+  shell,
+  ipcRenderer
+} = require('electron');
 const app = require('electron').remote.app;
-const {ipcRenderer} = require('electron');
+
 const notifier = require('node-notifier');
 const request = require('request');
 const fs = require('fs');
