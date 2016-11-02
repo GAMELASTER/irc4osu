@@ -217,6 +217,7 @@ function openChannelsDialog() {
   $("#channels-filter").val("");
   for(var i in channelsInfo) {
     var channelInfo = channelsInfo[i];
+    if(channelInfo.name in tabsList) continue;
     $("#channels-list").append(`<div onClick="joinChannel('${channelInfo.name}');" class="channel-row">
             <h1>${channelInfo.name}</h1>
             <p>${channelInfo.topic}<span class="active-users">${channelInfo.users} users</span></p>
@@ -228,6 +229,7 @@ $("#channels-filter").keyup(function() {
   $("#select-channel-modal .channel-row").remove();
   for(var i in channelsInfo) {
     var channelInfo = channelsInfo[i];
+    if(channelInfo.name in tabsList) continue;
     if(channelInfo.name.indexOf($("#channels-filter").val()) == -1) continue;
     $("#channels-list").append(`<div onClick="joinChannel('${channelInfo.name}');" class="channel-row">
             <h1>${channelInfo.name}</h1>
@@ -286,8 +288,11 @@ function onChatMouseWheel(e, channel) {
 }
 
 $("#open-friend").click(function() {
+  var friendName = $("#friend-name").val();
+  if(friendName in tabsList) return alert("Users chat is already opened!");
   $("#select-channel-modal").fadeOut(modalAnimationDuration);  
-  createChat($("#friend-name").val());
+  createChat(friendName);
+  $("#friend-name").val("");
 });
 
 function logOut() {
