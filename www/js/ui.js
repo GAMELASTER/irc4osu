@@ -120,9 +120,13 @@ function createChat(name) {
 
 function addMessage(channel, options) {
   var channelId = getChannelNameID(channel);
+
+  // Build date
   var date = new Date();
   var hours = ("0" + date.getHours()).slice(-2);
   var minutes = ("0" + date.getMinutes()).slice(-2);
+
+  // Build html message
   var html = `<span class='time-tag'>[${hours}:${minutes}]</span>`;
   html += `<a onMouseOver="nickMouseOver(event, '${options.nick}')" onMouseOut="nickMouseOut(event, '${options.nick}')" href="javascript:openUser('${options.nick}')" class="user-tag normal-user" href="#">${options.nick}</a>`;
   if(options.type == "message") html += ": ";
