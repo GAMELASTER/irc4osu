@@ -1,8 +1,32 @@
-
 // Constants
 const fs = require('fs');
 const path = require('path');
 const client = require("./js/client.js");
+
+const {dialog} = require("electron");
+
+// Check for update on startup
+request({
+  url: "https://api.github.com/repos/arogan-group/irc4osu/releases/latest",
+  json: true,
+  headers: {
+    'User-Agent': 'irc4osu'
+  }
+}, function(err, resp, body) {
+  if (body.tag_name != require('./package.json')
+    .version) {
+    dialog.showMessageBox(null, {
+      type: "info",
+      buttons: ["Yes", "No"],
+      title: "New update is available",
+      message: `A new version of irc4osu! ${body.tag_name} has been released!\n\nDo you want to download it?`
+    }, response => {
+      if (response == 0) {
+        require('electron').shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
+      }
+    });
+  }
+});
 
 // Check if credentials exist in storage
 client.getCredentials((credentials) => {
@@ -74,7 +98,7 @@ $(document).on("click", "#open-channel-dialog", () => {
   // Reset values
   $("#select-channel-modal .channel-row").remove();
   $("#channels-filter").val("");
-  
+
   // Open dialog
   $("#select-channel-modal").fadeIn(150);
 
@@ -93,7 +117,7 @@ $(document).on("click", "#open-channel-dialog", () => {
          <p>${channelInfo.topic}<span class="active-users">${channelInfo.users} users</span></p>
        </div>`);
 
-       return true;
+    return true;
   });
 });
 
@@ -110,12 +134,16 @@ $(document).on("click", ".close-modal", e => {
 
 // Swipe left button
 $(document).on("click", "#swipe-left", () => {
-  $("#tab-slider").animate({scrollLeft: $("#tab-slider").scrollLeft() - 100}, 200);
+  $("#tab-slider").animate({
+    scrollLeft: $("#tab-slider").scrollLeft() - 100
+  }, 200);
 });
 
 // Swipe right button
 $(document).on("click", "#swipe-right", () => {
-  $("#tab-slider").animate({scrollLeft: $("#tab-slider").scrollLeft() + 100}, 200);
+  $("#tab-slider").animate({
+    scrollLeft: $("#tab-slider").scrollLeft() + 100
+  }, 200);
 });
 
 // Open settings
