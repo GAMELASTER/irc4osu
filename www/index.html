@@ -14,9 +14,9 @@
         <img id="avatar" src="./images/loading.gif">
       </div>
       <ul id="top-menu">
-        <li><a href="javascript:Settings()">Settings</a></li>
-        <li><a href="javascript:About()">About</a></li>
-        <li><a href="javascript:logOut()">Logout</a></li>
+        <li><a href="#" id="open-settings">Settings</a></li>
+        <li><a href="#" id="open-about">About</a></li>
+        <li><a href="#" id="logout">Logout</a></li>
       </ul>
       <div class="clear-fix"></div>
       <div id="tabs-container">
@@ -81,7 +81,7 @@
     <div id="select-channel-modal" style="display: none;" data-close="true" class="modal-container">
       <div class="modal-dialog">
         <div class="modal-header">
-          Select channel <a href="#" id="exit-select-channel-modal">x</a>
+          Select channel <a href="#" class="close-modal">x</a>
         </div>
         <input type="text" id="friend-name" name="friend-name" placeholder="Friend name"/><br>
         <button type="button" id="open-friend" class="btn-osu btn-osu-pink">Add</button><br>
@@ -122,7 +122,7 @@
     <div id="settings-modal" style="display: none;" data-close="true" class="modal-container">
       <div class="modal-dialog modal-dialog-big">
         <div class="modal-header">
-          Settings <a href="#">x</a>
+          Settings <a href="#" class="close-modal">x</a>
         </div>
         <div class="row">
           <label for="nightModeCheckbox">Night mode</label>
@@ -137,7 +137,7 @@
     <div id="about-modal" style="display: none;" data-close="true" class="modal-container">
       <div class="modal-dialog modal-dialog-big">
         <div class="modal-header">
-          About <a href="#">x</a>
+          About <a href="#" class="close-modal">x</a>
         </div>
         <div id="about-logo">
           <img src="./images/logo.ico"> <span class="appname">IRC4OSU!</span> <span class="version"><script>document.write(require('../package.json').version);</script></span>

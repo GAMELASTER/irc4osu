@@ -103,9 +103,9 @@ $(document).on("click", ".join-channel", e => {
   $("#select-channel-modal").fadeOut(150);
 });
 
-// Exit channel modal
-$(document).on("click", "#exit-select-channel-modal", e => {
-  $("#select-channel-modal").fadeOut(150);
+// Exit modal
+$(document).on("click", ".close-modal", e => {
+  $(".modal-container").fadeOut(150);
 });
 
 // Swipe left button
@@ -116,4 +116,16 @@ $(document).on("click", "#swipe-left", () => {
 // Swipe right button
 $(document).on("click", "#swipe-right", () => {
   $("#tab-slider").animate({scrollLeft: $("#tab-slider").scrollLeft() + 100}, 200);
+});
+
+$(document).on("click", "#open-settings", () => {
+  $("#settings-modal").fadeIn(150);
+});
+
+$(document).on("click", "#open-about", () => {
+  $("#about-modal").fadeIn(150);
+});
+
+$(document).on("click", "#logout", () => {
+
 });
