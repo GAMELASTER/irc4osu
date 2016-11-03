@@ -37,8 +37,13 @@ $("#login-form").submit(e => {
 });
 
 // Click on tab
-$(document).on("click", "#tab-slider .tab span", e => {
-  client.changeTab($(e.target).parent().data("channel"));
+$(document).on("click", "#tab-slider .tab .tab-name", e => {
+  client.changeTab($(e.target).parent(".tab").data("channel"));
+});
+
+// Click on tab X
+$(document).on("click", "#tab-slider .tab .close", e => {
+  client.closeTab($(e.target).parent(".tab").data("channel"));
 });
 
 // Click on send message
@@ -73,13 +78,13 @@ $(document).on("click", "#open-channel-dialog", () => {
   // Open dialog
   $("#select-channel-modal").fadeIn(150);
 
-  client.channels.forEach((channelInfo) => {
+  // Collect all channel names we have open
+  let tabsList = client.tabs.map(e => e.name);
 
-    // Collect all channel names we have open
-    let tabsList = client.tabs.map(e => e.name);
+  client.channels.every(channelInfo => {
 
     // Skip any channels we already have opened
-    if (channelInfo.name in tabsList) return;
+    if (tabsList.indexOf(channelInfo.name) !== -1) return true;
 
     // Append the html
     $("#channels-list").append(
@@ -87,7 +92,9 @@ $(document).on("click", "#open-channel-dialog", () => {
          <h1>${channelInfo.name}</h1>
          <p>${channelInfo.topic}<span class="active-users">${channelInfo.users} users</span></p>
        </div>`);
-  }, this);
+
+       return true;
+  });
 });
 
 // Click in channel name inside channel modal

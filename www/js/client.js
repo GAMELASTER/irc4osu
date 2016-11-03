@@ -118,7 +118,7 @@ const client = {
     var message = $("<div/>").text(args.text).html();
 
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span> <a href="#" class="user-tag normal-user">${args.nick}</a>: ${message}<br />`;
-    $(`#chat-area [name="${args.to}"]`).append(html);
+    $(`#chat-area [name="${args.nick}"]`).append(html);
   },
 
   // Fires whenever we receive an action
@@ -153,7 +153,7 @@ const client = {
   // Fires when we connect
   onConnected: function (args) {
     this.connected = true;
-    
+
     // Hide login window
     $("#login-modal").fadeOut(150);
 
@@ -169,7 +169,7 @@ const client = {
     console.log(error);
 
     switch (error.command) {
-      
+
       // Wrong password
       case "err_passwdmismatch":
 
@@ -179,7 +179,7 @@ const client = {
         $("#login-form input[name='password']").prop("disabled", false);
         $("#login-form button").prop("disabled", false);
         break;
-    
+
     }
   },
 
@@ -209,7 +209,7 @@ const client = {
   // Joins a channel
   joinChannel: function (channelName) {
 
-    var element = $(`<div data-channel="${channelName}" class="tab default"><span class="close">X</span><span>${channelName}</span></div>`);
+    var element = $(`<div data-channel="${channelName}" class="tab default"><span class="close">X</span><span class="tab-name">${channelName}</span></div>`);
     this.tabs.push({
       name: channelName,
       autoScroll: true,
@@ -228,23 +228,46 @@ const client = {
 
   // Joins a user
   joinUser: function (username) {
-      var element = $(`<div data-channel="${username}" class="tab default"><span class="close">X</span><span>${username}</span></div>`);
-      this.tabs.push({
-        name: username,
-        autoScroll: true,
-        isChannel: channelName.charAt(0) == "#" ? true : false
-      });
+    var element = $(`<div data-channel="${username}" class="tab default"><span class="close">X</span><span class="tab-name">${username}</span></div>`);
+    this.tabs.push({
+      name: username,
+      autoScroll: true,
+      isChannel: channelName.charAt(0) == "#" ? true : false
+    });
 
-      $("#chat-area").prepend(`<div name='${username}' class="chat-container hidden"></div>`);
-      console.log(`Created chat with ${username}`);
-      element.appendTo($("#tab-slider"));
+    $("#chat-area").prepend(`<div name='${username}' class="chat-container hidden"></div>`);
+    console.log(`Created chat with ${username}`);
+    element.appendTo($("#tab-slider"));
 
-      this.changeTab(username);
+    this.changeTab(username);
   },
 
   // Leaves a channel
-  leaveChannel: function () {
+  closeTab: function (tabName) {
 
+    // Remove elements that belong to the tab
+    $(`#chat-area [name="${tabName}"]`).remove();
+    $(`#tab-slider div.tab[data-channel="${tabName}"]`).remove();
+
+    // Find tab index
+    let index = this.tabs.findIndex(tab => tab.name === tabName);
+
+    // Leave the irc channel
+    if (this.tabs[index].isChannel) {
+      this.irc.part(tabName);
+    }
+
+    // The next tab we're joining
+    let indexToJoin = index;
+
+    // Check to see if its the last index, if yes then change it to the tab before
+    if (index > 0 && index === this.tabs.length - 1) indexToJoin--;
+
+    // Remove array element
+    this.tabs.splice(index, 1);
+
+    // Make sure we have tabs open
+    if (this.tabs.length !== 0) this.changeTab(this.tabs[indexToJoin].name);
   },
 
   // Changes active tab
@@ -269,27 +292,27 @@ const client = {
   // Gets or creates the settings from storage
   getSettings: function (callback) {
     storage.has('irc4osu-settings', (error, hasKey) => {
-        if (error) throw error;
+      if (error) throw error;
 
-        if (hasKey) {
-          storage.get('irc4osu-settings', (error, settings) => {
-            if (error) throw error;
+      if (hasKey) {
+        storage.get('irc4osu-settings', (error, settings) => {
+          if (error) throw error;
 
-            callback(settings);
-          });
-        } else {
-          this.updateSettings({
-            notifications: true,
-            nightMode: false
-          }, callback);
-        }
-      });
+          callback(settings);
+        });
+      } else {
+        this.updateSettings({
+          notifications: true,
+          nightMode: false
+        }, callback);
+      }
+    });
   },
 
   // Saves new settings to storage
   updateSettings: function (settings, callback) {
     storage.set("irc4osu-settings", settings, (error) => {
-      if(error) throw error;
+      if (error) throw error;
 
       callback();
     });
@@ -317,7 +340,7 @@ const client = {
     // Get the user ID if its not in the object yet
     if (credentials.userID === undefined) {
       console.log("Requesting user id...");
-      request({ url: 'https://marekkraus.sk/irc4osu/getUserBasic.php?username=' + credentials.username, json: true}, function (error, response, body) {
+      request({ url: 'https://marekkraus.sk/irc4osu/getUserBasic.php?username=' + credentials.username, json: true }, function (error, response, body) {
         if (error) throw error;
 
         credentials.userID = body[0].user_id;
@@ -339,7 +362,7 @@ const client = {
   // Clears the login storage
   logout: function (callback) {
     storage.remove('irc4osu-login', function (error) {
-      if(error) throw error;
+      if (error) throw error;
       callback();
     });
   }
