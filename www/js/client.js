@@ -96,12 +96,17 @@ const client = {
     console.log(this.channels);
   },
 
-  // Fires whenever we receive a message
+  // Fires whenever we receive or send a message
   onMessage: function (args) {
 
     // Join channel if it doesn't exist yet
     var tab = this.tabs.find(tab => tab.name === args.to);
-    if (!tab) this.joinChannel(args.to);
+    if (!tab) {
+      if (args.to.charAt(0) === "#")
+        this.joinChannel(args.to);
+      else
+        this.joinUser(args.to);
+    }
 
     // Build date
     var date = new Date();
@@ -200,7 +205,7 @@ const client = {
   sendMessage: function (channel, message) {
 
     // Check if the message is a command
-    if (message.charAt(0) === "/") return this.processCommand(message);
+    if (message.charAt(0) === "/") return this.processCommand(channel, message);
 
     this.irc.say(channel, message);
     this.onMessage({
@@ -211,12 +216,41 @@ const client = {
     });
   },
 
+  // Send message through irc client
+  sendAction: function (channel, message) {
+    this.irc.action(channel, message);
+    this.onAction({
+      nick: this.username,
+      to: channel,
+      text: message,
+      message: null
+    });
+  },
+
+  // Sends a system message
+  // Possible types: success, info
   systemMessage: function (channel, type, message) {
     $(`#chat-area [name="${channel}"]`).append(`<span class="${type}-tag">${message}</span><br>`);
   },
 
-  processCommand: function (message) {
+  // Process a command
+  processCommand: function (channel, message) {
 
+    // Split the messages
+    let msgArray = message.split(" ");
+
+    switch (msgArray[0]) {
+
+      // Send an action
+      case "/me":
+        this.sendAction(channel, msgArray.slice(1).join(" "));
+        break;
+
+      // Send a PM
+      case "/pm":
+        this.sendMessage(msgArray[1], msgArray.slice(2).join(" "));
+        break;
+    }
   },
 
   // Joins a channel
