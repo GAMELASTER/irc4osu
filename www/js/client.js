@@ -114,7 +114,7 @@ const client = {
     var minutes = ("0" + date.getMinutes()).slice(-2);
 
     // A hack to escape all html symbols and script injections
-    var message = $("<div/>").text(args.text).html();
+    var message = this.processMessage(args.text);
 
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span> <a href="#" class="user-tag normal-user">${args.nick}</a>: ${message}<br />`;
     $(`#chat-area [name="${args.to}"]`).append(html);
@@ -133,7 +133,7 @@ const client = {
     var minutes = ("0" + date.getMinutes()).slice(-2);
 
     // A hack to escape all html symbols and script injections
-    var message = $("<div/>").text(args.text).html();
+    var message = this.processMessage(args.text);
 
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span> <a href="#" class="user-tag normal-user">${args.nick}</a>: ${message}<br />`;
     $(`#chat-area [name="${args.nick}"]`).append(html);
@@ -161,8 +161,7 @@ const client = {
     var hours = ("0" + date.getHours()).slice(-2);
     var minutes = ("0" + date.getMinutes()).slice(-2);
 
-    // A hack to escape all html symbols and script injections
-    var message = $("<div/>").text(args.text).html();
+    var message = this.processMessage(args.text);
 
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span> <a href="#" class="user-tag normal-user">${args.nick}</a> ${message}<br />`;
     $(`#chat-area [name="${args.to}"]`).append(html);
@@ -253,8 +252,28 @@ const client = {
     }
   },
 
+  // Process a message before displaying it
+  processMessage: function (message) { 
+
+    // Escape message from all injected scripts and html tags
+    message = $("<div/>").text(message).html();
+
+    // Search for all links in a message
+    var pattern = /\[(http.*?) (.*?\]?)\]/g;
+    var match = pattern.exec(message);
+
+    // Replace each match with a functional link
+    while (match) {
+        message = message.replace(match[0], `<a href='javascript:openPage("${match[1]}")' title='${match[1]}' class='link'>${match[2]}</a>`);
+        match = pattern.exec(message);
+    }
+
+    return message;
+  },
+
   // Joins a channel
   joinChannel: function (channelName) {
+    if (!channelName) throw "No channel name provided!";
 
     var element = $(`<div data-channel="${channelName}" class="tab default"><span class="close">X</span><span class="tab-name">${channelName}</span></div>`);
     this.tabs.push({
@@ -279,7 +298,7 @@ const client = {
     this.tabs.push({
       name: username,
       autoScroll: true,
-      isChannel: channelName.charAt(0) == "#" ? true : false
+      isChannel: false
     });
 
     $("#chat-area").prepend(`<div name='${username}' class="chat-container hidden"></div>`);
@@ -287,6 +306,7 @@ const client = {
     element.appendTo($("#tab-slider"));
 
     this.changeTab(username);
+    this.systemMessage(username, "info", `Created chat with ${username}!`);
   },
 
   // Leaves a channel

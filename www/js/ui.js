@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const client = require("./js/client.js");
-
+const request = require('request');
 const {dialog} = require("electron");
 
 // Check for update on startup
