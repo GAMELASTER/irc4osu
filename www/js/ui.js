@@ -19,6 +19,7 @@ const client = {
   tabs: [],
   activeTab: 0,
   defaultChannels: ["#osu", "#english"],
+  channels: [],
   connected: false,
   username: "",
 
@@ -27,7 +28,7 @@ const client = {
 
   // Initializes the client
   init: function (credentials) {
-    
+
     // Save the username for later use
     this.username = credentials.username;
 
@@ -37,10 +38,10 @@ const client = {
       autoConnect: false
     });
 
-    // Listeners
+    // Setup the listeners
     this.irc.connect(0, () => this.onConnected());
 
-    this.irc.addListener("error", (error) => this.onError(error));
+    this.irc.addListener("error", error => this.onError(error));
 
     this.irc.addListener("message#", (nick, to, text, message) => {
       this.onMessage({
@@ -67,6 +68,24 @@ const client = {
         message: message
       });
     });
+    
+    this.irc.addListener("channellist", channelList => this.onChannelList(channelList));
+  },
+
+  onChannelList: function (channelList) {
+    // Clear array
+    this.channels = [];
+
+    // Sort channel list alphabetically
+    channelList.sort((a, b) => {
+      var x = a.name.substring(1), y = b.name.substring(1);
+      return x < y ? -1 : x > y ? 1 : 0;
+    });
+
+    // Add all channel info to our array
+    channelList.map(e => this.channels.push(e));
+
+    console.log(this.channels);
   },
 
   // Fires whenever we receive a message
@@ -142,6 +161,8 @@ const client = {
     
     // Hide login window
     $("#login-modal").fadeOut(150);
+
+    this.irc.list();
 
     this.defaultChannels.forEach(function (channel) {
       this.joinChannel(channel);
@@ -377,9 +398,8 @@ $(document).on("click", "#send-button", () => {
   $("#text-input").val("");
 });
 
+// If enter was pressed
 $(document).on("keyup", "#text-input", e => {
-
-  // If enter was pressed
   if (e.keyCode === 13) {
     var message = $("#text-input").val();
     if (message === "") return;
@@ -388,4 +408,8 @@ $(document).on("keyup", "#text-input", e => {
 
     $("#text-input").val("");
   }
+});
+
+$(document).on("click", "#openChannelsDialog", () => {
+
 });
