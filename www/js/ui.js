@@ -27,8 +27,7 @@ const client = {
 
   // Initializes the client
   init: function (credentials) {
-    console.log("initializing " + credentials.username + " with password " + credentials.password);
-
+    
     // Save the username for later use
     this.username = credentials.username;
 
@@ -181,7 +180,10 @@ const client = {
       text: message,
       message: null
     });
+  },
 
+  systemMessage: function (channel, type, message) {
+    $(`#chat-area [name="${channel}"]`).append(`<span class="${type}-tag">${message}</span><br>`);
   },
 
   processCommand: function (message) {
@@ -190,22 +192,22 @@ const client = {
 
   // Joins a channel
   joinChannel: function (channelName) {
+
+    var element = $(`<div data-channel="${channelName}" class="tab default"><span class="close">X</span><span>${channelName}</span></div>`);
+    this.tabs.push({
+      name: channelName,
+      autoScroll: true,
+      isChannel: channelName.charAt(0) == "#" ? true : false
+    });
+
+    $("#chat-area").prepend(`<div name='${channelName}' class="chat-container hidden"></div>`);
+    element.appendTo($("#tab-slider"));
+    this.changeTab(channelName);
+    this.systemMessage(channelName, "info", `Attempting to join channel...`);
+
     this.irc.join(channelName, () => {
-
-       var element = $(`<div data-channel="${channelName}" class="tab default"><span class="close">X</span><span>${channelName}</span></div>`);
-       this.tabs.push({
-          name: channelName,
-          autoScroll: true,
-          isChannel: channelName.charAt(0) == "#" ? true : false,
-          element: element
-        });
-
-        $("#chat-area").prepend(`<div name='${channelName}' class="chat-container hidden"></div>`);
-        console.log(`Joined ${channelName}`);
-        element.appendTo($("#tab-slider"));
-
-        this.changeTab(channelName);
-     });
+      this.systemMessage(channelName, "success", `Joined ${channelName}!`);
+    });
   },
 
   // Joins a user
@@ -214,8 +216,7 @@ const client = {
       this.tabs.push({
         name: username,
         autoScroll: true,
-        isChannel: channelName.charAt(0) == "#" ? true : false,
-        element: element
+        isChannel: channelName.charAt(0) == "#" ? true : false
       });
 
       $("#chat-area").prepend(`<div name='${username}' class="chat-container hidden"></div>`);
@@ -377,7 +378,6 @@ $(document).on("click", "#send-button", () => {
 });
 
 $(document).on("keyup", "#text-input", e => {
-  e.preventDefault();
 
   // If enter was pressed
   if (e.keyCode === 13) {
