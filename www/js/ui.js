@@ -90,19 +90,23 @@ $(document).on("click", "#open-channel-dialog", () => {
   }, this);
 });
 
+// Click in channel name inside channel modal
 $(document).on("click", ".join-channel", e => {
   client.joinChannel($(e.target).parent(".join-channel").data("channel"));
   $("#select-channel-modal").fadeOut(150);
 });
 
+// Exit channel modal
 $(document).on("click", "#exit-select-channel-modal", e => {
   $("#select-channel-modal").fadeOut(150);
 });
 
+// Swipe left button
 $(document).on("click", "#swipe-left", () => {
   $("#tab-slider").animate({scrollLeft: $("#tab-slider").scrollLeft() - 100}, 200);
 });
 
+// Swipe right button
 $(document).on("click", "#swipe-right", () => {
   $("#tab-slider").animate({scrollLeft: $("#tab-slider").scrollLeft() + 100}, 200);
 });
