@@ -118,14 +118,19 @@ $(document).on("click", "#swipe-right", () => {
   $("#tab-slider").animate({scrollLeft: $("#tab-slider").scrollLeft() + 100}, 200);
 });
 
+// Open settings
 $(document).on("click", "#open-settings", () => {
   $("#settings-modal").fadeIn(150);
 });
 
+// Open about
 $(document).on("click", "#open-about", () => {
   $("#about-modal").fadeIn(150);
 });
 
+// Logout
 $(document).on("click", "#logout", () => {
+  if (!client.connected) return;
 
+  client.logout();
 });

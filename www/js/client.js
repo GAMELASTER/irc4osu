@@ -359,12 +359,17 @@ const client = {
     }
   },
 
-  // Clears the login storage
-  logout: function (callback) {
-    storage.remove('irc4osu-login', function (error) {
-      if (error) throw error;
-      callback();
+  // Clears the login storage and shows the login window
+  logout: function () {
+    this.irc.disconnect(() => {
+      storage.remove('irc4osu-login', function (error) {
+        if (error) throw error;
+
+        // Show login window
+        $("#login-modal").fadeIn(150);
+      });
     });
+    
   }
 }
 
