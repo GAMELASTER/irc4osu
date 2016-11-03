@@ -184,3 +184,9 @@ $(document).on("mousewheel", ".chat-container", e => {
       tab.autoScroll = true;
   }
 });
+
+$(document).on("click", "a.link-external", e => {
+  e.preventDefault();
+
+  require('electron').shell.openExternal($(e.target).data("link"));
+});

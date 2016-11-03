@@ -116,7 +116,9 @@ const client = {
     // A hack to escape all html symbols and script injections
     var message = this.processMessage(args.text);
 
-    var html = `<span class='time-tag'>[${hours}:${minutes}]</span> <a href="#" class="user-tag normal-user">${args.nick}</a>: ${message}<br />`;
+    var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
+                <a href="#" class="user-tag normal-user link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
+
     $(`#chat-area [name="${args.to}"]`).append(html);
 
     // Autoscroll
@@ -139,7 +141,9 @@ const client = {
     // A hack to escape all html symbols and script injections
     var message = this.processMessage(args.text);
 
-    var html = `<span class='time-tag'>[${hours}:${minutes}]</span> <a href="#" class="user-tag normal-user">${args.nick}</a>: ${message}<br />`;
+    var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
+                <a href="#" class="user-tag normal-user link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
+    
     $(`#chat-area [name="${args.nick}"]`).append(html);
 
     // Autoscroll
@@ -171,7 +175,9 @@ const client = {
 
     var message = this.processMessage(args.text);
 
-    var html = `<span class='time-tag'>[${hours}:${minutes}]</span> <a href="#" class="user-tag normal-user">${args.nick}</a> ${message}<br />`;
+    var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
+                <a href="#" class="user-tag normal-user link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a> ${message}<br />`;
+                
     $(`#chat-area [name="${args.to}"]`).append(html);
 
     // Autoscroll
