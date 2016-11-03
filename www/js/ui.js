@@ -162,3 +162,24 @@ $(document).on("click", "#logout", () => {
 
   client.logout();
 });
+
+// Whenever we use the mousewheel
+$(document).on("mousewheel", ".chat-container", e => {
+
+  // Get channel name
+  var channel = $(e.target).attr("name");
+
+  // Get tab item
+  var tab = client.tabs.find(tab => tab.name === channel);
+
+  console.log($(e.target).scrollTop() + $(e.target).innerHeight());
+ 
+  if (e.originalEvent.wheelDelta / 120 > 0) {
+      // Scrolling up
+      tab.autoScroll = false;
+  } else {
+    // Scrolling down
+    if ($(e.target).scrollTop() + $(e.target).innerHeight() >= $(e.target)[0].scrollHeight - 50)
+      tab.autoScroll = true;
+  }
+});

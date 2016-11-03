@@ -118,6 +118,10 @@ const client = {
 
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span> <a href="#" class="user-tag normal-user">${args.nick}</a>: ${message}<br />`;
     $(`#chat-area [name="${args.to}"]`).append(html);
+
+    // Autoscroll
+    if (tab.autoScroll)
+      $(`#chat-area [name="${args.to}"]`).scrollTop($(`#chat-area [name="${args.to}"]`)[0].scrollHeight);
   },
 
   // Fires whenever we recieve a private message
@@ -137,6 +141,10 @@ const client = {
 
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span> <a href="#" class="user-tag normal-user">${args.nick}</a>: ${message}<br />`;
     $(`#chat-area [name="${args.nick}"]`).append(html);
+
+    // Autoscroll
+    if (tab.autoScroll)
+      $(`#chat-area [name="${args.nick}"]`).scrollTop($(`#chat-area [name="${args.nick}"]`)[0].scrollHeight);
   },
 
   // Fires whenever we receive an action
@@ -165,6 +173,10 @@ const client = {
 
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span> <a href="#" class="user-tag normal-user">${args.nick}</a> ${message}<br />`;
     $(`#chat-area [name="${args.to}"]`).append(html);
+
+    // Autoscroll
+    if (tab.autoScroll)
+      $(`#chat-area [name="${args.to}"]`).scrollTop($(`#chat-area [name="${args.to}"]`)[0].scrollHeight);
   },
 
   // Fires when we connect
