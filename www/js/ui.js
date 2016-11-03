@@ -32,11 +32,12 @@ request({
 client.getCredentials((credentials) => {
   if (credentials) {
 
-    // Hide window early
-    $("#login-modal").fadeOut(150);
-
     // Initialize client
     client.init(credentials);
+
+  } else {
+    // Show login window
+    $("#login-modal").fadeIn(150);
   }
 });
 
