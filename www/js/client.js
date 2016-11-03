@@ -445,7 +445,10 @@ const client = {
         if (error) throw error;
 
         // Show login window
-        $("#login-modal").fadeIn(150);
+        //$("#login-modal").fadeIn(150);
+
+        // TODO: This shows a white page
+        window.location.reload();
       });
     });
     
