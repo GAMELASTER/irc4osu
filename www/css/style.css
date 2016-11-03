@@ -178,6 +178,10 @@ a {
 	background-color: rgb(240, 77, 174);
 }
 
+.hidden {
+	display: none;
+}
+
 .tab.active {
 	background-color: rgb(240, 122, 192);
 }

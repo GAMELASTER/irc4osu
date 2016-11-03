@@ -12,19 +12,22 @@ const request = require('request');
 const fs = require('fs');
 const path = require('path');
 const irc = require('irc');
+const storage = require("electron-json-storage");
 
 const client = {
 
   tabs: [],
   activeTab: 0,
-
-  defaultChannels: ["#english"],
+  defaultChannels: ["#osu", "#english"],
+  connected: false,
 
   // Holds the irc client
   irc: null,
 
   // Initializes the client
   init: function (credentials) {
+    console.log("initializing " + credentials.username + " with password " + credentials.password);
+
     // Start the client
     this.irc = new irc.Client("irc.ppy.sh", credentials.username, {
       password: credentials.password,
@@ -32,9 +35,9 @@ const client = {
     });
 
     // Listeners
-    this.irc.connect(0, this.onConnected);
+    this.irc.connect(0, () => this.onConnected());
 
-    this.irc.addListener("error", this.onError);
+    this.irc.addListener("error", (error) => this.onError(error));
 
     this.irc.addListener("message", (nick, to, text, message) => {
       this.onMessage({
@@ -55,14 +58,22 @@ const client = {
     });
   },
 
-  // Fires when we connect
-  onConnected: function (args) {
-    console.log("We're connected lul");
-  },
-
   // Fires whenever we receive a message
   onMessage: function (args) {
+    //console.log(`[${args.to}] ${args.nick}: ${args.text}`);
 
+
+
+    // Build date
+    var date = new Date();
+    var hours = ("0" + date.getHours()).slice(-2);
+    var minutes = ("0" + date.getMinutes()).slice(-2);
+
+    // A hack to escape all html symbols and script injections
+    var message = $("<div/>").text(args.text).html();
+
+    var html = `<span class='time-tag'>[${hours}:${minutes}]</span> <a href="#" class="user-tag normal-user">${args.nick}</a>: ${message}<br />`;
+    $(`#chat-area [name="${args.to}"]`).append(html);
   },
 
   // Fires whenever we receive an action
@@ -70,30 +81,208 @@ const client = {
 
   },
 
+  // Fires when we connect
+  onConnected: function (args) {
+    this.connected = true;
+    
+    // Hide login window
+    $("#login-modal").fadeOut(150);
+
+    this.defaultChannels.forEach(function (channel) {
+      this.joinChannel(channel);
+    }, this);
+  },
+
   // Fires whenever we receive an action
   onError: function (error) {
-    console.log("Holy error!");
+    console.log(error);
+
+    switch (error.command) {
+      
+      // Wrong password
+      case "err_passwdmismatch":
+
+        // Enable login stuff
+        $("#login-modal").fadeIn(150);
+        $("#login-form input[name='username']").prop("disabled", false);
+        $("#login-form input[name='password']").prop("disabled", false);
+        $("#login-form button").prop("disabled", false);
+        break;
+    
+    }
   },
 
   // Send message through irc client
-  sendMessage: function () {
-
+  sendMessage: function (message) {
+    
   },
 
   // Joins a channel
   joinChannel: function (channelName) {
+    this.irc.join(channelName, () => {
 
+       var element = $(`<div data-channel="${channelName}" class="tab default"><span class="close">X</span><span>${channelName}</span></div>`);
+       this.tabs.push({
+          name: channelName,
+          autoScroll: true,
+          isChannel: channelName.charAt(0) == "#" ? true : false,
+          element: element
+        });
+
+        $("#chat-area").prepend(`<div name='${channelName}' class="chat-container hidden"></div>`);
+        console.log(`Joined ${channelName}`);
+        element.appendTo($("#tab-slider"));
+
+        this.changeTab(channelName);
+     });
   },
 
   // Leaves a channel
   leaveChannel: function () {
+    
+  },
 
+  // Changes active channel
+  changeTab: function (channelName) {
+
+    // Change active tab index
+    this.activeTab = this.tabs.findIndex(tab => tab.name === channelName);
+    console.log(this.activeTab);
+
+    $("#tab-slider .tab").removeClass("active");
+    $("#chat-area .chat-container").addClass("hidden");
+    $(`#tab-slider div.tab[data-channel="${channelName}"]`).addClass("active");
+    $(`#chat-area [name="${channelName}"]`).removeClass("hidden");
+  },
+
+  // Gets or creates the settings from storage
+  getSettings: function (callback) {
+    storage.has('irc4osu-settings', (error, hasKey) => {
+        if (error) throw error;
+
+        if (hasKey) {
+          storage.get('irc4osu-settings', (error, settings) => {
+            if (error) throw error;
+
+            callback(settings);
+          });
+        } else {
+          this.updateSettings({
+            notifications: true,
+            nightMode: false
+          }, callback);
+        }
+      });
+  },
+
+  // Saves new settings to storage
+  updateSettings: function (settings, callback) {
+    storage.set("irc4osu-settings", settings, (error) => {
+      if(error) throw error;
+
+      callback();
+    });
+  },
+
+  // Gets the credentials from storage
+  getCredentials: function (callback) {
+    storage.has('irc4osu-login', (error, hasKey) => {
+      if (error) throw error;
+      if (hasKey) {
+        storage.get('irc4osu-login', (error, credentials) => {
+          if (error) throw error;
+
+          callback(credentials)
+        });
+      } else {
+        callback(null);
+      };
+    });
+  },
+
+  // Saves new credentials to storage
+  updateCredentials: function (credentials, callback) {
+    if (credentials.userID === undefined) {
+      console.log("Requesting user id...");
+      request({ url: 'https://marekkraus.sk/irc4osu/getUserBasic.php?username=' + credentials.username, json: true}, function (error, response, body) {
+        if (error) throw error;
+
+        credentials.userID = body[0].user_id;
+        storage.set('irc4osu-login', credentials, function (error) {
+          if (error) throw error;
+
+          callback();
+        });
+      });
+    } else {
+      storage.set('irc4osu-login', credentials, function (error) {
+        if (error) throw error;
+
+        callback();
+      });
+    }
+  },
+
+  // Clears the login storage
+  logout: function (callback) {
+    storage.remove('irc4osu-login', function (error) {
+      if(error) throw error;
+      callback();
+    });
   }
 }
 
-client.init({
-  username: "dddfs",
-  password: "skasdfk"
+//client.logout(() => {
+  // client.getCredentials((credentials) => {
+  //   if (!credentials) {
+  //     credentials = {
+  //       username: "hallowatcher",
+  //       password: "e490c558"
+  //     }
+
+      
+  //   } else {
+  //     console.log("Credentials found in storage, starting...");
+  //     client.init(credentials);
+  //   }
+  // });
+//});
+
+// If credentials exist in storage
+client.getCredentials((credentials) => {
+  if (credentials) {
+
+    // Hide window early
+    $("#login-modal").fadeOut(150);
+
+    // Initialize client
+    client.init(credentials);
+    
+  }
+});
+
+// Button binds
+$("#login-form").submit(e => {
+  e.preventDefault();
+
+  // Loading
+  $("#login-form input[name='username']").prop("disabled", true);
+  $("#login-form input[name='password']").prop("disabled", true);
+  $("#login-form button").prop("disabled", true);
+
+  let credentials = {
+    username: $("input[name='username']").val(),
+    password: $("input[name='password']").val()
+  }
+
+  console.log("Saving credentials to storage...");
+  client.updateCredentials(credentials, () => {
+    client.init(credentials);
+  });
+});
+
+$(document).on("click", "#tab-slider .tab", e => {
+  client.changeTab($(e.target).parent().data("channel"));
 });
 
 /*
