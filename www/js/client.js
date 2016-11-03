@@ -1,9 +1,8 @@
 /*
-
-Irc client handler
-
-*/
-
+ *
+ * Irc client handler
+ *
+ */
 
 const irc = require('irc');
 const storage = require("electron-json-storage");
@@ -11,11 +10,23 @@ const request = require('request');
 const notifier = require('node-notifier');
 
 const client = {
+
+  // Holds a list of all open tabs
   tabs: [],
+
+  // Holds the index of the currently selected tab
   activeTab: 0,
+
+  // Holds the channels to join on login
   defaultChannels: ["#osu", "#english"],
+
+  // Holds all the channelInfos
   channels: [],
+
+  // True whenever we are connected
   connected: false,
+
+  // Holds the username
   username: "",
 
   // Holds the irc client
@@ -67,7 +78,9 @@ const client = {
     this.irc.addListener("channellist", channelList => this.onChannelList(channelList));
   },
 
+  // Fires whenever we receive a channel listing from the server
   onChannelList: function (channelList) {
+    
     // Clear array
     this.channels = [];
 

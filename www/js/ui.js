@@ -30,7 +30,7 @@ $("#login-form").submit(e => {
     password: $("input[name='password']").val()
   }
 
-  console.log("Saving credentials to storage...");
+  // Save credentials to storage
   client.updateCredentials(credentials, () => {
     client.init(credentials);
   });
@@ -41,7 +41,7 @@ $(document).on("click", "#tab-slider .tab .tab-name", e => {
   client.changeTab($(e.target).parent(".tab").data("channel"));
 });
 
-// Click on tab X
+// Click on close tab
 $(document).on("click", "#tab-slider .tab .close", e => {
   client.closeTab($(e.target).parent(".tab").data("channel"));
 });
