@@ -100,6 +100,7 @@ const client = {
     console.log(this.channels);
   },
 
+  // Fires whenever we receive a list of names
   onNames: function (channel, nicks) {
   
     // Turn this hairy object into an array
@@ -111,11 +112,14 @@ const client = {
       // If user is not an admin, nope the fuck out
       if (nick.charAt(0) !== "@") return true;
 
+      // Remove the @
+      var newNick = nick.slice(1);
+
       // If admin is already in admin array, nope the fuck out
-      if (this.admins.indexOf(nick) !== -1) return true;
+      if (this.admins.indexOf(newNick) !== -1) return true;
 
       // Add new admin
-      this.admins.push(nick);
+      this.admins.push(newNick);
 
       return true;
     });
