@@ -172,8 +172,6 @@ $(document).on("mousewheel", ".chat-container", e => {
 
   // Get tab item
   var tab = client.tabs.find(tab => tab.name === channel);
-
-  console.log($(e.target).scrollTop() + $(e.target).innerHeight());
  
   if (e.originalEvent.wheelDelta / 120 > 0) {
       // Scrolling up
@@ -185,6 +183,7 @@ $(document).on("mousewheel", ".chat-container", e => {
   }
 });
 
+// External links
 $(document).on("click", "a.link-external", e => {
   e.preventDefault();
 

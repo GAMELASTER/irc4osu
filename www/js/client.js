@@ -32,6 +32,8 @@ const client = {
   // Holds the irc client
   irc: null,
 
+  admins: [],
+
   // Initializes the client
   init: function (credentials) {
 
@@ -48,6 +50,8 @@ const client = {
     this.irc.connect(0, () => this.onConnected());
 
     this.irc.addListener("error", error => this.onError(error));
+
+    this.irc.addListener("names", (channel, nicks) => this.onNames(channel, nicks));
 
     this.irc.addListener("message#", (nick, to, text, message) => {
       this.onMessage({
@@ -96,6 +100,27 @@ const client = {
     console.log(this.channels);
   },
 
+  onNames: function (channel, nicks) {
+  
+    // Turn this hairy object into an array
+    nicks = Object.keys(nicks);
+
+    // Gather admin names
+    nicks.every(nick => {
+
+      // If user is not an admin, nope the fuck out
+      if (nick.charAt(0) !== "@") return true;
+
+      // If admin is already in admin array, nope the fuck out
+      if (this.admins.indexOf(nick) !== -1) return true;
+
+      // Add new admin
+      this.admins.push(nick);
+
+      return true;
+    });
+  },
+
   // Fires whenever we receive or send a message
   onMessage: function (args) {
 
@@ -116,8 +141,11 @@ const client = {
     // A hack to escape all html symbols and script injections
     var message = this.processMessage(args.text);
 
+    // Get the user rights
+    var rights = this.admins.indexOf(args.nick) !== -1 ? "moderator-user" : "normal-user";
+
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-                <a href="#" class="user-tag normal-user link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
+                <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
 
     $(`#chat-area [name="${args.to}"]`).append(html);
 
@@ -141,8 +169,11 @@ const client = {
     // A hack to escape all html symbols and script injections
     var message = this.processMessage(args.text);
 
+    // Get the user rights
+    var rights = this.admins.indexOf(args.nick) !== -1 ? "moderator-user" : "normal-user";
+
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-                <a href="#" class="user-tag normal-user link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
+                <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
     
     $(`#chat-area [name="${args.nick}"]`).append(html);
 
@@ -175,9 +206,12 @@ const client = {
 
     var message = this.processMessage(args.text);
 
+    // Get the user rights
+    var rights = this.admins.indexOf(args.nick) !== -1 ? "moderator-user" : "normal-user";
+
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-                <a href="#" class="user-tag normal-user link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a> ${message}<br />`;
-                
+                <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a> ${message}<br />`;
+
     $(`#chat-area [name="${args.to}"]`).append(html);
 
     // Autoscroll
