@@ -356,11 +356,19 @@ const client = {
     // Show text input
     $('#text-input').show();
 
+    // Append html
     $("#chat-area").prepend(`<div name='${channelName}' class="chat-container hidden"></div>`);
+    
+    // Add tab to the tabslider
     element.appendTo($("#tab-slider"));
+
+    // Change the tab to the newly created tab
     this.changeTab(channelName);
+
+    // Add system message
     this.systemMessage(channelName, "info", `Attempting to join channel...`);
 
+    // Join from the irc client
     this.irc.join(channelName, () => {
       this.systemMessage(channelName, "success", `Joined ${channelName}!`);
     });
@@ -381,11 +389,19 @@ const client = {
     // Show text input
     $('#text-input').show();
 
+    // Set user count to ...
+    this.updateUserCount();
+
+    // Add the chat to the html
     $("#chat-area").prepend(`<div name='${username}' class="chat-container hidden"></div>`);
-    console.log(`Created chat with ${username}`);
+    
+    // Add the tab to the tabslider
     element.appendTo($("#tab-slider"));
 
+    // Change the tab to the newly created tab
     this.changeTab(username);
+
+    // Add a system message
     this.systemMessage(username, "info", `Created chat with ${username}!`);
   },
 
@@ -432,7 +448,7 @@ const client = {
       // Show text for no tabs open
       $('#empty').show();
 
-      // Update user count
+      // Set user count to ...
       this.updateUserCount();
     }
 
