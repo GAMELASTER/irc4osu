@@ -8,6 +8,7 @@ const irc = require('irc');
 const storage = require("electron-json-storage");
 const request = require('request');
 const notifier = require('node-notifier');
+const path = require("path");
 
 const client = {
 
@@ -47,7 +48,7 @@ const client = {
     });
 
     // Setup the listeners
-    this.irc.connect(0, () => this.onConnected());
+    this.irc.connect(0, () => this.onConnected(credentials));
 
     this.irc.addListener("error", error => this.onError(error));
 
@@ -225,14 +226,24 @@ const client = {
   },
 
   // Fires when we connect
-  onConnected: function (args) {
+  onConnected: function (credentials) {
+
+    // Set connected to true
     this.connected = true;
+
+    // Update profile pic
+    $("#avatar").prop("src", `https://a.ppy.sh/${credentials.userID}_${Date.now()}.jpg`);
+
+    // Update username
+    $("#user-name").text(credentials.username);
 
     // Hide login window
     $("#login-modal").fadeOut(150);
 
+    // Channel list with users online
     this.irc.list();
 
+    // Join each default channel
     this.defaultChannels.forEach(function (channel) {
       this.joinChannel(channel);
     }, this);
@@ -429,6 +440,36 @@ const client = {
       if (thisChannel)
         $("#online-users").text(thisChannel.users);
     }
+  },
+
+  // Returns the user's avatar
+  getAvatar: function (callback) {
+    var avatarPath = app.getPath('userData') + path.sep + "avatarCache" + path.sep + this.username + ".png";
+    
+    var downloadAvatar = function () {
+      request
+      .get('http://marekkraus.sk/irc4osu/getUserAvatar.php?username=' + this.username)
+      .on('end', function () {
+        callback(avatarPath);
+      })
+      .pipe(fs.createWriteStream(avatarPath));
+    };
+
+    fs.stat(avatarPath, (err, stat) => {
+      if (err) return downloadAvatar();
+      
+      // Get current time
+      now = new Date().getTime();
+
+      // Get change time + 1 day
+      endTime = new Date(stat.ctime).getTime() + (1 * 24 * 60 * 60 * 1000);
+
+      // Check if it's been longer than a day
+      if (now > endTime)
+        return downloadAvatar();
+
+      callback(avatarPath);
+    });
   },
 
   // Gets or creates the settings from storage
