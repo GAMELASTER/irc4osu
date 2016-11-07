@@ -332,7 +332,7 @@ const client = {
 
     // Replace each match with a functional link
     while (match) {
-        message = message.replace(match[0], `<a href='javascript:openPage("${match[1]}")' title='${match[1]}' class='link'>${match[2]}</a>`);
+        message = message.replace(match[0], `<a href='#' title='${match[1]}' class='link link-external' data-link='${match[1]}'>${match[2]}</a>`);
         match = pattern.exec(message);
     }
 
