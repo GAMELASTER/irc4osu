@@ -97,7 +97,8 @@ const client = {
     // Add all channel info to our array
     channelList.map(e => this.channels.push(e));
 
-    console.log(this.channels);
+    // Update user count for current tab
+    this.updateUserCount(this.tabs[this.activeTab].name);
   },
 
   // Fires whenever we receive a list of names
@@ -410,6 +411,24 @@ const client = {
 
     // Show chat container
     $(`#chat-area [name="${tabName}"]`).removeClass("hidden");
+
+    // Update user count
+    this.updateUserCount(tabName);
+  },
+
+  // Update online user count display
+  updateUserCount: function (channel) {
+    
+    // Check if channels array exists
+    if (this.channels !== null) {
+
+      // Find this channel
+      var thisChannel = this.channels.find(channelInfo => channelInfo.name === channel);
+
+      // If found, change text to this channel's user count
+      if (thisChannel)
+        $("#online-users").text(thisChannel.users);
+    }
   },
 
   // Gets or creates the settings from storage
