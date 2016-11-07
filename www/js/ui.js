@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const client = require("./js/client.js");
 const request = require('request');
-const {dialog} = require("electron");
+const {dialog} = require("electron").remote;
 
 // Check for update on startup
 request({
@@ -13,13 +13,12 @@ request({
     'User-Agent': 'irc4osu'
   }
 }, function(err, resp, body) {
-  if (body.tag_name != require('./package.json')
-    .version) {
+  if (body.tag_name !== process.env.npm_package_version) {
     dialog.showMessageBox(null, {
       type: "info",
       buttons: ["Yes", "No"],
       title: "New update is available",
-      message: `A new version of irc4osu! ${body.tag_name} has been released!\n\nDo you want to download it?`
+      message: `A newer version of irc4osu! has been released! (${body.tag_name})\n\nDo you wish to download it?`
     }, response => {
       if (response == 0) {
         require('electron').shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
