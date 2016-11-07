@@ -194,6 +194,21 @@ a {
 	background-color: rgb(241, 196, 15);
 }
 
+#empty {
+	position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 200px;
+    height: 90px;
+    margin: auto;
+    text-align: center;
+    font-size: 24px;
+	color: rgba(198, 18, 125, 1);
+	font-style: italic;
+}
+
 .container {
 	padding: 6px 6px;
 	flex-grow:1;
@@ -253,6 +268,10 @@ a {
   vertical-align:middle;
 	font-family: exo-main;
 	padding: 6px 6px;
+}
+
+#chat-area {
+	position: relative;
 }
 
 #chat-area .link {

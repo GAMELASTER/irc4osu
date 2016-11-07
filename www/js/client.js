@@ -350,6 +350,12 @@ const client = {
       isChannel: channelName.charAt(0) == "#" ? true : false
     });
 
+    // Hide text for no tabs open
+    $('#empty').hide();
+
+    // Show text input
+    $('#text-input').show();
+
     $("#chat-area").prepend(`<div name='${channelName}' class="chat-container hidden"></div>`);
     element.appendTo($("#tab-slider"));
     this.changeTab(channelName);
@@ -368,6 +374,12 @@ const client = {
       autoScroll: true,
       isChannel: false
     });
+
+    // Hide text for no tabs open
+    $('#empty').hide();
+
+    // Show text input
+    $('#text-input').show();
 
     $("#chat-area").prepend(`<div name='${username}' class="chat-container hidden"></div>`);
     console.log(`Created chat with ${username}`);
@@ -402,7 +414,28 @@ const client = {
     this.tabs.splice(index, 1);
 
     // Make sure we have tabs open
-    if (this.tabs.length !== 0) this.changeTab(this.tabs[indexToJoin].name);
+    if (this.tabs.length !== 0) {
+
+      // Show text input
+      $('#text-input').show();
+
+      // Hide text for no tabs open
+      $('#empty').hide();
+
+      // Change tab
+      this.changeTab(this.tabs[indexToJoin].name);
+    } else {
+
+      // Hide text input
+      $('#text-input').hide();
+
+      // Show text for no tabs open
+      $('#empty').show();
+
+      // Update user count
+      this.updateUserCount();
+    }
+
   },
 
   // Changes active tab
@@ -429,6 +462,9 @@ const client = {
 
   // Update online user count display
   updateUserCount: function (channel) {
+
+    // Default
+    if (channel === undefined) $("#online-users").text("...");
     
     // Check if channels array exists
     if (this.channels !== null) {
