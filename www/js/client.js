@@ -42,6 +42,13 @@ const client = {
     // Save the username for later use
     this.username = credentials.username;
 
+    // Set settings
+    this.getSettings(settings => {
+      this.nightMode(settings.nightMode);
+      $("#nightModeCheckbox").prop("checked", settings.nightMode);
+      $("#notificationsCheckbox").prop("checked", settings.notifications);
+    });
+
     // Start the client
     this.irc = new irc.Client("irc.ppy.sh", credentials.username, {
       password: credentials.password,
@@ -563,7 +570,7 @@ const client = {
         storage.get('irc4osu-settings', (error, settings) => {
           if (error) throw error;
 
-          callback(settings);
+          if (callback) callback(settings);
         });
       } else {
         this.updateSettings({
@@ -579,7 +586,7 @@ const client = {
     storage.set("irc4osu-settings", settings, (error) => {
       if (error) throw error;
 
-      callback(settings);
+      if (callback) callback(settings);
     });
   },
 
@@ -646,6 +653,14 @@ const client = {
       "title": title,
       "message": message
     });
+  },
+
+  // Sets night mode
+  nightMode: function (bool) {
+    if (bool)
+      $("body").addClass("night");
+    else
+      $("body").removeClass("night");
   }
 }
 

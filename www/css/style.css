@@ -215,6 +215,8 @@ a {
     font-size: 24px;
 	color: rgba(198, 18, 125, 1);
 	font-style: italic;
+	font-weight: 800;
+	text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
 }
 
 .container {

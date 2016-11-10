@@ -189,6 +189,23 @@ $(document).on("click", "#logout", () => {
   client.logout();
 });
 
+// Night mode
+$(document).on("change", "#nightModeCheckbox", () => {
+  client.getSettings(settings => {
+    settings.nightMode = !settings.nightMode;
+    client.nightMode(settings.nightMode);
+    client.updateSettings(settings);
+  });
+});
+
+// Notifications
+$(document).on("change", "#notificationsCheckbox", () => {
+  client.getSettings(settings => {
+    settings.notifications = !settings.notifications;
+    client.updateSettings(settings);
+  });
+});
+
 // Whenever we use the mousewheel
 $(document).on("mousewheel", ".chat-container", e => {
 
