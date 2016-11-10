@@ -153,6 +153,12 @@ $(document).on("click", ".join-channel", e => {
   $("#select-channel-modal").fadeOut(150);
 });
 
+// Click on friend button in channel modal
+$(document).on("click", "#open-friend", e => {
+  $("#select-channel-modal").fadeOut(150);
+  client.joinUser($("#friend-name").val());
+});
+
 // Exit modal
 $(document).on("click", ".close-modal", e => {
   $(".modal-container").fadeOut(150);
