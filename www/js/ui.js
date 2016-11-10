@@ -125,8 +125,6 @@ $(document).on("click", "#open-channel-dialog", () => {
 $(document).on("keyup", "#channels-filter", () => {
   $("#select-channel-modal .channel-row").remove();
 
-  console.log("typed");
-
   // Collect all channel names we have open
   let tabsList = client.tabs.map(e => e.name);
 
