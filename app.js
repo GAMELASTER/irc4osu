@@ -20,9 +20,9 @@ function createWindow() {
 
   // Initialize the main window
   mainWindow = new BrowserWindow({
-    width: 800,
+    width: 825,
     height: 600,
-    minWidth: 650, 
+    minWidth: 825, 
     minHeight: 400,
     useContentSize: true,
     autoHideMenuBar: true,
