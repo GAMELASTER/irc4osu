@@ -9,6 +9,7 @@ const storage = require("electron-json-storage");
 const request = require('request');
 const notifier = require('node-notifier');
 const path = require("path");
+const {app} = require("electron").remote;
 
 const client = {
 
@@ -150,14 +151,32 @@ const client = {
     // Get the user rights
     var rights = this.admins.indexOf(args.nick) !== -1 ? "moderator-user" : "normal-user";
 
-    var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
+    // Notify when mentioned
+    if (message.indexOf(this.username) !== -1) {
+
+      // Add notify to html
+      message = message.replace(this.username, `<span class="mention-tag">${this.username}</span>`);
+
+      // Check settings to see if we have notifications on
+      this.getSettings(settings => {
+        if (settings.notifications)
+          this.getAvatar(args.nick, avatarPath => {
+            console.log("Notifying...");
+            this.notify(`${args.nick} mentioned you in ${args.to}!`, args.text, avatarPath);
+          });
+      });
+
+      // Build html
+      var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
                 <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
 
-    $(`#chat-area [name="${args.to}"]`).append(html);
+      // Append html
+      $(`#chat-area [name="${args.to}"]`).append(html);
 
-    // Autoscroll
-    if (tab.autoScroll)
-      $(`#chat-area [name="${args.to}"]`).scrollTop($(`#chat-area [name="${args.to}"]`)[0].scrollHeight);
+      // Autoscroll
+      if (tab && tab.autoScroll)
+        $(`#chat-area [name="${args.to}"]`).scrollTop($(`#chat-area [name="${args.to}"]`)[0].scrollHeight);
+      }
   },
 
   // Fires whenever we recieve a private message
@@ -184,8 +203,16 @@ const client = {
     $(`#chat-area [name="${args.nick}"]`).append(html);
 
     // Autoscroll
-    if (tab.autoScroll)
+    if (tab && tab.autoScroll)
       $(`#chat-area [name="${args.nick}"]`).scrollTop($(`#chat-area [name="${args.nick}"]`)[0].scrollHeight);
+
+    // Notification
+    this.getSettings(settings => {
+      if (settings.notifications)
+        this.getAvatar(args.nick, avatarPath => {
+          this.notify(args.nick, args.text, avatarPath);
+        });
+    });
   },
 
   // Fires whenever we receive an action
@@ -479,6 +506,9 @@ const client = {
   // Update online user count display
   updateUserCount: function (channel) {
 
+    // Change to undefined if channel parameter is not a channel
+    if (channel && channel.charAt(0) !== "#") channel = undefined;
+
     // Default
     if (channel === undefined) $("#online-users").text("...");
     
@@ -495,12 +525,12 @@ const client = {
   },
 
   // Returns the user's avatar
-  getAvatar: function (callback) {
-    var avatarPath = app.getPath('userData') + path.sep + "avatarCache" + path.sep + this.username + ".png";
+  getAvatar: function (username, callback) {
+    var avatarPath = app.getPath('userData') + path.sep + "avatarCache" + path.sep + username + ".png";
     
     var downloadAvatar = function () {
       request
-      .get('http://marekkraus.sk/irc4osu/getUserAvatar.php?username=' + this.username)
+      .get('http://marekkraus.sk/irc4osu/getUserAvatar.php?username=' + username)
       .on('end', function () {
         callback(avatarPath);
       })
@@ -549,7 +579,7 @@ const client = {
     storage.set("irc4osu-settings", settings, (error) => {
       if (error) throw error;
 
-      callback();
+      callback(settings);
     });
   },
 
@@ -607,7 +637,15 @@ const client = {
         window.location.reload();
       });
     });
-    
+  },
+
+  // Show a notification
+  notify: function (title, message, icon) {
+    notifier.notify({
+      "icon": icon,
+      "title": title,
+      "message": message
+    });
   }
 }
 
