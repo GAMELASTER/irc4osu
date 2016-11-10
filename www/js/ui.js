@@ -62,12 +62,12 @@ $("#login-form").submit(e => {
 
 // Click on tab
 $(document).on("click", "#tab-slider .tab .tab-name", e => {
-  client.changeTab($(e.target).parent(".tab").data("channel"));
+  client.changeTab($(e.target).closest(".tab").data("channel"));
 });
 
 // Click on close tab
 $(document).on("click", "#tab-slider .tab .close", e => {
-  client.closeTab($(e.target).parent(".tab").data("channel"));
+  client.closeTab($(e.target).closest(".tab").data("channel"));
 });
 
 // Click on send message
@@ -123,7 +123,7 @@ $(document).on("click", "#open-channel-dialog", () => {
 
 // Click in channel name inside channel modal
 $(document).on("click", ".join-channel", e => {
-  client.joinChannel($(e.target).parent(".join-channel").data("channel"));
+  client.joinChannel($(e.target).closest(".join-channel").data("channel"));
   $("#select-channel-modal").fadeOut(150);
 });
 
@@ -183,8 +183,8 @@ $(document).on("mousewheel", ".chat-container", e => {
 });
 
 // External links
-$(document).on("click", "a.link-external", e => {
+$(document).on("click", ".link-external", e => {
   e.preventDefault();
 
-  require('electron').shell.openExternal($(e.target).data("link"));
+  require('electron').shell.openExternal($(e.target).closest(".link-external").data("link"));
 });

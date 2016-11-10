@@ -194,6 +194,14 @@ a {
 	background-color: rgb(241, 196, 15);
 }
 
+.link-external {
+	cursor: pointer;
+}
+
+.developer.link-external:hover {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
 #empty {
 	position: absolute;
     top: 0;
