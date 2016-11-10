@@ -121,6 +121,34 @@ $(document).on("click", "#open-channel-dialog", () => {
   });
 });
 
+// Filter channels
+$(document).on("keyup", "#channels-filter", () => {
+  $("#select-channel-modal .channel-row").remove();
+
+  console.log("typed");
+
+  // Collect all channel names we have open
+  let tabsList = client.tabs.map(e => e.name);
+
+  client.channels.every(channelInfo => {
+
+    // Skip any channels we already have opened
+    if (tabsList.indexOf(channelInfo.name) !== -1) return true;
+
+    // Skip any channels that dont match the filter
+    if(channelInfo.name.indexOf($("#channels-filter").val()) === -1) return true;
+
+    // Append the html
+    $("#channels-list").append(
+      `<div data-channel="${channelInfo.name}" class="channel-row join-channel">
+         <h1>${channelInfo.name}</h1>
+         <p>${channelInfo.topic}<span class="active-users">${channelInfo.users} users</span></p>
+       </div>`);
+
+    return true;
+  });
+});
+
 // Click in channel name inside channel modal
 $(document).on("click", ".join-channel", e => {
   client.joinChannel($(e.target).closest(".join-channel").data("channel"));
