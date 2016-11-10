@@ -178,6 +178,10 @@ a {
 	background-color: rgb(240, 77, 174);
 }
 
+.hidden {
+	display: none;
+}
+
 .tab.active {
 	background-color: rgb(240, 122, 192);
 }
@@ -188,6 +192,31 @@ a {
 
 .tab.add {
 	background-color: rgb(241, 196, 15);
+}
+
+.link-external {
+	cursor: pointer;
+}
+
+.developer.link-external:hover {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+#empty {
+	position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 200px;
+    height: 90px;
+    margin: auto;
+    text-align: center;
+    font-size: 24px;
+	color: rgba(198, 18, 125, 1);
+	font-style: italic;
+	font-weight: 800;
+	text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
 }
 
 .container {
@@ -249,6 +278,10 @@ a {
   vertical-align:middle;
 	font-family: exo-main;
 	padding: 6px 6px;
+}
+
+#chat-area {
+	position: relative;
 }
 
 #chat-area .link {
@@ -418,7 +451,7 @@ a {
 }
 
 .normal-user {
-	color: #ffdb9d;
+	color: #ffc561;
 }
 
 .supporter-user {
