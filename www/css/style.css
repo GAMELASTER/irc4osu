@@ -459,7 +459,7 @@ a {
 }
 
 .moderator-user {
-	color: darkred;
+	color: #BF3434;
 }
 
 .mention-tag {
@@ -477,7 +477,7 @@ a {
 }
 
 .error-tag {
-	color: darkred;
+	color: #BF3434;
 	font-weight: bold;
 }
 
