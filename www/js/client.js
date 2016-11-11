@@ -10,6 +10,7 @@ const request = require('request');
 const notifier = require('node-notifier');
 const path = require("path");
 const {app} = require("electron").remote;
+const mainWindow = require("electron").remote.getCurrentWindow();
 
 const client = {
 
@@ -168,7 +169,10 @@ const client = {
       this.getSettings(settings => {
         if (settings.notifications)
           this.getAvatar(args.nick, avatarPath => {
-            this.notify(`${args.nick} mentioned you in ${args.to}!`, args.text, avatarPath);
+            this.notify(`${args.nick} mentioned you in ${args.to}!`, args.text, avatarPath, () => {
+              mainWindow.show();
+              this.changeTab(args.to);
+            });
           });
       });
     }
@@ -217,7 +221,10 @@ const client = {
     this.getSettings(settings => {
       if (settings.notifications)
         this.getAvatar(args.nick, avatarPath => {
-          this.notify(args.nick, args.text, avatarPath);
+          this.notify(args.nick, args.text, avatarPath, () => {
+            mainWindow.show();
+            this.changeTab(args.nick);
+          });
         });
     });
   },
@@ -647,11 +654,21 @@ const client = {
   },
 
   // Show a notification
-  notify: function (title, message, icon) {
-    notifier.notify({
-      "icon": icon,
+  notify: function (title, message, icon, callback) {
+
+    let obj = {
       "title": title,
-      "message": message
+      "message": message,
+      "sound": true,
+      "wait": true
+    };
+
+    if (typeof icon === "string") obj.icon = icon;
+
+    notifier.notify(obj, (error, result, metadata) => {
+      if (error) return;
+
+      if (typeof callback === "function" && result === "activate") callback();
     });
   },
 

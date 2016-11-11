@@ -16,6 +16,8 @@ let client;
 let logInData;
 let tray;
 
+let oneTimeNotify = false;
+
 function createWindow() {
 
   // Initialize the main window
@@ -193,10 +195,15 @@ function createWindow() {
   mainWindow.on('close', function (event) {
     if (!app.isQuiting) {
       event.preventDefault();
-      mainWindow.webContents.send("showNotification", {
-        title: "irc4osu!",
-        message: "irc4osu! has been minimized to the tray!"
-      });
+      if (!oneTimeNotify) {
+        require("node-notifier").notify({
+          "title": "irc4osu!",
+          "icon": `${__dirname}/www/images/tray@2x.png`,
+          "message": "irc4osu! has been minimized to the tray!"
+        });
+        oneTimeNotify = true;
+      }
+      
       mainWindow.hide();
     }
     return false;
