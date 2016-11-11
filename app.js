@@ -151,7 +151,7 @@ function createWindow() {
   }
 
   // Initialize the tray item
-  tray = new Tray("./www/images/tray.png");
+  tray = new Tray(`${__dirname}/www/images/tray.png`);
 
   // Build the night mode setting
   nightModeItem = new MenuItem({
