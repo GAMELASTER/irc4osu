@@ -5,7 +5,9 @@ const {
   BrowserWindow,
   dialog,
   Menu,
-  Tray
+  MenuItem,
+  Tray,
+  ipcMain
 } = require("electron");
 
 const fs = require("fs");
@@ -17,6 +19,10 @@ let logInData;
 let tray;
 
 let oneTimeNotify = false;
+
+// Settings
+let nightModeItem;
+let notificationsItem;
 
 function createWindow() {
 
@@ -146,19 +152,46 @@ function createWindow() {
   // Initialize the tray item
   tray = new Tray("./www/images/tray.png");
 
-  // TODO: Add settings item
+  // Build the night mode setting
+  nightModeItem = new MenuItem({
+    label: "Night mode",
+    type: "checkbox",
+    click: (menuItem) => {
+      mainWindow.webContents.send("nightMode", {bool: menuItem.checked});
+    }
+  });
+
+  // Build the notification mode setting
+  notificationsItem = new MenuItem({
+    label: "Notifications",
+    type: "checkbox",
+    click: (menuItem) => {
+      mainWindow.webContents.send("notifications", {bool: menuItem.checked});
+    }
+  });
+
+  // Build the actual settings menu
+  let settings = new Menu();
+  settings.append(nightModeItem);
+  settings.append(notificationsItem);
+
   const trayMenu = Menu.buildFromTemplate([
     {
       label: "Open irc4osu",
       type: "normal",
-      click: function () {
+      click: () => {
         mainWindow.show();
       }
     },
     {
+      label: "Settings",
+      type: "submenu",
+      submenu: settings
+    },
+    {
       label: "Exit",
       type: "normal",
-      click: function () {
+      click: () => {
         mainWindow.destroy();
         if (process.platform == 'darwin') {
           app.quit();
@@ -166,6 +199,8 @@ function createWindow() {
       }
     }
   ]);
+
+  notificationsItem.checked = true;
 
   // Click event should open or hide the window
   tray.on('click', () => {
@@ -226,4 +261,15 @@ app.on('activate', function () {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+// IPC Events
+ipcMain.on("show", () => {
+  mainWindow.show();
+});
+
+// Settings
+ipcMain.on("settings", (event, settings) => {
+  notificationsItem.checked = settings.notifications;
+  nightModeItem.checked = settings.nightMode;
 });

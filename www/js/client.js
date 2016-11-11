@@ -10,7 +10,7 @@ const request = require('request');
 const notifier = require('node-notifier');
 const path = require("path");
 const {app} = require("electron").remote;
-const mainWindow = require("electron").remote.getCurrentWindow();
+const {ipcRenderer} = require("electron");
 
 const client = {
 
@@ -45,9 +45,16 @@ const client = {
 
     // Set settings
     this.getSettings(settings => {
-      this.nightMode(settings.nightMode);
+      
+      // Set settings in settings modal
       $("#nightModeCheckbox").prop("checked", settings.nightMode);
       $("#notificationsCheckbox").prop("checked", settings.notifications);
+
+      // Set nightmode if active
+      this.nightMode(settings.nightMode);
+
+      // Send settings to the main process
+      ipcRenderer.send("settings", settings);
     });
 
     // Start the client
@@ -170,7 +177,7 @@ const client = {
         if (settings.notifications)
           this.getAvatar(args.nick, avatarPath => {
             this.notify(`${args.nick} mentioned you in ${args.to}!`, args.text, avatarPath, () => {
-              mainWindow.show();
+              ipcRenderer.send("show");
               this.changeTab(args.to);
             });
           });
@@ -222,7 +229,7 @@ const client = {
       if (settings.notifications)
         this.getAvatar(args.nick, avatarPath => {
           this.notify(args.nick, args.text, avatarPath, () => {
-            mainWindow.show();
+            ipcRenderer.send("show");
             this.changeTab(args.nick);
           });
         });

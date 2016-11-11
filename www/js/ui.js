@@ -4,6 +4,7 @@ const path = require('path');
 const client = require("./js/client.js");
 const request = require('request');
 const {dialog} = require("electron").remote;
+const {ipcRenderer} = require("electron");
 
 // Check for update on startup
 request({
@@ -201,6 +202,9 @@ $(document).on("change", "#nightModeCheckbox", () => {
     settings.nightMode = !settings.nightMode;
     client.nightMode(settings.nightMode);
     client.updateSettings(settings);
+
+    // Send settings to the main process
+    ipcRenderer.send("settings", settings);
   });
 });
 
@@ -209,6 +213,9 @@ $(document).on("change", "#notificationsCheckbox", () => {
   client.getSettings(settings => {
     settings.notifications = !settings.notifications;
     client.updateSettings(settings);
+
+    // Send settings to the main process
+    ipcRenderer.send("settings", settings);
   });
 });
 
@@ -236,4 +243,30 @@ $(document).on("click", ".link-external", e => {
   e.preventDefault();
 
   require('electron').shell.openExternal($(e.target).closest(".link-external").data("link"));
+});
+
+// IPC Events
+
+// Fires when we click on notifications in tray
+ipcRenderer.on("notifications", (sender, obj) => {
+  client.getSettings(settings => {
+    settings.notifications = obj.bool;
+    client.updateSettings(settings);
+
+    // Set settings in settings modal
+    $("#notificationsCheckbox").prop("checked", obj.bool);
+  });
+});
+
+// Fires when we click on nightmode in tray
+ipcRenderer.on("nightMode", (sender, obj) => {
+  client.getSettings(settings => {
+    settings.nightMode = obj.bool;
+    client.updateSettings(settings);
+
+    // Set settings in settings modal
+    $("#nightModeCheckbox").prop("checked", obj.bool);
+
+    client.nightMode(obj.bool);
+  });
 });
