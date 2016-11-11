@@ -35,7 +35,11 @@ const client = {
   // Holds the irc client
   irc: null,
 
+  // Holds a list of moderators
   admins: [],
+
+  // Holds a list of all available settings
+  settingsArray: ["notifications", "nightMode", "sounds"],
 
   // Initializes the client
   init: function (credentials) {
@@ -49,6 +53,7 @@ const client = {
       // Set settings in settings modal
       $("#nightModeCheckbox").prop("checked", settings.nightMode);
       $("#notificationsCheckbox").prop("checked", settings.notifications);
+      $("#soundsCheckbox").prop("checked", settings.sounds);
 
       // Set nightmode if active
       this.nightMode(settings.nightMode);
@@ -584,12 +589,21 @@ const client = {
         storage.get('irc4osu-settings', (error, settings) => {
           if (error) throw error;
 
+          // Check if settings has all keys
+          if (Object.keys(settings).length !== this.settingsArray.length)
+            return this.updateSettings({
+              notifications: true,
+              nightMode: false,
+              sounds: true
+            }, callback);
+
           if (callback) callback(settings);
         });
       } else {
         this.updateSettings({
           notifications: true,
-          nightMode: false
+          nightMode: false,
+          sounds: true
         }, callback);
       }
     });
@@ -663,19 +677,24 @@ const client = {
   // Show a notification
   notify: function (title, message, icon, callback) {
 
-    let obj = {
-      "title": title,
-      "message": message,
-      "sound": true,
-      "wait": true
-    };
+    // Flash frame
+    ipcRenderer.send("flashFrame", true);
 
-    if (typeof icon === "string") obj.icon = icon;
+    this.getSettings(settings => {
+      let obj = {
+        "title": title,
+        "message": message,
+        "sound": settings.sounds,
+        "wait": true
+      };
 
-    notifier.notify(obj, (error, result, metadata) => {
-      if (error) return;
+      if (typeof icon === "string") obj.icon = icon;
 
-      if (typeof callback === "function" && result === "activate") callback();
+      notifier.notify(obj, (error, result, metadata) => {
+        if (error) return;
+
+        if (typeof callback === "function" && result === "activate") callback();
+      });
     });
   },
 

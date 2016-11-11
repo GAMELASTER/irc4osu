@@ -219,6 +219,17 @@ $(document).on("change", "#notificationsCheckbox", () => {
   });
 });
 
+// Sounds
+$(document).on("change", "#soundsCheckbox", () => {
+  client.getSettings(settings => {
+    settings.sounds = !settings.sounds;
+    client.updateSettings(settings);
+
+    // Send settings to the main process
+    ipcRenderer.send("settings", settings);
+  });
+});
+
 // Whenever we use the mousewheel
 $(document).on("mousewheel", ".chat-container", e => {
 
@@ -268,5 +279,16 @@ ipcRenderer.on("nightMode", (sender, obj) => {
     $("#nightModeCheckbox").prop("checked", obj.bool);
 
     client.nightMode(obj.bool);
+  });
+});
+
+// Fires when we click on sounds in tray
+ipcRenderer.on("sounds", (sender, obj) => {
+  client.getSettings(settings => {
+    settings.sounds = obj.bool;
+    client.updateSettings(settings);
+
+    // Set settings in settings modal
+    $("#soundsCheckbox").prop("checked", obj.bool);
   });
 });

@@ -23,6 +23,7 @@ let oneTimeNotify = false;
 // Settings
 let nightModeItem;
 let notificationsItem;
+let soundsItem;
 
 function createWindow() {
 
@@ -170,10 +171,20 @@ function createWindow() {
     }
   });
 
+  // Build the sound mode setting
+  soundsItem = new MenuItem({
+    label: "Sounds",
+    type: "checkbox",
+    click: (menuItem) => {
+      mainWindow.webContents.send("sounds", {bool: menuItem.checked});
+    }
+  });
+
   // Build the actual settings menu
   let settings = new Menu();
   settings.append(nightModeItem);
   settings.append(notificationsItem);
+  settings.append(soundsItem);
 
   const trayMenu = Menu.buildFromTemplate([
     {
@@ -272,4 +283,10 @@ ipcMain.on("show", () => {
 ipcMain.on("settings", (event, settings) => {
   notificationsItem.checked = settings.notifications;
   nightModeItem.checked = settings.nightMode;
+  soundsItem.checked = settings.sounds;
+});
+
+// Notification flash
+ipcMain.on("flashFrame", function(event, flag) {
+    mainWindow.flashFrame(flag);
 });
