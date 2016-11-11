@@ -168,22 +168,22 @@ const client = {
       this.getSettings(settings => {
         if (settings.notifications)
           this.getAvatar(args.nick, avatarPath => {
-            console.log("Notifying...");
             this.notify(`${args.nick} mentioned you in ${args.to}!`, args.text, avatarPath);
           });
       });
+    }
 
-      // Build html
-      var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-                <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
+    // Build html
+    var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
+              <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
 
-      // Append html
-      $(`#chat-area [name="${args.to}"]`).append(html);
+    // Append html
+    $(`#chat-area [name="${args.to}"]`).append(html);
 
-      // Autoscroll
-      if (tab && tab.autoScroll)
-        $(`#chat-area [name="${args.to}"]`).scrollTop($(`#chat-area [name="${args.to}"]`)[0].scrollHeight);
-      }
+    // Autoscroll
+    if (tab && tab.autoScroll)
+      $(`#chat-area [name="${args.to}"]`).scrollTop($(`#chat-area [name="${args.to}"]`)[0].scrollHeight);
+    
   },
 
   // Fires whenever we recieve a private message
@@ -252,11 +252,11 @@ const client = {
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
                 <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a> ${message}<br />`;
 
-    $(`#chat-area [name="${args.to}"]`).append(html);
+    $(`#chat-area [name="${tabName}"]`).append(html);
 
     // Autoscroll
-    if (tab.autoScroll)
-      $(`#chat-area [name="${args.to}"]`).scrollTop($(`#chat-area [name="${args.to}"]`)[0].scrollHeight);
+    if (tab && tab.autoScroll)
+      $(`#chat-area [name="${tabName}"]`).scrollTop($(`#chat-area [name="${tabName}"]`)[0].scrollHeight);
   },
 
   // Fires when we connect
