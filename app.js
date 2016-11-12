@@ -22,6 +22,7 @@ let tray;
 let __;
 
 let oneTimeNotify = false;
+let willQuit = false;
 
 // Settings
 let nightModeItem;
@@ -255,19 +256,25 @@ function createWindow() {
 
   mainWindow.on('close', function (event) {
     if (!app.isQuiting) {
-      event.preventDefault();
-      if (!oneTimeNotify) {
-        require("node-notifier").notify({
-          "title": "irc4osu!",
-          "icon": `${__dirname}/www/images/tray@2x.png`,
-          "message": __("irc4osu! has been minimized to the tray!")
-        });
-        oneTimeNotify = true;
+      if(willQuit)
+      {
+        app.quit();
       }
-      
-      mainWindow.hide();
+      else
+      {
+        event.preventDefault();
+        if (!oneTimeNotify) {
+          require("node-notifier").notify({
+            "title": "irc4osu!",
+            "icon": `${__dirname}/www/images/tray@2x.png`,
+            "message": __("irc4osu! has been minimized to the tray!")
+          });
+          oneTimeNotify = true;
+        }
+        
+        mainWindow.hide();
+      }
     }
-    return false;
   });
 }
 
@@ -308,3 +315,6 @@ ipcMain.on("settings", (event, settings) => {
 ipcMain.on("flashFrame", function(event, flag) {
     mainWindow.flashFrame(flag);
 });
+
+// the signal to exit and wants to start closing windows
+app.on("before-quit", () => willQuit = true);
