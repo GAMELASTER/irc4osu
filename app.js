@@ -287,6 +287,9 @@ app.on('activate', function () {
   if (mainWindow === null) {
     createWindow();
   }
+  else {
+    mainWindow.show();
+  }
 });
 
 // IPC Events
