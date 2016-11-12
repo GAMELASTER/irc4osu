@@ -348,7 +348,7 @@ const client = {
   },
 
   // Sends a system message
-  // Possible types: success, info
+  // Possible types: success, info, error
   systemMessage: function (channel, type, message) {
     $(`#chat-area [name="${channel}"]`).append(`<span class="${type}-tag">${message}</span><br>`);
   },
@@ -361,14 +361,56 @@ const client = {
 
     switch (msgArray[0]) {
 
-      // Send an action
+      // Sends an action
       case "/me":
         this.sendAction(channel, msgArray.slice(1).join(" "));
         break;
 
-      // Send a PM
+      // Sends a PM
       case "/pm":
         this.sendMessage(msgArray[1], msgArray.slice(2).join(" "));
+        break;
+
+      // Sends a PM
+      case "/msg":
+        this.sendMessage(msgArray[1], msgArray.slice(2).join(" "));
+        break;
+
+      // Joins a channel
+      case "/join":
+        
+        // Save channel
+        let channelToJoin = msgArray[1];
+        
+        // Format channel
+        if (msgArray[1].charAt(0) !== "#") channelToJoin = `#${channelToJoin}`;
+
+        // Collect all channel names we have open
+        let tabsList = this.tabs.map(e => e.name);
+
+        // Array to hold available channel names
+        let channelNames = [];
+
+        // Check to see if we're in the channel already, if not, add to array
+        this.channels.every(channelInfo => {
+
+          // Skip any channels we already have opened
+          if (tabsList.indexOf(channelInfo.name) !== -1) return true;
+
+          // Add to array
+          channelNames.push(channelInfo.name);
+
+          // Continue
+          return true;
+
+        });
+
+        // Join if available
+        if (channelNames.indexOf(channelToJoin) !== -1)
+          this.joinChannel(channelToJoin);
+        else
+          this.systemMessage(channel, "error", `Error joining ${channelToJoin}!`);
+
         break;
     }
   },
