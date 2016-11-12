@@ -234,8 +234,8 @@ a {
 .right-side {
 	display: flex;
 	flex-wrap: wrap;
-	min-width: 125px;
-	width: 125px;
+	min-width: 150px;
+	width: 150px;
 }
 
 #splitter {
