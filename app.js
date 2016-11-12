@@ -41,16 +41,19 @@ function createWindow() {
     icon: "./www/images/logo.ico"
   });
 
+  let lang = {};
+
   i18n.configure({
     locales: ["en","de","sk","cs","pl","hu"],
     directory: __dirname + "/locales",
     defaultLocale: "en",
     prefix: "irc4osu-",
+    register: lang
   });
 
-  i18n.setLocale(osLocale.sync().substring(0, 2));
+  lang.setLocale(osLocale.sync().substring(0, 2));
 
-  __ = i18n.__;
+  __ = lang.__;
   mainWindow.__ = __;
 
   // Initialize the menu
