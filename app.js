@@ -12,11 +12,14 @@ const {
 
 const fs = require("fs");
 const path = require("path");
+const i18n = require("i18n");
+const osLocale = require('os-locale');
 
 let mainWindow;
 let client;
 let logInData;
 let tray;
+let __;
 
 let oneTimeNotify = false;
 
@@ -38,10 +41,22 @@ function createWindow() {
     icon: "./www/images/logo.ico"
   });
 
+  i18n.configure({
+    locales: ["en","de","sk","cs","pl","hu"],
+    directory: __dirname + "/locales",
+    defaultLocale: "en",
+    prefix: "irc4osu-",
+    syncFiles: true
+  });
+
+  i18n.setLocale(osLocale.sync().substring(0, 2));
+
+  __ = i18n.__;
+
   // Initialize the menu
   const template = [
     {
-    label: 'Edit',
+    label: __('Edit'),
     submenu: [{
       role: 'undo'
     }, {
@@ -62,7 +77,7 @@ function createWindow() {
       role: 'selectall'
     }]
   }, {
-    label: 'View',
+    label: __('View'),
     submenu: [{
       type: 'separator'
     }, {
@@ -86,7 +101,7 @@ function createWindow() {
   }, {
     role: 'help',
     submenu: [{
-      label: 'Learn More',
+      label: __('Learn More'),
       click() {
         require('electron')
           .shell.openExternal('http://electron.atom.io')
@@ -123,7 +138,7 @@ function createWindow() {
     template[1].submenu.push({
         type: 'separator'
       }, {
-        label: 'Speech',
+        label: __('Speech'),
         submenu: [{
           role: 'startspeaking'
         }, {
@@ -132,20 +147,20 @@ function createWindow() {
       })
       // Window menu.
     template[3].submenu = [{
-      label: 'Close',
+      label: __('Close'),
       accelerator: 'CmdOrCtrl+W',
       role: 'close'
     }, {
-      label: 'Minimize',
+      label: __('Minimize'),
       accelerator: 'CmdOrCtrl+M',
       role: 'minimize'
     }, {
-      label: 'Zoom',
+      label: __('Zoom'),
       role: 'zoom'
     }, {
       type: 'separator'
     }, {
-      label: 'Bring All to Front',
+      label: __('Bring All to Front'),
       role: 'front'
     }];
   }
@@ -155,7 +170,7 @@ function createWindow() {
 
   // Build the night mode setting
   nightModeItem = new MenuItem({
-    label: "Night mode",
+    label: __("Night mode"),
     type: "checkbox",
     click: (menuItem) => {
       mainWindow.webContents.send("nightMode", {bool: menuItem.checked});
@@ -164,7 +179,7 @@ function createWindow() {
 
   // Build the notification mode setting
   notificationsItem = new MenuItem({
-    label: "Notifications",
+    label: __("Notifications"),
     type: "checkbox",
     click: (menuItem) => {
       mainWindow.webContents.send("notifications", {bool: menuItem.checked});
@@ -173,7 +188,7 @@ function createWindow() {
 
   // Build the sound mode setting
   soundsItem = new MenuItem({
-    label: "Sounds",
+    label: __("Sounds"),
     type: "checkbox",
     click: (menuItem) => {
       mainWindow.webContents.send("sounds", {bool: menuItem.checked});
@@ -188,19 +203,19 @@ function createWindow() {
 
   const trayMenu = Menu.buildFromTemplate([
     {
-      label: "Open irc4osu",
+      label: __("Open irc4osu"),
       type: "normal",
       click: () => {
         mainWindow.show();
       }
     },
     {
-      label: "Settings",
+      label: __("Settings"),
       type: "submenu",
       submenu: settings
     },
     {
-      label: "Exit",
+      label: __("Exit"),
       type: "normal",
       click: () => {
         mainWindow.destroy();
@@ -228,7 +243,6 @@ function createWindow() {
   if (fs.existsSync(app.getPath('userData') + path.sep + "avatarCache") == false) {
     fs.mkdir(app.getPath('userData') + path.sep + "avatarCache" + path.sep);
   }
-
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
   mainWindow.webContents.openDevTools({ detach: true });
   
@@ -243,7 +257,7 @@ function createWindow() {
         require("node-notifier").notify({
           "title": "irc4osu!",
           "icon": `${__dirname}/www/images/tray@2x.png`,
-          "message": "irc4osu! has been minimized to the tray!"
+          "message": __("irc4osu! has been minimized to the tray!")
         });
         oneTimeNotify = true;
       }
