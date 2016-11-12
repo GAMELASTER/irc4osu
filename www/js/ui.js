@@ -18,8 +18,8 @@ request({
     dialog.showMessageBox(null, {
       type: "info",
       buttons: ["Yes", "No"],
-      title: "New update is available",
-      message: `A newer version of irc4osu! has been released! (${body.tag_name})\n\nDo you wish to download it?`
+      title: __("New update is available"),
+      message: __(`A newer version of irc4osu! has been released! %s\n\nDo you wish to download it?`, body.tag_name)
     }, response => {
       if (response == 0) {
         require('electron').shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
@@ -121,7 +121,7 @@ $(document).on("click", "#open-channel-dialog", () => {
     $("#channels-list").append(
       `<div data-channel="${channelInfo.name}" class="channel-row join-channel">
          <h1>${channelInfo.name}</h1>
-         <p>${channelInfo.topic}<span class="active-users">${channelInfo.users} users</span></p>
+         <p>${channelInfo.topic}<span class="active-users">${channelInfo.users} ${__("users")}</span></p>
        </div>`);
 
     return true;
@@ -147,7 +147,7 @@ $(document).on("keyup", "#channels-filter", () => {
     $("#channels-list").append(
       `<div data-channel="${channelInfo.name}" class="channel-row join-channel">
          <h1>${channelInfo.name}</h1>
-         <p>${channelInfo.topic}<span class="active-users">${channelInfo.users} users</span></p>
+         <p>${channelInfo.topic}<span class="active-users">${channelInfo.users} ${__("users")}</span></p>
        </div>`);
 
     return true;

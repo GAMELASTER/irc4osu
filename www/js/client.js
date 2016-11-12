@@ -415,7 +415,7 @@ const client = {
         if (channelNames.indexOf(channelToJoin) !== -1)
           this.joinChannel(channelToJoin);
         else
-          this.systemMessage(channel, "error", `Error joining ${channelToJoin}!`);
+          this.systemMessage(channel, "error", `${__("Error joining")} ${channelToJoin}!`);
 
         break;
     }
@@ -467,11 +467,11 @@ const client = {
     this.changeTab(channelName);
 
     // Add system message
-    this.systemMessage(channelName, "info", `Attempting to join channel...`);
+    this.systemMessage(channelName, "info", __("Attempting to join channel..."));
 
     // Join from the irc client
     this.irc.join(channelName, () => {
-      this.systemMessage(channelName, "success", `Joined ${channelName}!`);
+      this.systemMessage(channelName, "success", __("Joined %s!", channelName));
     });
   },
 
@@ -503,7 +503,7 @@ const client = {
     this.changeTab(username);
 
     // Add a system message
-    this.systemMessage(username, "info", `Created chat with ${username}!`);
+    this.systemMessage(username, "info", __(`Created chat with %s!`, username));
   },
 
   // Leaves a channel
