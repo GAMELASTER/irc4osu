@@ -46,7 +46,6 @@ function createWindow() {
     directory: __dirname + "/locales",
     defaultLocale: "en",
     prefix: "irc4osu-",
-    syncFiles: true
   });
 
   i18n.setLocale(osLocale.sync().substring(0, 2));
