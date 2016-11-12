@@ -28,6 +28,12 @@ request({
   }
 });
 
+// Set translations for elements
+$("#text-input").attr("placeholder", __("Enter a message..."));
+$("#login-form input[name='username']").attr("placeholder", __("Username"));
+$("#login-form input[name='password']").attr("placeholder", __("IRC Password"));
+$("#channels-filter").attr("placeholder", __("Filter"));
+
 // Check if credentials exist in storage
 client.getCredentials((credentials) => {
   if (credentials) {

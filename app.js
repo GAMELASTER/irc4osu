@@ -51,6 +51,7 @@ function createWindow() {
   i18n.setLocale(osLocale.sync().substring(0, 2));
 
   __ = i18n.__;
+  mainWindow.__ = __;
 
   // Initialize the menu
   const template = [

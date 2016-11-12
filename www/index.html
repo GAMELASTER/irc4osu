@@ -1,3 +1,4 @@
+<script>let __ = require("electron").remote.getCurrentWindow().__;</script>
 <html>
   <head>
     <title>irc4osu!</title>
@@ -10,13 +11,13 @@
     </div>
     <div id="header">
       <div id="user-info">
-        <span id="name-text">Logged in as<br><span id="user-name">loading...</span></span>
+        <span id="name-text"><script>document.write(__("Logged in as"));</script><br><span id="user-name"><script>document.write(__("loading..."));</script></span></span>
         <img id="avatar" src="./images/loading.gif">
       </div>
       <ul id="top-menu">
-        <li><a href="#" id="open-settings">Settings</a></li>
-        <li><a href="#" id="open-about">About</a></li>
-        <li><a href="#" id="logout">Logout</a></li>
+        <li><a href="#" id="open-settings"><script>document.write(__("Settings"));</script></a></li>
+        <li><a href="#" id="open-about"><script>document.write(__("About"));</script></a></li>
+        <li><a href="#" id="logout"><script>document.write(__("Logout"));</script></a></li>
       </ul>
       <div class="clear-fix"></div>
       <div id="tabs-container">
@@ -46,13 +47,13 @@
           <span class="time-tag">[14:42]</span> <a class="user-tag normal-user" href="#">gamelaster</a> silently laughning (che che chee!)<br>
         </div>-->
         <input type="text" id="text-input" class="hidden" placeholder="Enter a message...">
-        <div id="empty">No chats currently open!</div>
+        <div id="empty"><script>document.write(__("No chats currently open!"));</script></div>
       </div>
       <div id="splitter"></div>
       <div class="right-side">
         <div class="panel">
           <div class="info-panel">
-            <div class="info-title">Online users:</div>
+            <div class="info-title"><script>document.write(__("Online users:"));</script></div>
             <div id="online-users" class="info-text">...</div>
           </div>
           <!--<button class="btn-osu btn-osu-default">View users</button>-->
@@ -62,30 +63,30 @@
           </div>
           <button class="btn-osu btn-osu-default">Friends</button>-->
         </div>
-        <button type="button" id="send-button" class="btn-osu btn-osu-pink">Send message</button>
+        <button type="button" id="send-button" class="btn-osu btn-osu-pink"><script>document.write(__("Send message"));</script></button>
       </div>
     </div>
     <div id="login-modal" class="modal-container hidden">
       <div class="modal-dialog">
         <div class="modal-header">
-          Login
+          <script>document.write(__("Login"));</script>
         </div>
         <form id="login-form">
           <input type="text" name="username" placeholder="Username"/><br>
           <input type="password" name="password" placeholder="IRC Password"/><br>
-          <button class="btn-osu btn-osu-pink">Log in</button>
-          <div>Don’t have an IRC password?<br>
-          <a href="#" class="link-external" data-link="https://osu.ppy.sh/p/irc">CLICK HERE</a> to get your IRC password.</div>
+          <button class="btn-osu btn-osu-pink"><script>document.write(__("Log in"));</script></button>
+          <div><script>document.write(__("Don’t have an IRC password?"));</script><br>
+          <a href="#" class="link-external" data-link="https://osu.ppy.sh/p/irc"><script>document.write(__("CLICK HERE"));</script></a> <script>document.write(__("to get your IRC password"));</script>.</div>
         </form>
       </div>
     </div>
     <div id="select-channel-modal" style="display: none;" data-close="true" class="modal-container">
       <div class="modal-dialog">
         <div class="modal-header">
-          Select channel <a href="#" class="close-modal">x</a>
+          <script>document.write(__("Select channel"));</script> <a href="#" class="close-modal">x</a>
         </div>
         <input type="text" id="friend-name" name="friend-name" placeholder="Friend name"/><br>
-        <button type="button" id="open-friend" class="btn-osu btn-osu-pink">Add</button><br>
+        <button type="button" id="open-friend" class="btn-osu btn-osu-pink"><script>document.write(__("Add"));</script></button><br>
         <span>- or -</span>
         <div id="channels-list">
           <input id="channels-filter" placeholder="Filter"/>
@@ -123,18 +124,18 @@
     <div id="settings-modal" style="display: none;" data-close="true" class="modal-container">
       <div class="modal-dialog modal-dialog-big">
         <div class="modal-header">
-          Settings <a href="#" class="close-modal">x</a>
+          <script>document.write(__("Settings"));</script> <a href="#" class="close-modal">x</a>
         </div>
         <div class="row">
-          <label for="nightModeCheckbox">Night mode</label>
+          <label for="nightModeCheckbox"><script>document.write(__("Night mode"));</script></label>
           <input type="checkbox" id="nightModeCheckbox"/>
         </div>
         <div class="row">
-          <label for="notificationsCheckbox">Notifications</label>
+          <label for="notificationsCheckbox"><script>document.write(__("Notifications"));</script></label>
           <input type="checkbox" id="notificationsCheckbox"/>
         </div>
         <div class="row">
-          <label for="soundsCheckbox">Notification sounds</label>
+          <label for="soundsCheckbox"><script>document.write(__("Notification sounds"));</script></label>
           <input type="checkbox" id="soundsCheckbox"/>
         </div>
       </div>
@@ -142,7 +143,7 @@
     <div id="about-modal" style="display: none;" data-close="true" class="modal-container">
       <div class="modal-dialog modal-dialog-big">
         <div class="modal-header">
-          About <a href="#" class="close-modal">x</a>
+          <script>document.write(__("About"));</script> <a href="#" class="close-modal">x</a>
         </div>
         <div id="about-logo">
           <img src="./images/logo.ico"> <span class="appname">IRC4OSU!</span> <span class="version"><script>document.write(require("../package.json").version);</script></span>
@@ -152,14 +153,14 @@
             <img src="https://a.ppy.sh/4167678_1476773984.jpg">
             <p>
               <h1>Claire Farron</h1>
-              Project Leader & Designer c:
+              <script>document.write(__("Project Leader & Designer c:"));</script>
             </p>
           </div>
           <div class="developer link-external" style="float: right;" data-link="https://osu.ppy.sh/u/6506667">
             <img src="https://a.ppy.sh/6506667_1477423614988.jpg">
             <p>
               <h1>GAMELASTER</h1>
-              Lazy programmer ^^
+              <script>document.write(__("Lazy programmer ^^"));</script>
             </p>
           </div>
           <div class="clear-fix"></div>
@@ -169,14 +170,14 @@
             <img src="https://a.ppy.sh/1874761_1477166733.jpg">
             <p>
               <h1>hallowatcher</h1>
-              A new programmer ^^
+              <script>document.write(__("A new programmer ^^"));</script>
             </p>
           </div>
           <div class="developer link-external" style="float: right;" data-link="https://osu.ppy.sh/">
             <img src="https://new.ppy.sh/images/layout/osu-logo.png">
             <p>
               <h1>osu! team</h1>
-              osu! graphic concept
+              <script>document.write(__("osu! graphic concept"));</script>
             </p>
           </div>
           <div class="clear-fix"></div>
@@ -186,7 +187,7 @@
             <img src="https://a.ppy.sh/4656511_1470363474.png">
             <p>
               <h1>Lemmmy</h1>
-              Osu!sign author
+              <script>document.write(__("Osu!sign author"));</script>
             </p>
           </div>
           <div class="clear-fix"></div>
