@@ -318,6 +318,12 @@ const client = {
         $("#login-form button").prop("disabled", false);
         break;
 
+      // User doesn't exist
+      case "err_nosuchnick":
+
+        this.systemMessage(this.tabs[this.activeTab].name, "error", "This user is either offline or doesn't exist!");
+
+        break;
     }
   },
 
