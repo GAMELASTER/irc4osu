@@ -145,7 +145,7 @@
           About <a href="#" class="close-modal">x</a>
         </div>
         <div id="about-logo">
-          <img src="./images/logo.ico"> <span class="appname">IRC4OSU!</span> <span class="version"><script>document.write(process.env.npm_package_version);</script></span>
+          <img src="./images/logo.ico"> <span class="appname">IRC4OSU!</span> <span class="version"><script>document.write(require("../package.json").version);</script></span>
         </div>
         <div class="row">
           <div class="developer link-external" style="float: left;" data-link="https://osu.ppy.sh/u/4167678">

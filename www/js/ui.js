@@ -14,7 +14,7 @@ request({
     'User-Agent': 'irc4osu'
   }
 }, function(err, resp, body) {
-  if (body.tag_name !== process.env.npm_package_version) {
+  if (body.tag_name !== require("../package.json").version) {
     dialog.showMessageBox(null, {
       type: "info",
       buttons: ["Yes", "No"],
