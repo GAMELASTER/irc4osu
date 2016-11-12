@@ -211,8 +211,6 @@ function createWindow() {
     }
   ]);
 
-  notificationsItem.checked = true;
-
   // Click event should open or hide the window
   tray.on('click', () => {
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
