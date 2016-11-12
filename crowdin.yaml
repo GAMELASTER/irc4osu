@@ -1,0 +1,4 @@
+files:
+  - 
+    source: /locales/irc4osu-en.json
+    translation: /locales/irc4osu-%two_letters_code%.json
