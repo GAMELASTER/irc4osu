@@ -17,9 +17,8 @@ You can download the last version listed in [Releases page](https://github.com/a
 - Notification sounds (when someone mentions you in the chat)
 - Simple channel management
 - Log in / Log out screen
-- Beatmap management
-- Ranks (you can see who has a supporter rank, etc.)
-- Online time, so you can see for how long you're online already
+- Beatmap parsing
+
 - Auto-Update system
 - Windows, Linux, OS X Support
 
@@ -27,6 +26,8 @@ Coming soon:
 - iOS/Android/Windows Phone Support
 - Friendlist / Friend management
 - Much more features (depends on feedback from you)
+- Ranks (you can see who has a supporter rank, etc.)
+- Online time, so you can see for how long you're online already
 
 # Support us
 If you want to support this project, just star this project or leave a post in the [project topic](https://osu.ppy.sh/forum/t/430741)! :-)
