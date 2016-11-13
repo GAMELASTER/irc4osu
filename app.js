@@ -105,7 +105,7 @@ function createWindow() {
   }, {
     role: 'help',
     submenu: [{
-      label: __('Learn More'),
+      label: __('Open DevTools'),
       click() {
         require('electron')
           .shell.openExternal('http://electron.atom.io')
@@ -248,7 +248,7 @@ function createWindow() {
     fs.mkdir(app.getPath('userData') + path.sep + "avatarCache" + path.sep);
   }
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
-  //mainWindow.webContents.openDevTools({ detach: true });
+  if(process.argv[0].indexOf("Electron") != -1) mainWindow.webContents.openDevTools({ detach: true });
   
   mainWindow.on('closed', function() {
     mainWindow = null;
