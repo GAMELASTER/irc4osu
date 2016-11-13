@@ -52,7 +52,7 @@ function createWindow() {
     register: lang
   });
 
-  lang.setLocale(osLocale.sync().substring(0, 2));
+  lang.setLocale(osLocale.sync({spawn: false}).substring(0, 2));
 
   __ = lang.__;
   mainWindow.__ = __;
@@ -248,7 +248,7 @@ function createWindow() {
     fs.mkdir(app.getPath('userData') + path.sep + "avatarCache" + path.sep);
   }
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
-  mainWindow.webContents.openDevTools({ detach: true });
+  //mainWindow.webContents.openDevTools({ detach: true });
   
   mainWindow.on('closed', function() {
     mainWindow = null;
