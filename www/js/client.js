@@ -41,6 +41,9 @@ const client = {
   // Holds a list of all available settings
   settingsArray: ["notifications", "nightMode", "sounds"],
 
+  // Holds the path to the notification sound
+  notificationSound: `${__dirname}/../sounds/notification.wav`,
+
   // Initializes the client
   init: function (credentials) {
 
@@ -177,8 +180,10 @@ const client = {
       // Add notify to html
       message = message.replace(this.username, `<span class="mention-tag">${this.username}</span>`);
 
-      // Check settings to see if we have notifications on
+      // Check settings
       this.getSettings(settings => {
+
+        // Notifications
         if (settings.notifications)
           this.getAvatar(args.nick, avatarPath => {
             this.notify(`${args.nick} mentioned you in ${args.to}!`, args.text, avatarPath, () => {
@@ -186,6 +191,14 @@ const client = {
               this.changeTab(args.to);
             });
           });
+
+        // Sounds
+        if (settings.sounds) {
+          let notify = new Audio(this.notificationSound);
+          notify.currentTime = 0;
+          notify.volume = 0.5;
+          notify.play();
+        }
       });
     }
 
@@ -229,8 +242,10 @@ const client = {
     if (tab && tab.autoScroll)
       $(`#chat-area [name="${args.nick}"]`).scrollTop($(`#chat-area [name="${args.nick}"]`)[0].scrollHeight);
 
-    // Notification
+    // Check settings for options
     this.getSettings(settings => {
+
+      // Notification
       if (settings.notifications)
         this.getAvatar(args.nick, avatarPath => {
           this.notify(args.nick, args.text, avatarPath, () => {
@@ -238,6 +253,15 @@ const client = {
             this.changeTab(args.nick);
           });
         });
+
+      // Sounds
+      if (settings.sounds) {
+        let notify = new Audio(this.notificationSound);
+        notify.currentTime = 0;
+        notify.volume = 0.5;
+        notify.play();
+      }
+        
     });
   },
 
@@ -728,21 +752,18 @@ const client = {
     // Flash frame
     ipcRenderer.send("flashFrame", true);
 
-    this.getSettings(settings => {
-      let obj = {
-        "title": title,
-        "message": message,
-        "sound": settings.sounds,
-        "wait": true
-      };
+    let obj = {
+      "title": title,
+      "message": message,
+      "wait": true
+    };
 
-      if (typeof icon === "string") obj.icon = icon;
+    if (typeof icon === "string") obj.icon = icon;
 
-      notifier.notify(obj, (error, result, metadata) => {
-        if (error) return;
+    notifier.notify(obj, (error, result, metadata) => {
+      if (error) return;
 
-        if (typeof callback === "function" && result === "activate") callback();
-      });
+      if (typeof callback === "function" && result === "activate") callback();
     });
   },
 
