@@ -2,9 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "irc4osu!"
-#define MyAppVersion "v0.0.5"
-#define MyAppPublisher "GAMELASTER & Noobish"
-#define MyAppURL "https://github.com/GAMELASTER/irc4osu"
+#define MyAppVersion "v0.1.0"
+#define MyAppPublisher "AROGAN-GROUP"
+#define MyAppURL "https://github.com/arogan-group/irc4osu"
 #define MyAppExeName "irc4osu.exe"
 
 [Setup]
