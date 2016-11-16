@@ -45,7 +45,7 @@ function createWindow() {
   let lang = {};
 
   i18n.configure({
-    locales: ["en","de","sk","cs","pl","hu","es", "it"],
+    locales: ["en","de","sk","cs","pl","hu","es","it","pt"],
     directory: __dirname + "/locales",
     defaultLocale: "en",
     prefix: "irc4osu-",
