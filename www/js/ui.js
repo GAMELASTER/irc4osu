@@ -236,6 +236,17 @@ $(document).on("change", "#soundsCheckbox", () => {
   });
 });
 
+// Highlights
+$(document).on("change", "#highlightsTextbox", () => {
+  client.getSettings(settings => {
+    settings.highlights = $("#highlightsTextbox").prop("value");
+    client.updateSettings(settings);
+
+    // Send settings to the main process
+    ipcRenderer.send("settings", settings);
+  });
+});
+
 // Whenever we use the mousewheel
 $(document).on("mousewheel", ".chat-container", e => {
 

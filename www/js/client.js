@@ -39,7 +39,7 @@ const client = {
   admins: [],
 
   // Holds a list of all available settings
-  settingsArray: ["notifications", "nightMode", "sounds"],
+  settingsArray: ["notifications", "nightMode", "sounds", "highlights"],
 
   // Holds the path to the notification sound
   notificationSound: `${__dirname}/../sounds/notification.wav`,
@@ -57,6 +57,7 @@ const client = {
       $("#nightModeCheckbox").prop("checked", settings.nightMode);
       $("#notificationsCheckbox").prop("checked", settings.notifications);
       $("#soundsCheckbox").prop("checked", settings.sounds);
+      $("#highlightsTextbox").prop("value", settings.highlights);
 
       // Set nightmode if active
       this.nightMode(settings.nightMode);
@@ -169,45 +170,22 @@ const client = {
     var minutes = ("0" + date.getMinutes()).slice(-2);
 
     // A hack to escape all html symbols and script injections
-    var message = this.processMessage(args.text);
+    this.processMessage(args.text, message => {
+    
+      // Notify if mentioned
+      if (this.checkMentioned(message))
+        this.checkAndNotify(args);
 
-    // Get the users name color
-    var user = this.classForUser(args.nick);
+      // Get the users name color
+      var user = this.classForUser(args.nick);
 
-    // Notify when mentioned
-    if (message.indexOf(this.username) !== -1) {
+      // Build html
+      var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
+                <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
 
-      // Add notify to html
-      message = message.replace(this.username, `<span class="mention-tag">${this.username}</span>`);
-
-      // Check settings
-      this.getSettings(settings => {
-
-        // Notifications
-        if (settings.notifications)
-          this.getAvatar(args.nick, avatarPath => {
-            this.notify(`${args.nick} mentioned you in ${args.to}!`, args.text, avatarPath, () => {
-              ipcRenderer.send("show");
-              this.changeTab(args.to);
-            });
-          });
-
-        // Sounds
-        if (settings.sounds) {
-          let notify = new Audio(this.notificationSound);
-          notify.currentTime = 0;
-          notify.volume = 0.5;
-          notify.play();
-        }
-      });
-    }
-
-    // Build html
-    var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-              <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
-
-    // Append html
-    $(`#chat-area [name="${args.to}"]`).append(html);
+      // Append html
+      $(`#chat-area [name="${args.to}"]`).append(html);
+    });
 
     // Autoscroll
     if (tab && tab.autoScroll)
@@ -228,41 +206,22 @@ const client = {
     var minutes = ("0" + date.getMinutes()).slice(-2);
 
     // A hack to escape all html symbols and script injections
-    var message = this.processMessage(args.text);
+    this.processMessage(args.text, message => {
 
-    // Get the users name color
-    var user = this.classForUser(args.nick);
+      // Get the users name color
+      var user = this.classForUser(args.nick);
 
-    var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-                <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
-    
-    $(`#chat-area [name="${args.nick}"]`).append(html);
+      var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
+                  <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
+      
+      $(`#chat-area [name="${args.nick}"]`).append(html);
+    });
 
     // Autoscroll
     if (tab && tab.autoScroll)
       $(`#chat-area [name="${args.nick}"]`).scrollTop($(`#chat-area [name="${args.nick}"]`)[0].scrollHeight);
 
-    // Check settings for options
-    this.getSettings(settings => {
-
-      // Notification
-      if (settings.notifications)
-        this.getAvatar(args.nick, avatarPath => {
-          this.notify(args.nick, args.text, avatarPath, () => {
-            ipcRenderer.send("show");
-            this.changeTab(args.nick);
-          });
-        });
-
-      // Sounds
-      if (settings.sounds) {
-        let notify = new Audio(this.notificationSound);
-        notify.currentTime = 0;
-        notify.volume = 0.5;
-        notify.play();
-      }
-        
-    });
+    this.checkAndNotify(args);
   },
 
   // Fires whenever we send or receive an action
@@ -287,15 +246,21 @@ const client = {
     var hours = ("0" + date.getHours()).slice(-2);
     var minutes = ("0" + date.getMinutes()).slice(-2);
 
-    var message = this.processMessage(args.text);
+    // A hack to escape all html symbols and script injections
+    this.processMessage(args.text, message => {
 
-    // Get the users name color
-    var user = this.classForUser(args.nick);
+      // Notify if mentioned
+      if (this.checkMentioned(message))
+        this.checkAndNotify(args);
 
-    var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-                <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a> ${message}<br />`;
+      // Get the users name color
+      var user = this.classForUser(args.nick);
 
-    $(`#chat-area [name="${tabName}"]`).append(html);
+      var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
+                  <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a> ${message}<br />`;
+
+      $(`#chat-area [name="${tabName}"]`).append(html);
+    });
 
     // Autoscroll
     if (tab && tab.autoScroll)
@@ -446,7 +411,7 @@ const client = {
   },
 
   // Process a message before displaying it
-  processMessage: function (message) { 
+  processMessage: function (message, callback) { 
 
     // Escape message from all injected scripts and html tags
     message = $("<div/>").text(message).html();
@@ -461,7 +426,24 @@ const client = {
         match = pattern.exec(message);
     }
 
-    return message;
+    // Check highlight settings
+    this.getSettings(settings => {
+
+      // Tag mentions
+      [this.username].concat(settings.highlights.split(" ")).map(highlight => this.escapeRegExp(highlight)).filter(highlight => highlight.length > 0).forEach(highlight => message = message.replace(new RegExp(highlight, 'gi'), `<span class="mention-tag">$&</span>`));
+
+      if (callback) callback(message);
+    });
+  },
+  
+  checkMentioned: function (message) {
+    
+    // Check if replacement html exists
+    return message.indexOf(`<span class="mention-tag">`) !== -1;
+  },
+
+  escapeRegExp: function (str) {
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
   },
 
   // Returns a class for a user's name
@@ -689,7 +671,8 @@ const client = {
             return this.updateSettings({
               notifications: true,
               nightMode: false,
-              sounds: true
+              sounds: true,
+              highlights: ""
             }, callback);
 
           if (callback) callback(settings);
@@ -698,7 +681,8 @@ const client = {
         this.updateSettings({
           notifications: true,
           nightMode: false,
-          sounds: true
+          sounds: true,
+          highlights: ""
         }, callback);
       }
     });
@@ -788,6 +772,35 @@ const client = {
 
       if (typeof callback === "function" && result === "activate") callback();
     });
+  },
+
+  checkAndNotify: function (args) {
+
+    // Only notify if you didn't send the message
+    if (this.username !== args.nick) {
+
+      // Check settings for options
+      this.getSettings(settings => {
+
+        // Notification
+        if (settings.notifications)
+          this.getAvatar(args.nick, avatarPath => {
+            this.notify(args.nick, args.text, avatarPath, () => {
+              ipcRenderer.send("show");
+              this.changeTab(args.nick);
+            });
+          });
+
+        // Sounds
+        if (settings.sounds) {
+          let notify = new Audio(this.notificationSound);
+          notify.currentTime = 0;
+          notify.volume = 0.5;
+          notify.play();
+        }
+      });
+    }
+
   },
 
   // Sets night mode
