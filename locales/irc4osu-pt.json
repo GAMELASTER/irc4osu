@@ -1,6 +1,6 @@
 {
-  "Edit":"Edit",
-  "View":"View",
+  "Edit":"Editar",
+  "View":"Exibir",
   "Learn More":"Saiba mais",
   "Speech":"Speech",
   "Close":"Fechar",
@@ -13,7 +13,7 @@
   "Open irc4osu":"Abrir irc4osu",
   "Settings":"Configurações",
   "Exit":"Sair",
-  "irc4osu! has been minimized to the tray!":"irc4osu! has been minimized to the tray!",
+  "irc4osu! has been minimized to the tray!":"O irc4osu! foi minimizado para a barra de notificações!",
   "Logged in as":"Conectado como",
   "loading...":"carregando...",
   "About":"Sobre",
@@ -39,10 +39,10 @@
   "IRC Password":"Senha do IRC",
   "Filter":"Filter",
   "users":"usuários",
-  "New update is available":"New update is available",
+  "New update is available":"Nova atualização disponível",
   "A newer version of irc4osu! has been released! %s\n\nDo you wish to download it?":"A newer version of irc4osu! has been released! %s\n\nDo you wish to download it?",
   "Attempting to join channel...":"Attempting to join channel...",
-  "Joined %s!":"Joined %s!",
+  "Joined %s!":"Entrou em %s!",
   "Created chat with %s!":"Created chat with %s!",
   "Error joining":"Error joining"
 }
