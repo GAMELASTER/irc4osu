@@ -44,5 +44,6 @@
 	"Attempting to join channel...": "Attempting to join channel...",
 	"Joined %s!": "Joined %s!",
 	"Created chat with %s!": "Created chat with %s!",
-	"Error joining": "Error joining"
+	"Error joining": "Error joining",
+	"Chat highlights (space separated)": "Chat highlights (space separated)"
 }
