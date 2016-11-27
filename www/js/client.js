@@ -171,8 +171,8 @@ const client = {
     // A hack to escape all html symbols and script injections
     var message = this.processMessage(args.text);
 
-    // Get the user rights
-    var rights = this.admins.indexOf(args.nick) !== -1 ? "moderator-user" : "normal-user";
+    // Get the users name color
+    var user = this.classForUser(args.nick);
 
     // Notify when mentioned
     if (message.indexOf(this.username) !== -1) {
@@ -204,7 +204,7 @@ const client = {
 
     // Build html
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-              <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
+              <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
 
     // Append html
     $(`#chat-area [name="${args.to}"]`).append(html);
@@ -230,11 +230,11 @@ const client = {
     // A hack to escape all html symbols and script injections
     var message = this.processMessage(args.text);
 
-    // Get the user rights
-    var rights = this.admins.indexOf(args.nick) !== -1 ? "moderator-user" : "normal-user";
+    // Get the users name color
+    var user = this.classForUser(args.nick);
 
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-                <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
+                <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
     
     $(`#chat-area [name="${args.nick}"]`).append(html);
 
@@ -265,7 +265,7 @@ const client = {
     });
   },
 
-  // Fires whenever we receive an action
+  // Fires whenever we send or receive an action
   onAction: function (args) {
 
     // Check if it was a pm
@@ -289,11 +289,11 @@ const client = {
 
     var message = this.processMessage(args.text);
 
-    // Get the user rights
-    var rights = this.admins.indexOf(args.nick) !== -1 ? "moderator-user" : "normal-user";
+    // Get the users name color
+    var user = this.classForUser(args.nick);
 
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-                <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a> ${message}<br />`;
+                <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a> ${message}<br />`;
 
     $(`#chat-area [name="${tabName}"]`).append(html);
 
@@ -462,6 +462,29 @@ const client = {
     }
 
     return message;
+  },
+
+  // Returns a class for a user's name
+  classForUser: function (user) {
+    var userClass;
+
+    // Self
+    if (user === this.username) {
+      return "self-user";
+    }
+    
+    // BanchoBot
+    if (user === "BanchoBot") {
+      return "banchobot-user";
+    }
+    
+    // Moderator
+    if (this.admins.indexOf(user) !== -1) {
+      return "moderator-user";
+    }
+
+    // Everyone else
+    return "normal-user";
   },
 
   // Joins a channel

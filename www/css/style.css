@@ -462,6 +462,14 @@ a {
 	color: #BF3434;
 }
 
+.self-user {
+	color: #CECECE;
+}
+
+.banchobot-user {
+	color: #e45678;
+}
+
 .mention-tag {
 	color: #f04dae;
 	font-weight: bold;
