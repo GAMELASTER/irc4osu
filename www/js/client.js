@@ -8,9 +8,12 @@ const irc = require('irc');
 const storage = require("electron-json-storage");
 const request = require('request');
 const notifier = require('node-notifier');
+const notification = require('../notification/notification');
 const path = require("path");
 const {ipcRenderer, remote} = require("electron");
 const {app} = remote;
+
+notification.init('renderer');
 
 const client = {
 
@@ -194,9 +197,14 @@ const client = {
         // Notifications
         if (settings.notifications)
           this.getAvatar(args.nick, avatarPath => {
-            this.notify(`${args.nick} mentioned you in ${args.to}!`, args.text, avatarPath, () => {
-              ipcRenderer.send("show");
-              this.changeTab(args.to);
+            this.notify({
+              title: `${args.nick} mentioned you in ${args.to}!`,
+              message: args.text,
+              icon: avatarPath,
+              callback: () => {
+                ipcRenderer.send("show");
+                this.changeTab(args.to);
+              }
             });
           });
 
@@ -256,9 +264,14 @@ const client = {
       // Notification
       if (settings.notifications)
         this.getAvatar(args.nick, avatarPath => {
-          this.notify(args.nick, args.text, avatarPath, () => {
-            ipcRenderer.send("show");
-            this.changeTab(args.nick);
+          this.notify({
+              title: args.nick,
+              message: args.text,
+              icon: avatarPath,
+              callback: () => {
+                ipcRenderer.send("show");
+                this.changeTab(args.nick);
+              }
           });
         });
 
@@ -662,7 +675,7 @@ const client = {
     }
 
     // Get the path to the image
-    var avatarPath = path.join(this.avatarCache, username, ".png");
+    var avatarPath = path.join(this.avatarCache, username + ".png");
     
     var downloadAvatar = function () {
       request
@@ -785,23 +798,19 @@ const client = {
   },
 
   // Show a notification
-  notify: function (title, message, icon, callback) {
+  // title, message, icon, callback
+  notify: function (obj) {
 
     // Flash frame
-    ipcRenderer.send("flashFrame", true);
+    //ipcRenderer.send("flashFrame", true);
 
-    let obj = {
-      "title": title,
-      "message": message,
-      "wait": true
-    };
+    // notifier.notify(obj, (error, result, metadata) => {
+    //   if (error) return;
 
-    if (typeof icon === "string") obj.icon = icon;
-
-    notifier.notify(obj, (error, result, metadata) => {
-      if (error) return;
-
-      if (typeof callback === "function" && result === "activate") callback();
+    //   if (typeof callback === "function" && result === "activate") callback();
+    // });
+    notification.notify(obj, () => {
+      if (typeof obj.callback === "function") obj.callback();
     });
   },
 

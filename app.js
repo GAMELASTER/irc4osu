@@ -1,5 +1,6 @@
 
 // Electron includes
+const electron = require("electron");
 const {
   app,
   BrowserWindow,
@@ -8,7 +9,7 @@ const {
   MenuItem,
   Tray,
   ipcMain
-} = require("electron");
+} = electron;
 
 const fs = require("fs");
 const path = require("path");
@@ -17,8 +18,10 @@ const osLocale = require('os-locale');
 
 const tray = require('./window/tray');
 const menu = require('./window/menu');
+const notification = require('./www/notification/notification');
 
 let mainWindow;
+
 let client;
 let logInData;
 let __;
@@ -56,6 +59,7 @@ function createWindow() {
 
   tray.initializeTray();
   menu.initializeMenu();
+  notification.init();
 
   mainWindow.tray = tray;
 
@@ -76,10 +80,10 @@ function createWindow() {
       {
         event.preventDefault();
         if (!oneTimeNotify) {
-          require("node-notifier").notify({
-            "title": "irc4osu!",
-            "icon": `${__dirname}/www/images/tray@2x.png`,
-            "message": __("irc4osu! has been minimized to the tray!")
+          notification.notify({
+             "title": "irc4osu!",
+             "icon": path.join(__dirname, 'www', 'images', 'tray@2x.png'),
+             "message": __("irc4osu! has been minimized to the tray!")
           });
           oneTimeNotify = true;
         }
@@ -119,6 +123,10 @@ ipcMain.on("show", () => {
 // Notification flash
 ipcMain.on("flashFrame", function(event, flag) {
     mainWindow.flashFrame(flag);
+});
+
+ipcMain.on('click', function () {
+  mainWindow.webContents.send('click');
 });
 
 // the signal to exit and wants to start closing windows
