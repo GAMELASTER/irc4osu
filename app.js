@@ -63,9 +63,10 @@ function createWindow() {
   menu.initializeMenu();
 
   // Make sure cache exists
-  if (fs.existsSync(app.getPath('userData') + path.sep + "avatarCache") == false) {
-    fs.mkdir(app.getPath('userData') + path.sep + "avatarCache" + path.sep);
+  if (fs.existsSync(path.join(app.getPath('userData'), "avatarCache")) === false) {
+    fs.mkdir(path.join(app.getPath('userData'), "avatarCache"));
   }
+  
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
   if(process.argv[0].indexOf("electron") !== -1) mainWindow.webContents.openDevTools({ detach: true });
   
