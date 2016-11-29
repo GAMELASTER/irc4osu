@@ -5,12 +5,18 @@ const {
   Tray
 } = require("electron");
 
+const events = require('events');
+const eventEmitter = new events.EventEmitter();
+
 // Responsive settings items
 let nightModeItem;
 let notificationsItem;
 let soundsItem;
 
 module.exports = {
+
+    // For events
+    on: (event, func) => eventEmitter.on(event, func),
 
     // Getters for each settings item
     // If we don't do this, we dont get the latest properties from
@@ -35,7 +41,8 @@ module.exports = {
             label: __("Night mode"),
             type: "checkbox",
             click: (menuItem) => {
-                mainWindow.webContents.send("nightMode", {bool: menuItem.checked});
+                eventEmitter.emit("nightMode", menuItem.checked);
+                //mainWindow.webContents.send("nightMode", {bool: menuItem.checked});
             }
         });
 
@@ -44,7 +51,8 @@ module.exports = {
             label: __("Notifications"),
             type: "checkbox",
             click: (menuItem) => {
-                mainWindow.webContents.send("notifications", {bool: menuItem.checked});
+                eventEmitter.emit("notifications", menuItem.checked);
+                //mainWindow.webContents.send("notifications", {bool: menuItem.checked});
             }
         });
 
@@ -53,7 +61,8 @@ module.exports = {
             label: __("Sounds"),
             type: "checkbox",
             click: (menuItem) => {
-                mainWindow.webContents.send("sounds", {bool: menuItem.checked});
+                eventEmitter.emit("sounds", menuItem.checked);
+                //mainWindow.webContents.send("sounds", {bool: menuItem.checked});
             }
         });
 

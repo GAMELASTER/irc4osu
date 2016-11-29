@@ -9,8 +9,8 @@ const storage = require("electron-json-storage");
 const request = require('request');
 const notifier = require('node-notifier');
 const path = require("path");
-const {app} = require("electron").remote;
-const {ipcRenderer} = require("electron");
+const {ipcRenderer, remote} = require("electron");
+const {app} = remote;
 
 const client = {
 
@@ -47,6 +47,9 @@ const client = {
   // Where to store avatars
   avatarCache: path.join(app.getPath('userData'), "avatar_cache"),
 
+  // Shared variable tray
+  tray: remote.getCurrentWindow().tray,
+
   // Initializes the client
   init: function (credentials) {
 
@@ -65,7 +68,9 @@ const client = {
       this.nightMode(settings.nightMode);
 
       // Send settings to the main process
-      ipcRenderer.send("settings", settings);
+      tray.settings.nightMode().checked = settings.nightMode;
+      tray.settings.sounds().checked = settings.sounds;
+      tray.settings.notifications().checked = settings.notifications;
     });
 
     // Start the client

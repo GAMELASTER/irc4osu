@@ -62,6 +62,8 @@ function createWindow() {
   tray.initializeTray();
   menu.initializeMenu();
 
+  mainWindow.tray = tray;
+
   mainWindow.loadURL(`file://${__dirname}/www/index.html`);
   if(process.argv[0].indexOf("electron") !== -1) mainWindow.webContents.openDevTools({ detach: true });
   
@@ -117,13 +119,6 @@ app.on('activate', function () {
 // IPC Events
 ipcMain.on("show", () => {
   mainWindow.show();
-});
-
-// Settings
-ipcMain.on("settings", (event, settings) => {
-  tray.settings.notifications().checked = settings.notifications;
-  tray.settings.nightMode().checked = settings.nightMode;
-  tray.settings.sounds().checked = settings.sounds;
 });
 
 // Notification flash
