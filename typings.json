@@ -1,8 +1,0 @@
-{
-  "globalDependencies": {
-    "electron": "registry:env/electron#0.37.6+20160909065630",
-    "irc": "registry:dt/irc#0.3.12+20160521154229",
-    "node": "registry:dt/node#6.0.0+20161110151007",
-    "request": "registry:dt/request#0.0.0+20161116202412"
-  }
-}
