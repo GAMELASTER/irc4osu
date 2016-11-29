@@ -15,10 +15,12 @@ const path = require("path");
 const i18n = require("i18n");
 const osLocale = require('os-locale');
 
+const tray = require('./window/tray');
+const menu = require('./window/menu');
+
 let mainWindow;
 let client;
 let logInData;
-let tray;
 let __;
 
 let oneTimeNotify = false;
@@ -57,191 +59,8 @@ function createWindow() {
   __ = lang.__;
   mainWindow.__ = __;
 
-  // Initialize the menu
-  const template = [
-    {
-    label: __('Edit'),
-    submenu: [{
-      role: 'undo'
-    }, {
-      role: 'redo'
-    }, {
-      type: 'separator'
-    }, {
-      role: 'cut'
-    }, {
-      role: 'copy'
-    }, {
-      role: 'paste'
-    }, {
-      role: 'pasteandmatchstyle'
-    }, {
-      role: 'delete'
-    }, {
-      role: 'selectall'
-    }]
-  }, {
-    label: __('View'),
-    submenu: [{
-      type: 'separator'
-    }, {
-      role: 'resetzoom'
-    }, {
-      role: 'zoomin'
-    }, {
-      role: 'zoomout'
-    }, {
-      type: 'separator'
-    }, {
-      role: 'togglefullscreen'
-    }]
-  }, {
-    role: 'window',
-    submenu: [{
-      role: 'minimize'
-    }, {
-      role: 'close'
-    }]
-  }, {
-    role: 'help',
-    submenu: [{
-      label: __('Open DevTools'),
-      click() {
-        require('electron')
-          .shell.openExternal('http://electron.atom.io')
-      }
-    }]
-  }];
-
-  // Initialize the menu for Mac
-  if (process.platform === 'darwin') {
-    template.unshift({
-        label: app.getName(),
-        submenu: [{
-          role: 'about'
-        }, {
-          type: 'separator'
-        }, {
-          role: 'services',
-          submenu: []
-        }, {
-          type: 'separator'
-        }, {
-          role: 'hide'
-        }, {
-          role: 'hideothers'
-        }, {
-          role: 'unhide'
-        }, {
-          type: 'separator'
-        }, {
-          role: 'quit'
-        }]
-      })
-      // Edit menu.
-    template[1].submenu.push({
-        type: 'separator'
-      }, {
-        label: __('Speech'),
-        submenu: [{
-          role: 'startspeaking'
-        }, {
-          role: 'stopspeaking'
-        }]
-      })
-      // Window menu.
-    template[3].submenu = [{
-      label: __('Close'),
-      accelerator: 'CmdOrCtrl+W',
-      role: 'close'
-    }, {
-      label: __('Minimize'),
-      accelerator: 'CmdOrCtrl+M',
-      role: 'minimize'
-    }, {
-      label: __('Zoom'),
-      role: 'zoom'
-    }, {
-      type: 'separator'
-    }, {
-      label: __('Bring All to Front'),
-      role: 'front'
-    }];
-  }
-
-  // Initialize the tray item
-  tray = new Tray(`${__dirname}/www/images/tray.png`);
-
-  // Build the night mode setting
-  nightModeItem = new MenuItem({
-    label: __("Night mode"),
-    type: "checkbox",
-    click: (menuItem) => {
-      mainWindow.webContents.send("nightMode", {bool: menuItem.checked});
-    }
-  });
-
-  // Build the notification mode setting
-  notificationsItem = new MenuItem({
-    label: __("Notifications"),
-    type: "checkbox",
-    click: (menuItem) => {
-      mainWindow.webContents.send("notifications", {bool: menuItem.checked});
-    }
-  });
-
-  // Build the sound mode setting
-  soundsItem = new MenuItem({
-    label: __("Sounds"),
-    type: "checkbox",
-    click: (menuItem) => {
-      mainWindow.webContents.send("sounds", {bool: menuItem.checked});
-    }
-  });
-
-  // Build the actual settings menu
-  let settings = new Menu();
-  settings.append(nightModeItem);
-  settings.append(notificationsItem);
-  settings.append(soundsItem);
-
-  const trayMenu = Menu.buildFromTemplate([
-    {
-      label: __("Open irc4osu"),
-      type: "normal",
-      click: () => {
-        mainWindow.show();
-      }
-    },
-    {
-      label: __("Settings"),
-      type: "submenu",
-      submenu: settings
-    },
-    {
-      label: __("Exit"),
-      type: "normal",
-      click: () => {
-        mainWindow.destroy();
-        if (process.platform == 'darwin') {
-          app.quit();
-        }
-      }
-    }
-  ]);
-
-  // Click event should open or hide the window
-  tray.on('click', () => {
-    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
-  });
-
-  // Set the tray in the app
-  tray.setToolTip("irc4osu!");
-  tray.setContextMenu(trayMenu);
-
-  // Set the menu in the app
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
+  tray.initializeTray();
+  menu.initializeMenu();
 
   // Make sure cache exists
   if (fs.existsSync(app.getPath('userData') + path.sep + "avatarCache") == false) {
@@ -306,9 +125,9 @@ ipcMain.on("show", () => {
 
 // Settings
 ipcMain.on("settings", (event, settings) => {
-  notificationsItem.checked = settings.notifications;
-  nightModeItem.checked = settings.nightMode;
-  soundsItem.checked = settings.sounds;
+  tray.settings.notifications().checked = settings.notifications;
+  tray.settings.nightMode().checked = settings.nightMode;
+  tray.settings.sounds().checked = settings.sounds;
 });
 
 // Notification flash
@@ -318,3 +137,8 @@ ipcMain.on("flashFrame", function(event, flag) {
 
 // the signal to exit and wants to start closing windows
 app.on("before-quit", () => willQuit = true);
+
+module.exports = {
+  __: () => __,
+  mainWindow: () => mainWindow
+};
