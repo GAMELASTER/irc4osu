@@ -44,6 +44,9 @@ const client = {
   // Holds the path to the notification sound
   notificationSound: `${__dirname}/../sounds/notification.wav`,
 
+  // Where to store avatars
+  avatarCache: path.join(app.getPath('userData'), "avatar_cache"),
+
   // Initializes the client
   init: function (credentials) {
 
@@ -647,7 +650,14 @@ const client = {
 
   // Returns the user's avatar
   getAvatar: function (username, callback) {
-    var avatarPath = app.getPath('userData') + path.sep + "avatarCache" + path.sep + username + ".png";
+
+    // Make sure cache exists
+    if (!fs.existsSync(this.avatarCache)) {
+      fs.mkdir(this.avatarCache);
+    }
+
+    // Get the path to the image
+    var avatarPath = path.join(this.avatarCache, username, ".png");
     
     var downloadAvatar = function () {
       request
