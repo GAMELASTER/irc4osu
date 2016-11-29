@@ -26,11 +26,6 @@ let __;
 let oneTimeNotify = false;
 let willQuit = false;
 
-// Settings
-let nightModeItem;
-let notificationsItem;
-let soundsItem;
-
 function createWindow() {
 
   // Initialize the main window
@@ -73,7 +68,7 @@ function createWindow() {
 
   mainWindow.on('close', function (event) {
     if (!app.isQuiting) {
-      if(willQuit)
+      if (willQuit)
       {
         app.quit();
       }

@@ -19,8 +19,8 @@ module.exports = {
     on: (event, func) => eventEmitter.on(event, func),
 
     // Getters for each settings item
-    // If we don't do this, we dont get the latest properties from
-    // the tray item
+    // If we don't do this, we dont get the
+    // latest properties from the tray item
     settings: {
         nightMode: () => nightModeItem,
         notifications: () => notificationsItem,
