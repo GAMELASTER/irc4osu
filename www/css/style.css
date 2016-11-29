@@ -713,8 +713,22 @@ input[type=checkbox]:not(:checked) {
 	background-image: url("../images/switch_off.png");
 }
 
-#settings-modal input[type=checkbox] {
+#settings-modal input {
 	float: right;
+}
+
+#settings-modal input[type=text] {
+  font: 18px exo-main;
+  border-color: rgba(198, 18, 125, 1);
+  border-style: solid;
+  border-radius: 14px;
+  padding: 0 .5em 2px .5em;
+  margin: 6px 16px 6px 0;
+}
+
+#settings-modal input[type=text]:focus {
+  outline: none;
+  border-style: dashed;
 }
 
 #settings-modal label {
