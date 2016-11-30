@@ -44,7 +44,7 @@ const client = {
   settingsArray: ["notifications", "nightMode", "sounds"],
 
   // Holds the path to the notification sound
-  notificationSound: `${__dirname}/../sounds/notification.wav`,
+  notificationSound: `${__dirname}/../resources/sounds/notification.wav`,
 
   // Where to store avatars
   avatarCache: path.join(app.getPath('userData'), "avatar_cache"),

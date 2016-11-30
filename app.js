@@ -16,13 +16,12 @@ const path = require("path");
 const i18n = require("i18n");
 const osLocale = require('os-locale');
 
-const tray = require('./window/tray');
-const menu = require('./window/menu');
-const notification = require('./www/notification/notification');
+const tray = require('./app/window/tray');
+const menu = require('./app/window/menu');
+const notification = require('./app/notification/notification');
 
 let mainWindow;
 
-let client;
 let logInData;
 let __;
 
@@ -39,7 +38,7 @@ function createWindow() {
     minHeight: 400,
     useContentSize: true,
     autoHideMenuBar: true,
-    icon: "./www/images/logo.ico"
+    icon: "./app/resources/images/logo.ico"
   });
 
   let lang = {};
@@ -63,7 +62,7 @@ function createWindow() {
 
   mainWindow.tray = tray;
 
-  mainWindow.loadURL(`file://${__dirname}/www/index.html`);
+  mainWindow.loadURL(`file://${__dirname}/app/chat/chat.html`);
   if(process.argv[0].indexOf("electron") !== -1) mainWindow.webContents.openDevTools({ detach: true });
   
   mainWindow.on('closed', function() {
