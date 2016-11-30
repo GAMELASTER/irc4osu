@@ -339,3 +339,7 @@ tray.on("sounds", (bool) => {
     $("#soundsCheckbox").prop("checked", bool);
   });
 });
+
+ipcRenderer.on('notify', (event, obj) => {
+  client.notify(obj);
+});

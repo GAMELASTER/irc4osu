@@ -18,7 +18,6 @@ const osLocale = require('os-locale');
 
 const tray = require('./app/window/tray');
 const menu = require('./app/window/menu');
-const notification = require('./app/notification/notification');
 
 let mainWindow;
 
@@ -58,7 +57,6 @@ function createWindow() {
 
   tray.initializeTray();
   menu.initializeMenu();
-  notification.init();
 
   mainWindow.tray = tray;
 
@@ -79,9 +77,9 @@ function createWindow() {
       {
         event.preventDefault();
         if (!oneTimeNotify) {
-          notification.notify({
+          mainWindow.webContents.send('notify', {
              "title": "irc4osu!",
-             "icon": path.join(__dirname, 'www', 'images', 'tray@2x.png'),
+             "icon": path.join(__dirname, 'app', 'resources', 'images', 'tray@2x.png'),
              "message": __("irc4osu! has been minimized to the tray!")
           });
           oneTimeNotify = true;
