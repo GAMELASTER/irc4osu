@@ -7,7 +7,6 @@
 const irc = require('irc');
 const storage = require("electron-json-storage");
 const request = require('request');
-const notifier = require('node-notifier');
 const notification = require('../notification/notification');
 const path = require("path");
 const {ipcRenderer, remote} = require("electron");
@@ -210,10 +209,10 @@ const client = {
 
         // Sounds
         if (settings.sounds) {
-          let notify = new Audio(this.notificationSound);
-          notify.currentTime = 0;
-          notify.volume = 0.5;
-          notify.play();
+          let sound = new Audio(this.notificationSound);
+          sound.currentTime = 0;
+          sound.volume = 0.5;
+          sound.play();
         }
       });
     }
@@ -277,10 +276,10 @@ const client = {
 
       // Sounds
       if (settings.sounds) {
-        let notify = new Audio(this.notificationSound);
-        notify.currentTime = 0;
-        notify.volume = 0.5;
-        notify.play();
+        let sound = new Audio(this.notificationSound);
+        sound.currentTime = 0;
+        sound.volume = 0.5;
+        sound.play();
       }
         
     });
@@ -800,15 +799,6 @@ const client = {
   // Show a notification
   // title, message, icon, callback
   notify: function (obj) {
-
-    // Flash frame
-    //ipcRenderer.send("flashFrame", true);
-
-    // notifier.notify(obj, (error, result, metadata) => {
-    //   if (error) return;
-
-    //   if (typeof callback === "function" && result === "activate") callback();
-    // });
     notification.notify(obj, () => {
       if (typeof obj.callback === "function") obj.callback();
     });

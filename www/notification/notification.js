@@ -25,7 +25,8 @@ module.exports = {
       alwaysOnTop: true,
       skipTaskbar: true,
       frame: false,
-      show: false
+      show: false,
+      focusable: false
     });
 
     notification.loadURL(`file://${__dirname}/notification.html`);

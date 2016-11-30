@@ -110,7 +110,7 @@
       $('#title').html(params.nick);
       $('#message').html(params.msg);
 
-      remote.getCurrentWindow().show();
+      remote.getCurrentWindow().showInactive();
       notifying = true;
 
       $(document).off('click', '.container').on('click', '.container', e => {
