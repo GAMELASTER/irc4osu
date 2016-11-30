@@ -55,7 +55,7 @@ function createWindow() {
   __ = lang.__;
   mainWindow.__ = __;
 
-  tray.initializeTray();
+  tray.init();
   menu.initializeMenu();
 
   mainWindow.tray = tray;
@@ -65,6 +65,7 @@ function createWindow() {
   
   mainWindow.on('closed', function() {
     mainWindow = null;
+    tray.destroy();
   });
 
   mainWindow.on('close', function (event) {
@@ -72,6 +73,7 @@ function createWindow() {
       if (willQuit)
       {
         app.quit();
+        tray.destroy();
       }
       else
       {

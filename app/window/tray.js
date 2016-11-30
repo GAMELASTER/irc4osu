@@ -10,6 +10,8 @@ const path = require('path');
 const events = require('events');
 const eventEmitter = new events.EventEmitter();
 
+let tray;
+
 // Responsive settings items
 let nightModeItem;
 let notificationsItem;
@@ -29,14 +31,18 @@ module.exports = {
         sounds: () => soundsItem
     },
 
-    initializeTray: () => {
+    destroy: () => {
+        tray.destroy();
+    },
+
+    init: () => {
 
         // Gets the latest values from app
         const mainWindow = require('../../app').mainWindow();
         const __ = require('../../app').__();
 
         // Initialize the tray item
-        const tray = new Tray(path.join(__dirname, '..', 'resources', 'images', 'tray.png'));
+        tray = new Tray(path.join(__dirname, '..', 'resources', 'images', 'tray.png'));
 
         // Build the night mode setting
         nightModeItem = new MenuItem({
