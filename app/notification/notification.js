@@ -13,7 +13,7 @@ let notification;
 
 module.exports = {
   init: (mode) => {
-    const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+    const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
 
     notification = new BrowserWindow({
       width: 400,

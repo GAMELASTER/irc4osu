@@ -16,13 +16,11 @@ const path = require("path");
 const i18n = require("i18n");
 const osLocale = require('os-locale');
 
-const tray = require('./window/tray');
-const menu = require('./window/menu');
-const notification = require('./www/notification/notification');
+const tray = require('./app/window/tray');
+const menu = require('./app/window/menu');
 
 let mainWindow;
 
-let client;
 let logInData;
 let __;
 
@@ -39,7 +37,7 @@ function createWindow() {
     minHeight: 400,
     useContentSize: true,
     autoHideMenuBar: true,
-    icon: "./www/images/logo.ico"
+    icon: "./app/resources/images/logo.ico"
   });
 
   let lang = {};
@@ -57,17 +55,17 @@ function createWindow() {
   __ = lang.__;
   mainWindow.__ = __;
 
-  tray.initializeTray();
+  tray.init();
   menu.initializeMenu();
-  notification.init();
 
   mainWindow.tray = tray;
 
-  mainWindow.loadURL(`file://${__dirname}/www/index.html`);
+  mainWindow.loadURL(`file://${__dirname}/app/chat/chat.html`);
   if(process.argv[0].indexOf("electron") !== -1) mainWindow.webContents.openDevTools({ detach: true });
   
   mainWindow.on('closed', function() {
     mainWindow = null;
+    tray.destroy();
   });
 
   mainWindow.on('close', function (event) {
@@ -75,14 +73,15 @@ function createWindow() {
       if (willQuit)
       {
         app.quit();
+        tray.destroy();
       }
       else
       {
         event.preventDefault();
         if (!oneTimeNotify) {
-          notification.notify({
+          mainWindow.webContents.send('notify', {
              "title": "irc4osu!",
-             "icon": path.join(__dirname, 'www', 'images', 'tray@2x.png'),
+             "icon": path.join(__dirname, 'app', 'resources', 'images', 'tray@2x.png'),
              "message": __("irc4osu! has been minimized to the tray!")
           });
           oneTimeNotify = true;

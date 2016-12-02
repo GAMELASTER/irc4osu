@@ -1,7 +1,7 @@
 // Constants
 const fs = require('fs');
 const path = require('path');
-const client = require("./js/client.js");
+const client = require("../shared/client.js");
 const request = require('request');
 const {remote, ipcRenderer} = require("electron");
 const {dialog} = remote;
@@ -17,7 +17,7 @@ request({
     'User-Agent': 'irc4osu'
   }
 }, function(err, resp, body) {
-  if (compareVersionNumbers(body.tag_name, require("../package.json").version) > 0) {
+  if (compareVersionNumbers(body.tag_name, require("../../package.json").version) > 0) {
     dialog.showMessageBox(null, {
       type: "info",
       buttons: ["Yes", "No"],
@@ -338,4 +338,8 @@ tray.on("sounds", (bool) => {
     // Set settings in settings modal
     $("#soundsCheckbox").prop("checked", bool);
   });
+});
+
+ipcRenderer.on('notify', (event, obj) => {
+  client.notify(obj);
 });
