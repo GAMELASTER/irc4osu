@@ -37,7 +37,7 @@ function createWindow() {
     minHeight: 400,
     useContentSize: true,
     autoHideMenuBar: true,
-    icon: "./app/resources/images/logo.ico"
+    icon: "./app/assets/images/logo.ico"
   });
 
   let lang = {};
@@ -60,7 +60,7 @@ function createWindow() {
 
   mainWindow.tray = tray;
 
-  mainWindow.loadURL(`file://${__dirname}/app/chat/chat.html`);
+  mainWindow.loadURL(`file://${__dirname}/app/index.html`);
   if(process.argv[0].indexOf("electron") !== -1) mainWindow.webContents.openDevTools({ detach: true });
   
   mainWindow.on('closed', function() {

@@ -2,7 +2,7 @@
   "name": "irc4osu",
   "version": "0.1.0",
   "description": "An unofficial IRC client for osu!",
-  "main": "app.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
@@ -16,6 +16,9 @@
     "osu"
   ],
   "author": "GAMELASTER & Noobish",
+  "contributors": [
+    "hallowatcher <hallowatcher@gmail.com> (http://hwchr.com/)"
+  ],
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/GAMELASTER/irc4osu/issues"
@@ -25,6 +28,7 @@
     "electron": "^1.4.4"
   },
   "dependencies": {
+    "angular": "^1.5.9",
     "electron-json-storage": "^2.0.2",
     "i18n": "^0.8.3",
     "irc": "^0.5.2",

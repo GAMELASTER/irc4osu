@@ -38,11 +38,11 @@ module.exports = {
     init: () => {
 
         // Gets the latest values from app
-        const mainWindow = require('../../app').mainWindow();
-        const __ = require('../../app').__();
+        const mainWindow = require('../../main').mainWindow();
+        const __ = require('../../main').__();
 
         // Initialize the tray item
-        tray = new Tray(path.join(__dirname, '..', 'resources', 'images', 'tray.png'));
+        tray = new Tray(path.join(__dirname, '..', 'assets', 'images', 'tray.png'));
 
         // Build the night mode setting
         nightModeItem = new MenuItem({

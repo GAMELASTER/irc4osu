@@ -9,7 +9,7 @@ module.exports = {
   initializeMenu: () => {
 
     // Gets the latest values from app
-    const __ = require('../../app').__();
+    const __ = require('../../main').__();
 
     // Initialize the menu
     const template = [
