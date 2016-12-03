@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Client */
+client {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  background: #FFA5A5;
+}
+
+client .header {
+  display: flex;
+  flex-direction: row;
+  background: #FFF5A5;
+}
+
+client .header div {
+  display: flex;
+  flex-direction: column;
+}
+
+client .header .left {
+  flex-grow: 1;
+}
+
+client .header .user {
+  background: #C7FFA5;
+  width: 150px;
+}
+
+client .content {
+  flex-grow: 1;
+  background: #A5C9FF;
+  display: flex;
+  flex-direction: row;
+}
+
+client .footer {
+  height: 50px;
+}
+
+/* Menu */
+menu {
+  margin: 10px 0 20px;
+  padding: 0;
+}
+
+menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+menu ul li {
+  display: inline;
+}
+
+/* Tabs */
+tabs {
+  background: #A5FFEF;
+}
+
+/* Chat */
+chat {
+  flex-grow: 1;
+  background: #FF84C3;
+}
+
+/* Sidebar */
+sidebar {
+  width: 150px;
+}

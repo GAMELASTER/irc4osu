@@ -33,8 +33,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 825,
     height: 600,
-    minWidth: 825, 
-    minHeight: 400,
+    minWidth: 400, 
+    minHeight: 200,
     useContentSize: true,
     autoHideMenuBar: true,
     icon: "./app/assets/images/logo.ico"

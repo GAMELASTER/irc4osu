@@ -2,9 +2,9 @@ angular = window.angular;
 
 angular
 .module('irc4osu')
-.component('helloIrc', {
-  template: '<h1>{{$ctrl.message}}</h1>',
-  controller: function helloIrcController() {
+.component('client', {
+  templateUrl: './components/client/client.template.html',
+  controller: function clientController() {
     this.message = "Lets get ready to irc some osu!";
   }
 });
