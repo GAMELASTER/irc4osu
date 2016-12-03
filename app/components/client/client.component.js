@@ -5,6 +5,14 @@ angular
 .component('client', {
   templateUrl: './components/client/client.template.html',
   controller: function clientController() {
-    this.message = "Lets get ready to irc some osu!";
+    this.channels = [
+      { name: '#english' },
+      { name: '#german' },
+      { name: '#osu' }
+    ];
+
+    this.addTab = function () {
+      this.channels.push({name: '#announce'});
+    }
   }
 });

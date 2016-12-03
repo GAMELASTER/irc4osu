@@ -1,8 +1,45 @@
+@font-face {
+	font-family: exo-main;
+	src: url("./assets/fonts/Exo2-Light.otf") format("opentype");
+}
+
+@font-face {
+	font-family: exo-main;
+	font-weight: bold;
+	src: url("./assets/fonts/Exo2-SemiBold.otf") format("opentype");
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-button {
+	/*width: 8px;
+	height: 5px;*/
+}
+::-webkit-scrollbar-track {
+	/*background:#eee;
+	border: thin solid lightgray;
+	box-shadow: 0px 0px 3px #dfdfdf inset;
+	border-radius:10px;*/
+	background: rgba(0,0,0,0.0);
+}
+::-webkit-scrollbar-thumb {
+	background:#999;
+	/*border: thin solid gray;*/
+	border-radius:10px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background:#7d7d7d;
+} 
+
 body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
+  font-family: exo-main, sans-serif;
+  overflow: hidden;
 }
 
 /* Client */
@@ -11,7 +48,7 @@ client {
   height: 100%;
   display: flex;
   flex-direction: column;
-
+  overflow: hidden;
   background: #FFA5A5;
 }
 
@@ -21,18 +58,28 @@ client .header {
   background: #FFF5A5;
 }
 
-client .header div {
-  display: flex;
-  flex-direction: column;
-}
-
 client .header .left {
   flex-grow: 1;
+  overflow: hidden;
+}
+
+client .header .tab-panel {
+  display: flex;
+  flex-direction: row;
+}
+
+client .header .tab-panel .tabs {
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
 }
 
 client .header .user {
   background: #C7FFA5;
-  width: 150px;
+  max-width: 150px;
+  min-width: 150px;
 }
 
 client .content {
@@ -48,7 +95,7 @@ client .footer {
 
 /* Menu */
 menu {
-  margin: 10px 0 20px;
+  margin: 10px 20px 20px;
   padding: 0;
 }
 
@@ -60,10 +107,11 @@ menu ul {
 
 menu ul li {
   display: inline;
+  margin: 0 5px;
 }
 
 /* Tabs */
-tabs {
+tab {
   background: #A5FFEF;
 }
 

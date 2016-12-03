@@ -2,10 +2,15 @@
 <div class="header">
   <div class="left">
     <menu></menu>
-    <tabs></tabs>
+    <div class="tab-panel">
+      <div class="tabs">
+        <tab ng-repeat="channel in $ctrl.channels" tab="channel"></tab>
+      </div>
+      <button ng-click="$ctrl.addTab()">+</button>
+    </div>
   </div>
   <div class="user">
-    Loggied in as...
+    {{'Learn More' | translate}}
   </div>
 </div>
 
