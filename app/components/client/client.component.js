@@ -1,5 +1,4 @@
 angular = window.angular;
-const irc = require('irc');
 
 angular
 .module('irc4osu')
@@ -32,28 +31,15 @@ angular
     this.irc = null;
 
     // Initializes the client
-    this.init = function (username, password) {
+    this.init = function () {
 
-      console.log("Connecting with username " + username + " and password " + password);
-
-      // Start the client
-      this.irc = new irc.Client("irc.ppy.sh", username, {
-        password: password,
-        channels: this.channels,
-        autoConnect: false
-      });
-
-      // Listeners
-      this.irc.connect(0, () => this.onConnected());
-      this.irc.on('message#', (nick, to, text, msg) => { this.onChannelMessage(nick, to, text, msg) });
-      this.irc.on('pm', (nick, text, msg) => { this.onPrivateMessage(nick, text, msg) });
-    };
-
-    this.onConnected = function () {
       this.connected = true;
       angular.forEach(this.defaultChannels, val => {
         this.joinChannel(val);
       });
+
+      this.irc.on('message#', (nick, to, text, msg) => { this.onChannelMessage(nick, to, text, msg) });
+      this.irc.on('pm', (nick, text, msg) => { this.onPrivateMessage(nick, text, msg) });
     };
 
     this.onChannelMessage = function (nick, to, text, msg) {
@@ -100,10 +86,15 @@ angular
     // On startup, show login modal
     ModalService.showModal({
       templateUrl: "./modals/login/login.template.html",
-      controller: "loginController"
+      controller: "loginController",
+      inputs: {
+        channels: this.channels
+      }
     }).then((modal) => {
-      modal.close.then((result) => {
-        this.init(result.username, result.password);
+      modal.close.then((client) => {
+        // If we ever come in here, we successfully logged in
+        this.irc = client;
+        this.init();
       });
     });
 
