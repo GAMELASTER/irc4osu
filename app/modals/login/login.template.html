@@ -4,7 +4,7 @@
     <div class="login-box">
         <div class="title">osu!irc login</div>
         <div class="content">
-            <form class="login-form" ng-submit="close({ username: username, password: password })">
+            <form class="login-form" ng-submit="login(username, password)">
                 <input ng-model="username" type="text" placeholder="Username" />
                 <input ng-model="password" type="password" placeholder="Password" />
                 <button type="submit" class="btn-osu btn-osu-pink">Log in</button>

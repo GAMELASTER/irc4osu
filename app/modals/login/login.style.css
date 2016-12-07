@@ -17,7 +17,7 @@
 }
 
 .login-box .title {
-  background-image: url("bg-light.png");
+  background-image: url("images/bg-light.png");
   background-color: rgba(198, 18, 125, 0.8);
   background-blend-mode: multiply;
   height: 50px;
@@ -32,7 +32,7 @@
 
 .login-box .content {
   padding: 50px;
-  background-image: url("bg-light.png");
+  background-image: url("images/bg-light.png");
 }
 
 .login-box .content .login-form {
@@ -65,12 +65,12 @@
 }
 
 .login-box .content .login-form input[type="text"] {
-	background-image: url("user.png");
+	background-image: url("images/user.png");
 	border-bottom: 1px solid #eeeeee;
 }
 
 .login-box .content .login-form input[type="password"] {
-	background-image: url("password.png");
+	background-image: url("images/password.png");
 	margin-bottom: 20px;
 }
 
@@ -123,7 +123,7 @@
 }
 
 .btn-osu {
-	background-image: url("button.svg");
+	background-image: url("images/button.svg");
 	background-size: 200px;
 	background-position: 50% 50%;
 }
