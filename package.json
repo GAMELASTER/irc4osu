@@ -5,7 +5,10 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "build-x64": "electron-packager . irc4osu --platform=win32 --arch=x64 --icon=./app/resources/images/logo.ico --overwrite --prune --ignore=build/",
+    "build-x86": "electron-packager . irc4osu --platform=win32 --arch=ia32 --icon=./app/resources/images/logo.ico --overwrite --prune --ignore=build/",
+    "build-osx": "electron-packager . irc4osu --platform=darwin --arch=x64 --icon=./app/resources/images/logo.icns --prune --overwrite --ignore=build/"
   },
   "repository": {
     "type": "git",
