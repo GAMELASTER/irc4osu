@@ -7,10 +7,12 @@
 const irc = require('irc');
 const storage = require("electron-json-storage");
 const request = require('request');
-const notifier = require('node-notifier');
+const notification = require('../notification/notification');
 const path = require("path");
-const {app} = require("electron").remote;
-const {ipcRenderer} = require("electron");
+const {ipcRenderer, remote} = require("electron");
+const {app} = remote;
+
+notification.init('renderer');
 
 const client = {
 
@@ -42,7 +44,13 @@ const client = {
   settingsArray: ["notifications", "nightMode", "sounds"],
 
   // Holds the path to the notification sound
-  notificationSound: `${__dirname}/../sounds/notification.wav`,
+  notificationSound: `${__dirname}/../resources/sounds/notification.wav`,
+
+  // Where to store avatars
+  avatarCache: path.join(app.getPath('userData'), "avatar_cache"),
+
+  // Shared variable tray
+  tray: remote.getCurrentWindow().tray,
 
   // Initializes the client
   init: function (credentials) {
@@ -62,7 +70,9 @@ const client = {
       this.nightMode(settings.nightMode);
 
       // Send settings to the main process
-      ipcRenderer.send("settings", settings);
+      tray.settings.nightMode().checked = settings.nightMode;
+      tray.settings.sounds().checked = settings.sounds;
+      tray.settings.notifications().checked = settings.notifications;
     });
 
     // Start the client
@@ -171,8 +181,8 @@ const client = {
     // A hack to escape all html symbols and script injections
     var message = this.processMessage(args.text);
 
-    // Get the user rights
-    var rights = this.admins.indexOf(args.nick) !== -1 ? "moderator-user" : "normal-user";
+    // Get the users name color
+    var user = this.classForUser(args.nick);
 
     // Notify when mentioned
     if (message.indexOf(this.username) !== -1) {
@@ -186,25 +196,30 @@ const client = {
         // Notifications
         if (settings.notifications)
           this.getAvatar(args.nick, avatarPath => {
-            this.notify(`${args.nick} mentioned you in ${args.to}!`, args.text, avatarPath, () => {
-              ipcRenderer.send("show");
-              this.changeTab(args.to);
+            this.notify({
+              title: `${args.nick} mentioned you in ${args.to}!`,
+              message: args.text,
+              icon: avatarPath,
+              callback: () => {
+                ipcRenderer.send("show");
+                this.changeTab(args.to);
+              }
             });
           });
 
         // Sounds
         if (settings.sounds) {
-          let notify = new Audio(this.notificationSound);
-          notify.currentTime = 0;
-          notify.volume = 0.5;
-          notify.play();
+          let sound = new Audio(this.notificationSound);
+          sound.currentTime = 0;
+          sound.volume = 0.5;
+          sound.play();
         }
       });
     }
 
     // Build html
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-              <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
+              <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
 
     // Append html
     $(`#chat-area [name="${args.to}"]`).append(html);
@@ -230,11 +245,11 @@ const client = {
     // A hack to escape all html symbols and script injections
     var message = this.processMessage(args.text);
 
-    // Get the user rights
-    var rights = this.admins.indexOf(args.nick) !== -1 ? "moderator-user" : "normal-user";
+    // Get the users name color
+    var user = this.classForUser(args.nick);
 
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-                <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
+                <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
     
     $(`#chat-area [name="${args.nick}"]`).append(html);
 
@@ -248,24 +263,29 @@ const client = {
       // Notification
       if (settings.notifications)
         this.getAvatar(args.nick, avatarPath => {
-          this.notify(args.nick, args.text, avatarPath, () => {
-            ipcRenderer.send("show");
-            this.changeTab(args.nick);
+          this.notify({
+              title: args.nick,
+              message: args.text,
+              icon: avatarPath,
+              callback: () => {
+                ipcRenderer.send("show");
+                this.changeTab(args.nick);
+              }
           });
         });
 
       // Sounds
       if (settings.sounds) {
-        let notify = new Audio(this.notificationSound);
-        notify.currentTime = 0;
-        notify.volume = 0.5;
-        notify.play();
+        let sound = new Audio(this.notificationSound);
+        sound.currentTime = 0;
+        sound.volume = 0.5;
+        sound.play();
       }
         
     });
   },
 
-  // Fires whenever we receive an action
+  // Fires whenever we send or receive an action
   onAction: function (args) {
 
     // Check if it was a pm
@@ -289,11 +309,11 @@ const client = {
 
     var message = this.processMessage(args.text);
 
-    // Get the user rights
-    var rights = this.admins.indexOf(args.nick) !== -1 ? "moderator-user" : "normal-user";
+    // Get the users name color
+    var user = this.classForUser(args.nick);
 
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-                <a href="#" class="user-tag ${rights} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a> ${message}<br />`;
+                <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a> ${message}<br />`;
 
     $(`#chat-area [name="${tabName}"]`).append(html);
 
@@ -464,6 +484,29 @@ const client = {
     return message;
   },
 
+  // Returns a class for a user's name
+  classForUser: function (user) {
+    var userClass;
+
+    // Self
+    if (user === this.username) {
+      return "self-user";
+    }
+    
+    // BanchoBot
+    if (user === "BanchoBot") {
+      return "banchobot-user";
+    }
+    
+    // Moderator
+    if (this.admins.indexOf(user) !== -1) {
+      return "moderator-user";
+    }
+
+    // Everyone else
+    return "normal-user";
+  },
+
   // Joins a channel
   joinChannel: function (channelName) {
     if (!channelName) throw "No channel name provided!";
@@ -624,7 +667,14 @@ const client = {
 
   // Returns the user's avatar
   getAvatar: function (username, callback) {
-    var avatarPath = app.getPath('userData') + path.sep + "avatarCache" + path.sep + username + ".png";
+
+    // Make sure cache exists
+    if (!fs.existsSync(this.avatarCache)) {
+      fs.mkdir(this.avatarCache);
+    }
+
+    // Get the path to the image
+    var avatarPath = path.join(this.avatarCache, username + ".png");
     
     var downloadAvatar = function () {
       request
@@ -747,23 +797,10 @@ const client = {
   },
 
   // Show a notification
-  notify: function (title, message, icon, callback) {
-
-    // Flash frame
-    ipcRenderer.send("flashFrame", true);
-
-    let obj = {
-      "title": title,
-      "message": message,
-      "wait": true
-    };
-
-    if (typeof icon === "string") obj.icon = icon;
-
-    notifier.notify(obj, (error, result, metadata) => {
-      if (error) return;
-
-      if (typeof callback === "function" && result === "activate") callback();
+  // title, message, icon, callback
+  notify: function (obj) {
+    notification.notify(obj, () => {
+      if (typeof obj.callback === "function") obj.callback();
     });
   },
 

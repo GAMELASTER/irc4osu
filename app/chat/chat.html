@@ -2,7 +2,7 @@
   <head>
     <title>irc4osu!</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../resources/css/style.css">
     <script>let __ = require("electron").remote.getCurrentWindow().__;</script>
   </head>
   <body>
@@ -12,7 +12,7 @@
     <div id="header">
       <div id="user-info">
         <span id="name-text"><script>document.write(__("Logged in as"));</script><br><span id="user-name"><script>document.write(__("loading..."));</script></span></span>
-        <img id="avatar" src="./images/loading.gif">
+        <img id="avatar" src="../resources/images/loading.gif">
       </div>
       <ul id="top-menu">
         <li><a href="#" id="open-settings"><script>document.write(__("Settings"));</script></a></li>
@@ -146,7 +146,7 @@
           <script>document.write(__("About"));</script> <a href="#" class="close-modal">x</a>
         </div>
         <div id="about-logo">
-          <img src="./images/logo.ico"> <span class="appname">IRC4OSU!</span> <span class="version"><script>document.write(require("../package.json").version);</script></span>
+          <img src="../resources/images/logo.ico"> <span class="appname">IRC4OSU!</span> <span class="version"><script>document.write(require("../../package.json").version);</script></span>
         </div>
         <div class="row">
           <div class="developer link-external" style="float: left;" data-link="https://osu.ppy.sh/u/4167678">
@@ -194,9 +194,8 @@
         </div>
       </div>
     </div>
-    <script>window.$ = window.jQuery = require('./js/jquery-3.1.0.js');</script>
-    <script src="js/splitter.js"></script>
-    <script src="js/ui.js"></script>
-    <!--<script src="js/irc-handler.js"></script>-->
+    <script>window.$ = window.jQuery = require('../shared/jquery.js');</script>
+    <script src="../shared/splitter.js"></script>
+    <script src="chat.js"></script>
   </body>
 </html>
