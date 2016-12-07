@@ -27,7 +27,7 @@ app.controller('loginController', function($scope, channels, close) {
     // Listeners
     $scope.ircClient.connect(0, () => {
       console.log("connected");
-      close($scope.ircClient)
+      close({irc: $scope.ircClient, username: username});
     });
   };
 

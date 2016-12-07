@@ -1,8 +1,14 @@
+<link rel="stylesheet" href="./components/message/message.style.css" />
 <switch ng-switch="$ctrl.message.type">
 
     <!-- Normal message -->
     <span ng-switch-when="message">
         <span class="username">{{$ctrl.message.nick}}:</span> <span class="message">{{$ctrl.message.text}}</span>
+    </span>
+
+    <!-- Self message -->
+    <span ng-switch-when="self">
+        <span class="self">{{$ctrl.message.nick}}:</span> <span class="message">{{$ctrl.message.text}}</span>
     </span>
 
     <!-- System default message -->

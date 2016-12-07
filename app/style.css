@@ -114,13 +114,13 @@ menu ul li {
 
 /* Tabs */
 tab {
-  background: #A5FFEF;
+  background: #51DAC2;
   cursor: pointer;
   margin: 0 3px;
 }
 
 tab.active {
-  background: #51DAC2;
+  background: #A5FFEF;
 }
 
 /* Chat */

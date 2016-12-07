@@ -31,7 +31,13 @@ angular
     this.irc = null;
 
     // Initializes the client
-    this.init = function () {
+    this.init = function (username, client) {
+
+      // Store the logged in client
+      this.irc = client;
+
+      // Store the username
+      this.username = username;
 
       this.connected = true;
       angular.forEach(this.defaultChannels, val => {
@@ -63,10 +69,13 @@ angular
     this.addMessage = function (target, nick, message) {
       if (!this.messages[target]) this.messages[target] = [];
 
+      let type = 'message';
+      if (nick === this.username) type = 'self';
+
       this.messages[target].push({
         nick: nick,
         text: message,
-        type: "message"
+        type: type
       });
     };
 
@@ -83,6 +92,11 @@ angular
       this.activeChannel = channel;
     };
 
+    this.sendMessage = function (channel, message) {
+      this.irc.say(channel, message);
+      this.addMessage(channel, this.username, message);
+    };
+
     // On startup, show login modal
     ModalService.showModal({
       templateUrl: "./modals/login/login.template.html",
@@ -91,10 +105,9 @@ angular
         channels: this.channels
       }
     }).then((modal) => {
-      modal.close.then((client) => {
+      modal.close.then((result) => {
         // If we ever come in here, we successfully logged in
-        this.irc = client;
-        this.init();
+        this.init(result.username, result.irc);
       });
     });
 

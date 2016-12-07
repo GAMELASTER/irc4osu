@@ -31,5 +31,8 @@
 
 
 <div class="footer">
-  <send-message></send-message>
+  <form ng-submit="$ctrl.sendMessage($ctrl.activeChannel, message)">
+    <input ng-model="message" type="text" placeholder="Send a message!" />
+    <button type="submit">Send message</button>
+  </form>
 </div>
