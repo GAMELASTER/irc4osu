@@ -13,10 +13,7 @@
 	width: 8px;
   height: 8px;
 }
-::-webkit-scrollbar-button {
-	/*width: 8px;
-	height: 5px;*/
-}
+
 ::-webkit-scrollbar-track {
 	/*background:#eee;
 	border: thin solid lightgray;
@@ -24,11 +21,13 @@
 	border-radius:10px;*/
 	background: rgba(0,0,0,0.0);
 }
+
 ::-webkit-scrollbar-thumb {
 	background:#999;
 	/*border: thin solid gray;*/
 	border-radius:10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
 	background:#7d7d7d;
 } 
@@ -56,6 +55,7 @@ client .header {
   display: flex;
   flex-direction: row;
   background: #FFF5A5;
+  flex-shrink: 0;
 }
 
 client .header .left {
@@ -87,10 +87,12 @@ client .content {
   background: #A5C9FF;
   display: flex;
   flex-direction: row;
+  overflow: hidden;
 }
 
 client .footer {
   height: 50px;
+  flex-shrink: 0;
 }
 
 /* Menu */
@@ -119,9 +121,16 @@ tab {
 chat {
   flex-grow: 1;
   background: #FF84C3;
+  overflow-y: auto;
+}
+
+chat .messages {
+  display: flex;
+  flex-direction: column;
 }
 
 /* Sidebar */
 sidebar {
   width: 150px;
+  flex-shrink: 0;
 }
