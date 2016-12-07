@@ -40,14 +40,15 @@ angular
         autoConnect: false
       });
 
+      // Listeners
       this.irc.connect(0, () => this.onConnected());
       this.irc.on('message#', (nick, to, text, msg) => {this.onChannelMessage(nick, to, text, msg)});
+      this.irc.on('pm', (nick, to, text, msg) => {this.onPrivateMessage(nick, text, msg)});
     };
 
     this.onConnected = function () {
       this.connected = true;
       $scope.$apply();
-      console.log("Connected!");
     };
 
     this.onChannelMessage = function (nick, to, text, msg) {
@@ -62,8 +63,20 @@ angular
       });
 
       $scope.$apply();
-      
-      //console.log(`[${to}] ${nick}: ${text}`);
+    };
+
+    this.onPrivateMessage = function (nick, text, msg) {
+
+      // Create message array if it doesn't exist
+      if (!this.messages[nick]) this.messages[nick] = [];
+
+      // Push to messages
+      this.messages[nick].push({
+        nick: nick,
+        text: text
+      });
+
+      $scope.$apply();
     };
 
     // Joins a channel
