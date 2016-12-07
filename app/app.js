@@ -22,3 +22,4 @@ irc4osu.config(['$translateProvider', function ($translateProvider) {
 require('./components/client/client.component.js');
 require('./components/menu/menu.component.js');
 require('./components/tab/tab.component.js');
+require('./components/message/message.component.js');

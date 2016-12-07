@@ -4,9 +4,11 @@
     <menu></menu>
     <div class="tab-panel">
       <div class="tabs">
-        <tab ng-repeat="channel in $ctrl.channels" tab="channel"></tab>
+        <tab ng-repeat="channel in $ctrl.channels" tab="channel" ng-click="$ctrl.changeActiveChannel(channel)"></tab>
       </div>
-      <button ng-click="$ctrl.addTab()">+</button>
+      <input ng-model="$ctrl.username" ng-disabled="$ctrl.connected" type="text" placeholder="Username" />
+      <input ng-model="$ctrl.password" ng-disabled="$ctrl.connected" type="password" placeholder="Password" />
+      <button ng-click="$ctrl.init($ctrl.username, $ctrl.password)">Connect</button>
     </div>
   </div>
   <div class="user">
@@ -16,7 +18,11 @@
 
 
 <div class="content">
-  <chat></chat>
+  <chat>
+    <div class="messages">
+      <message ng-repeat="message in $ctrl.messages[$ctrl.activeChannel]" message="message"></message>
+    </div>
+  </chat>
   <sidebar></sidebar>
 </div>
 
