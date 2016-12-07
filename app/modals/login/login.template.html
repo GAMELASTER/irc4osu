@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="modals/login/login.style.css" />
+<div class="login-modal">
+
+    <div class="login-box">
+        <div class="title">osu!irc login</div>
+        <div class="content">
+            <form class="login-form" ng-submit="close({ username: username, password: password })">
+                <input ng-model="username" type="text" placeholder="Username" />
+                <input ng-model="password" type="password" placeholder="Password" />
+                <button type="submit" class="btn-osu btn-osu-pink">Log in</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div class="fade"></div>

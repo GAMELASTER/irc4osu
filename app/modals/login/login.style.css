@@ -1,0 +1,185 @@
+.login-modal {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-box {
+  background-color: #ffffff;
+  max-width: 300px;
+  width: calc(100vw - 100px);
+  z-index: 100;
+}
+
+.login-box .title {
+  background-image: url("bg-light.png");
+  background-color: rgba(198, 18, 125, 0.8);
+  background-blend-mode: multiply;
+  height: 50px;
+  font-size: 23px;
+  font-weight: bold;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.login-box .content {
+  padding: 50px;
+  background-image: url("bg-light.png");
+}
+
+.login-box .content .login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-box .content .login-form input {
+  outline: none;
+  background-color: white;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 32px;
+  font-family: exo-main;
+  font-size: 18px;
+  padding-left: 30px;
+  background-size: 20px;
+  background-position: 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.login-box .content .login-form input[disabled] {
+	background-color: silver !important;
+}
+
+.login-box .content .login-form input.error {
+	color: darkred;
+}
+
+.login-box .content .login-form input[type="text"] {
+	background-image: url("user.png");
+	border-bottom: 1px solid #eeeeee;
+}
+
+.login-box .content .login-form input[type="password"] {
+	background-image: url("password.png");
+	margin-bottom: 20px;
+}
+
+.login-modal.ng-enter {
+  transition: opacity .5s ease-out;
+  opacity: 0;
+}
+
+.login-modal.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+
+.login-modal.ng-leave {
+  transition: opacity .5s ease-out;
+  opacity: 1;
+}
+
+.login-modal.ng-leave.ng-leave-active {
+    opacity: 0;
+}
+
+/*thx new.ppy.sh*/
+
+.btn-osu {
+  font-family: exo-main;
+  outline: none;
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 5px 10px;
+  font-size: 16px;
+  line-height: 1.25;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none
+}
+
+.btn-osu,.btn-osu.focus,.btn-osu:focus,.btn-osu:hover {
+  color: #fff
+}
+
+.btn-osu {
+	background-image: url("button.svg");
+	background-size: 200px;
+	background-position: 50% 50%;
+}
+
+.btn-osu-default {
+  background-color: #4ad;
+  box-shadow: 0 6px #29b,0 7px 10px rgba(0,0,0,.8);
+  margin-bottom: 14px;
+  transition: all .1s ease-in-out
+}
+
+.btn-osu-default.disabled,.btn-osu-default[disabled] {
+  background-color: #9ad1ed;
+  box-shadow: 0 10px #8cd5ea,0 7px 10px rgba(0,0,0,.6)
+}
+
+.btn-osu-default:focus {
+  background-color: #2ea0d9;
+  box-shadow: 0 6px #1e87a5,0 7px 6px rgba(0,0,0,.8)
+}
+
+.btn-osu-default:hover {
+  background-color: #2592c9;
+  box-shadow: 0 6px #1a7690,0 7px 6px rgba(0,0,0,.8)
+}
+
+.btn-osu-default:active {
+  transform: translateY(5px);
+  background-color: #2592c9;
+  box-shadow: 0 2px #1a7690,0 3px 5px rgba(0,0,0,.8)
+}
+
+.btn-osu-pink {
+  background-color: #e31591;
+  box-shadow: 0 5px #bc1177,0 7px 5px rgba(0,0,0,.8);
+  margin-bottom: 10px;
+  transition: all .1s ease-in-out
+}
+
+.btn-osu-pink.disabled,.btn-osu-pink[disabled] {
+  background-color: #9ad1ed;
+  box-shadow: 0 5px #8cd5ea,0 7px 5px rgba(0,0,0,.6)
+}
+
+.btn-osu-pink:focus {
+  background-color: #e31591;
+  box-shadow: 0 5px #bc1177,0 7px 5px rgba(0,0,0,.8)
+}
+
+.btn-osu-pink:hover {
+  background-color: #d71389;
+  box-shadow: 0 5px #ac106d,0 7px 5px rgba(0,0,0,.8)
+}
+
+.btn-osu-pink:active {
+  transform: translateY(5px);
+  background-color: #d71389;
+  box-shadow: 0 2px #ac106d,0 2px 2px rgba(0,0,0,.8)
+}

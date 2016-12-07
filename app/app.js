@@ -1,9 +1,10 @@
 
 // External
 require('angular-translate');
+require('angular-modal-service');
 
 // Module
-let irc4osu = angular.module('irc4osu', ['pascalprecht.translate']);
+let irc4osu = angular.module('irc4osu', ['pascalprecht.translate', 'angularModalService']);
 
 // Locales
 let locales = ["en", "de"];
@@ -26,3 +27,6 @@ require('./components/client/client.component.js');
 require('./components/menu/menu.component.js');
 require('./components/tab/tab.component.js');
 require('./components/message/message.component.js');
+
+// Modals
+require('./modals/login/login.controller.js');

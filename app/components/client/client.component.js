@@ -1,12 +1,11 @@
 angular = window.angular;
-
 const irc = require('irc');
 
 angular
 .module('irc4osu')
 .component('client', {
   templateUrl: './components/client/client.template.html',
-  controller: function clientController($scope) {
+  controller: function clientController($scope, ModalService) {
 
     // Holds all the open channels
     this.channels = [];
@@ -97,5 +96,16 @@ angular
     this.changeActiveChannel = function (channel) {
       this.activeChannel = channel;
     };
+
+    // On startup, show login modal
+    ModalService.showModal({
+      templateUrl: "./modals/login/login.template.html",
+      controller: "loginController"
+    }).then((modal) => {
+      modal.close.then((result) => {
+        this.init(result.username, result.password);
+      });
+    });
+
   }
 });
