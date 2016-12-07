@@ -3,8 +3,13 @@
   <div class="left">
     <menu></menu>
     <div class="tab-panel">
-      <div class="tabs">
-        <tab ng-repeat="channel in $ctrl.channels" tab="channel" ng-click="$ctrl.changeActiveChannel(channel)"></tab>
+      <div class="tabs" sortable="$ctrl.channels">
+        <tab
+            ng-repeat="channel in $ctrl.channels"
+            ng-click="$ctrl.changeActiveChannel(channel)"
+            ng-class="{'active': channel === $ctrl.activeChannel}"
+            sortable-item="$index"
+            tab="channel"></tab>
       </div>
       <input ng-model="$ctrl.username" ng-disabled="$ctrl.connected" type="text" placeholder="Username" />
       <input ng-model="$ctrl.password" ng-disabled="$ctrl.connected" type="password" placeholder="Password" />

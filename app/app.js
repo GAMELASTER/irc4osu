@@ -18,6 +18,9 @@ irc4osu.config(['$translateProvider', function ($translateProvider) {
   $translateProvider.preferredLanguage('en');
 }]);
 
+// Directives
+require('./directives/dragdrop.directive.js');
+
 // Components
 require('./components/client/client.component.js');
 require('./components/menu/menu.component.js');

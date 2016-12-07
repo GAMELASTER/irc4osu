@@ -115,6 +115,12 @@ menu ul li {
 /* Tabs */
 tab {
   background: #A5FFEF;
+  cursor: pointer;
+  margin: 0 3px;
+}
+
+tab.active {
+  background: #51DAC2;
 }
 
 /* Chat */
@@ -133,4 +139,27 @@ chat .messages {
 sidebar {
   width: 150px;
   flex-shrink: 0;
+}
+
+/* Sortable */
+
+[sortable-item] {
+  cursor: pointer;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Required to make elements draggable in old WebKit */
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
+
+[sortable-item].hover {
+  outline: 1px dashed #666666;
+  position: relative;
+  z-index: 1;
+}
+
+[sortable-item].dragging {
+  opacity: 0.5;
 }
