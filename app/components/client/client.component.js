@@ -9,8 +9,12 @@ angular
   controller: function clientController($scope) {
 
     // Holds all the open channels
-    this.channels = ["#osu", "#english"];
+    this.channels = [];
 
+    // Holds a list of channels to join by default
+    this.defaultChannels = ["#osu", "#english"];
+
+    // Holds a list of messages
     this.messages = {};
 
     // Holds the currently opened channel
@@ -42,47 +46,51 @@ angular
 
       // Listeners
       this.irc.connect(0, () => this.onConnected());
-      this.irc.on('message#', (nick, to, text, msg) => {this.onChannelMessage(nick, to, text, msg)});
-      this.irc.on('pm', (nick, to, text, msg) => {this.onPrivateMessage(nick, text, msg)});
+      this.irc.on('message#', (nick, to, text, msg) => { this.onChannelMessage(nick, to, text, msg) });
+      this.irc.on('pm', (nick, text, msg) => { this.onPrivateMessage(nick, text, msg) });
     };
 
     this.onConnected = function () {
       this.connected = true;
-      $scope.$apply();
+      angular.forEach(this.defaultChannels, val => {
+        this.joinChannel(val);
+      });
     };
 
     this.onChannelMessage = function (nick, to, text, msg) {
-
-      // Create message array if it doesn't exist
-      if (!this.messages[to]) this.messages[to] = [];
-
-      // Push to messages
-      this.messages[to].push({
-        nick: nick,
-        text: text
-      });
-
+      this.addMessage(to, nick, text);
       $scope.$apply();
     };
 
     this.onPrivateMessage = function (nick, text, msg) {
-
-      // Create message array if it doesn't exist
-      if (!this.messages[nick]) this.messages[nick] = [];
-
-      // Push to messages
-      this.messages[nick].push({
-        nick: nick,
-        text: text
-      });
-
+      this.addMessage(nick, nick, text);
       $scope.$apply();
     };
 
     // Joins a channel
     this.joinChannel = function (channel) {
       this.irc.join(channel, () => {
+        this.addSystemMessage(channel, `Joined ${channel}!`);
         $scope.$apply();
+      });
+    };
+
+    this.addMessage = function (target, nick, message) {
+      if (!this.messages[target]) this.messages[target] = [];
+
+      this.messages[target].push({
+        nick: nick,
+        text: message,
+        type: "message"
+      });
+    };
+
+    this.addSystemMessage = function (target, message) {
+      if (!this.messages[target]) this.messages[target] = [];
+
+      this.messages[target].push({
+        text: message,
+        type: "system"
       });
     };
 

@@ -1,1 +1,13 @@
-{{$ctrl.message.nick}}: {{$ctrl.message.text}}
+<switch ng-switch="$ctrl.message.type">
+
+    <!-- Normal message -->
+    <span ng-switch-when="message">
+        <span class="username">{{$ctrl.message.nick}}:</span> <span class="message">{{$ctrl.message.text}}</span>
+    </span>
+
+    <!-- System default message -->
+    <span ng-switch-when="system">
+        <span class="system">{{$ctrl.message.text}}</span>
+    </span>
+
+</switch>
