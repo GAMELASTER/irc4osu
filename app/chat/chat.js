@@ -1,10 +1,13 @@
 // Constants
 const fs = require('fs');
 const path = require('path');
-const client = require("./js/client.js");
+const client = require("../shared/client.js");
 const request = require('request');
-const {dialog} = require("electron").remote;
-const {ipcRenderer} = require("electron");
+const {remote, ipcRenderer} = require("electron");
+const {dialog} = remote;
+
+// Shared variables
+let tray = remote.getCurrentWindow().tray;
 
 // Check for update on startup
 request({
@@ -14,7 +17,7 @@ request({
     'User-Agent': 'irc4osu'
   }
 }, function(err, resp, body) {
-  if (compareVersionNumbers(body.tag_name, require("../package.json").version) > 0) {
+  if (compareVersionNumbers(body.tag_name, require("../../package.json").version) > 0) {
     dialog.showMessageBox(null, {
       type: "info",
       buttons: ["Yes", "No"],
@@ -208,9 +211,7 @@ $(document).on("change", "#nightModeCheckbox", () => {
     settings.nightMode = !settings.nightMode;
     client.nightMode(settings.nightMode);
     client.updateSettings(settings);
-
-    // Send settings to the main process
-    ipcRenderer.send("settings", settings);
+    tray.settings.nightMode().checked = settings.nightMode;
   });
 });
 
@@ -219,9 +220,7 @@ $(document).on("change", "#notificationsCheckbox", () => {
   client.getSettings(settings => {
     settings.notifications = !settings.notifications;
     client.updateSettings(settings);
-
-    // Send settings to the main process
-    ipcRenderer.send("settings", settings);
+    tray.settings.notifications().checked = settings.notifications;
   });
 });
 
@@ -230,9 +229,7 @@ $(document).on("change", "#soundsCheckbox", () => {
   client.getSettings(settings => {
     settings.sounds = !settings.sounds;
     client.updateSettings(settings);
-
-    // Send settings to the main process
-    ipcRenderer.send("settings", settings);
+    tray.settings.sounds().checked = settings.sounds;
   });
 });
 
@@ -306,39 +303,43 @@ function compareVersionNumbers(v1, v2) {
     return 0;
 }
 
-// IPC Events
+// Tray events
 
 // Fires when we click on notifications in tray
-ipcRenderer.on("notifications", (sender, obj) => {
+tray.on("notifications", (bool) => {
   client.getSettings(settings => {
-    settings.notifications = obj.bool;
+    settings.notifications = bool;
     client.updateSettings(settings);
 
     // Set settings in settings modal
-    $("#notificationsCheckbox").prop("checked", obj.bool);
+    $("#notificationsCheckbox").prop("checked", bool);
   });
 });
 
 // Fires when we click on nightmode in tray
-ipcRenderer.on("nightMode", (sender, obj) => {
+tray.on("nightMode", (bool) => {
   client.getSettings(settings => {
-    settings.nightMode = obj.bool;
+    settings.nightMode = bool;
     client.updateSettings(settings);
 
     // Set settings in settings modal
-    $("#nightModeCheckbox").prop("checked", obj.bool);
+    $("#nightModeCheckbox").prop("checked", bool);
 
-    client.nightMode(obj.bool);
+    client.nightMode(bool);
   });
 });
 
 // Fires when we click on sounds in tray
-ipcRenderer.on("sounds", (sender, obj) => {
+tray.on("sounds", (bool) => {
   client.getSettings(settings => {
-    settings.sounds = obj.bool;
+    settings.sounds = bool;
     client.updateSettings(settings);
 
     // Set settings in settings modal
-    $("#soundsCheckbox").prop("checked", obj.bool);
+    $("#soundsCheckbox").prop("checked", bool);
   });
+});
+
+ipcRenderer.on('notify', (event, obj) => {
+  client.notify(obj);
 });

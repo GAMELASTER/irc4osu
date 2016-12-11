@@ -5,7 +5,10 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron app.js"
+    "start": "electron .",
+    "build-x64": "electron-packager . irc4osu --platform=win32 --arch=x64 --icon=./app/resources/images/logo.ico --overwrite --prune --ignore=build/",
+    "build-x86": "electron-packager . irc4osu --platform=win32 --arch=ia32 --icon=./app/resources/images/logo.ico --overwrite --prune --ignore=build/",
+    "build-osx": "electron-packager . irc4osu --platform=darwin --arch=x64 --icon=./app/resources/images/logo.icns --prune --overwrite --ignore=build/"
   },
   "repository": {
     "type": "git",
@@ -27,8 +30,7 @@
   "dependencies": {
     "electron-json-storage": "^2.0.2",
     "i18n": "^0.8.3",
-    "irc": "^0.5.0",
-    "node-notifier": "^4.6.0",
+    "irc": "^0.5.2",
     "os-locale": "git+https://git@github.com/gamelaster/os-locale.git",
     "request": "^2.76.0"
   }

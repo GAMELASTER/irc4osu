@@ -1,0 +1,130 @@
+<style>
+  @font-face {
+    font-family: exo-main;
+    src: url("../resources/fonts/Exo2-Light.otf") format("opentype");
+  }
+
+  @font-face {
+    font-family: exo-main;
+    font-weight: bold;
+    src: url("../resources/fonts/Exo2-SemiBold.otf") format("opentype");
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: exo-main;
+  }
+
+  .container {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+  }
+
+  #icon {
+    display: none;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    width: 100vh;
+    min-width: 100vh;
+  }
+  
+  .content {
+    flex-grow: 1;
+    box-sizing: border-box;
+    padding: 10px;
+    overflow: hidden !important;
+    cursor: pointer;
+  }
+
+  #title {
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+
+    margin-bottom: 8px;
+  }
+
+  #message {
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+  }
+
+  #close {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    top: -5px;
+    right: 7px;
+    font-size: 25px;
+    cursor: pointer;
+    color: #D2D2D2;
+  }
+</style>
+<script>window.$ = window.jQuery = require('../shared/jquery.js');</script>
+
+<div class="container">
+
+  <div id="icon"></div>
+
+  <div class="content">
+    <div id="close">&times;</div>
+    <h1 id="title"></h1>
+    <p id="message"></p>
+  </div>
+
+</div>
+
+<script>
+  let {ipcRenderer, remote} = require('electron');
+  let notifying = false;
+
+  $(document).ready(function() {
+    $(document).off('click', '#close').on('click', '#close', e => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      remote.getCurrentWindow().hide();
+    });
+  });
+
+  ipcRenderer.on('notify', (event, params) => {
+    if (!notifying) {
+
+      if (params.icon) {
+        params.icon = params.icon.replace(/\\/g, '/');
+        $('#icon').show();
+        $('#icon').css('background-image', `url("${params.icon}")`);
+      }
+
+      $('#title').html(params.nick);
+      $('#message').html(params.msg);
+
+      remote.getCurrentWindow().showInactive();
+      notifying = true;
+
+      $(document).off('click', '.container').on('click', '.container', e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        remote.getCurrentWindow().hide();
+        ipcRenderer.send('click');
+      });
+
+      setTimeout(() => {
+        remote.getCurrentWindow().hide();
+        notifying = false;
+      }, 5000);
+    }
+  });
+</script>
