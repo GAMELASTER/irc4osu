@@ -40,10 +40,13 @@ angular
       this.username = username;
 
       this.connected = true;
+
+      // Join each default channel
       angular.forEach(this.defaultChannels, val => {
         this.joinChannel(val);
       });
 
+      // Event handlers
       this.irc.on('message#', (nick, to, text, msg) => { this.onChannelMessage(nick, to, text, msg) });
       this.irc.on('pm', (nick, text, msg) => { this.onPrivateMessage(nick, text, msg) });
     };
@@ -54,6 +57,7 @@ angular
     };
 
     this.onPrivateMessage = function (nick, text, msg) {
+      console.log("got private message");
       this.addMessage(nick, nick, text);
       $scope.$apply();
     };
@@ -68,6 +72,10 @@ angular
 
     this.addMessage = function (target, nick, message) {
       if (!this.messages[target]) this.messages[target] = [];
+      if (this.channels.indexOf(target) === -1) {
+        this.channels.push(target);
+        this.addSystemMessage(target, `Joined ${target}!`);
+      }
 
       let type = 'message';
       if (nick === this.username) type = 'self';
@@ -95,6 +103,20 @@ angular
     this.sendMessage = function (channel, message) {
       this.irc.say(channel, message);
       this.addMessage(channel, this.username, message);
+    };
+
+    this.openChannelsModal = function () {
+      ModalService.showModal({
+        templateUrl: "./modals/channels/channels.template.html",
+        controller: "channelsController",
+        inputs: {
+          irc: this.irc
+        }
+      }).then((modal) => {
+        modal.close.then((result) => {
+          
+        });
+      });
     };
 
     // On startup, show login modal
