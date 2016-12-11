@@ -9,9 +9,10 @@
             ng-click="$ctrl.changeActiveChannel(channel)"
             ng-class="{'active': channel === $ctrl.activeChannel}"
             sortable-item="$index"
-            tab="channel"></tab>
+            tab="channel">
+        </tab>
       </div>
-      <button>+</button>
+      <button ng-click="$ctrl.openChannelsModal()">+</button>
     </div>
   </div>
   <div class="user">

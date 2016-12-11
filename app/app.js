@@ -30,3 +30,4 @@ require('./components/message/message.component.js');
 
 // Modals
 require('./modals/login/login.controller.js');
+require('./modals/channels/channels.controller.js');
