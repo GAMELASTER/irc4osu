@@ -14,11 +14,13 @@
   max-width: 300px;
   width: calc(100vw - 100px);
   z-index: 100;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .login-box .title {
   background-image: url("images/bg-light.png");
-  background-color: rgba(198, 18, 125, 0.8);
+  background-color: rgba(198, 18, 125, 1);
   background-blend-mode: multiply;
   height: 50px;
   font-size: 23px;

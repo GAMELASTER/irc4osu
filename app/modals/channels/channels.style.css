@@ -1,0 +1,36 @@
+.channels-modal {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.channels-box {
+  background-color: #ffffff;
+  max-width: 500px;
+  width: calc(100vw - 100px);
+  z-index: 100;
+}
+
+.channels-box .title {
+  background-image: url("images/bg-light.png");
+  background-color: rgba(198, 18, 125, 1);
+  background-blend-mode: multiply;
+  height: 50px;
+  font-size: 23px;
+  font-weight: bold;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.channels-box .content {
+  padding: 50px;
+  background-image: url("images/bg-light.png");
+}
