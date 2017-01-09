@@ -184,8 +184,10 @@ const client = {
     // Get the users name color
     var user = this.classForUser(args.nick);
 
+    let escapedUsername = this.username.replace(' ', '_');
+
     // Notify when mentioned
-    if (message.indexOf(this.username) !== -1) {
+    if (message.toLowerCase().indexOf(this.username.toLowerCase()) !== -1 || message.toLowerCase().indexOf(escapedUsername.toLowerCase()) !== -1) {
 
       // Add notify to html
       message = message.replace(this.username, `<span class="mention-tag">${this.username}</span>`);
