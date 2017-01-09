@@ -190,6 +190,9 @@ const client = {
       // Add notify to html
       message = message.replace(this.username, `<span class="mention-tag">${this.username}</span>`);
 
+      if (tab && this.tabs.indexOf(tab) !== this.activeTab)
+        $(`#tab-slider div[data-channel*="${tab.name.toLowerCase()}"]`).addClass('new');
+
       // Check settings
       this.getSettings(settings => {
 
@@ -222,11 +225,11 @@ const client = {
               <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
 
     // Append html
-    $(`#chat-area [name="${args.to}"]`).append(html);
+    $(`#chat-area [name="${args.to.toLowerCase()}"]`).append(html);
 
     // Autoscroll
     if (tab && tab.autoScroll)
-      $(`#chat-area [name="${args.to}"]`).scrollTop($(`#chat-area [name="${args.to}"]`)[0].scrollHeight);
+      $(`#chat-area [name="${args.to.toLowerCase()}"]`).scrollTop($(`#chat-area [name="${args.to.toLowerCase()}"]`)[0].scrollHeight);
     
   },
 
@@ -234,7 +237,7 @@ const client = {
   onPrivateMessage: function (args) {
 
     // Join chat with user if it doesn't exist yet
-    var tab = this.tabs.find(tab => tab.name === args.nick);
+    var tab = this.tabs.find(tab => tab.name.toLowerCase() === args.nick.toLowerCase());
     if (!tab) this.joinUser(args.nick);
 
     // Build date
@@ -251,11 +254,14 @@ const client = {
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
                 <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
     
-    $(`#chat-area [name="${args.nick}"]`).append(html);
+    $(`#chat-area [name="${args.nick.toLowerCase()}"]`).append(html);
 
     // Autoscroll
     if (tab && tab.autoScroll)
-      $(`#chat-area [name="${args.nick}"]`).scrollTop($(`#chat-area [name="${args.nick}"]`)[0].scrollHeight);
+      $(`#chat-area [name="${args.nick.toLowerCase()}"]`).scrollTop($(`#chat-area [name="${args.nick.toLowerCase()}"]`)[0].scrollHeight);
+
+    if (tab && this.tabs.indexOf(tab) !== this.activeTab)
+      $(`#tab-slider div[data-channel*="${tab.name.toLowerCase()}"]`).addClass('new');
 
     // Check settings for options
     this.getSettings(settings => {
@@ -292,14 +298,14 @@ const client = {
     var tabName = args.to === this.username ? args.nick : args.to;
 
     // Join chat with user if it doesn't exist yet
-    var tab = this.tabs.find(tab => tab.name === tabName);
+    var tab = this.tabs.find(tab => tab.name.toLowerCase() === tabName.toLowerCase());
 
     // If tab doesnt exist, check if its a user or a channel
     if (!tab) {
-      if (args.to === this.username)
+      if (args.to.toLowerCase() === this.username.toLowerCase())
         this.joinUser(tabName);
       else
-        this.joinChannel(tabName)
+        this.joinChannel(tabName);
     }
 
     // Build date
@@ -315,11 +321,14 @@ const client = {
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
                 <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a> ${message}<br />`;
 
-    $(`#chat-area [name="${tabName}"]`).append(html);
+    $(`#chat-area [name="${tabName.toLowerCase()}"]`).append(html);
+
+    if (tab && args.to.toLowerCase() === this.username.toLowerCase() && this.tabs.indexOf(tab) !== this.activeTab)
+      $(`#tab-slider div[data-channel*="${tab.name.toLowerCase()}"]`).addClass('new');
 
     // Autoscroll
     if (tab && tab.autoScroll)
-      $(`#chat-area [name="${tabName}"]`).scrollTop($(`#chat-area [name="${tabName}"]`)[0].scrollHeight);
+      $(`#chat-area [name="${tabName.toLowerCase()}"]`).scrollTop($(`#chat-area [name="${tabName.toLowerCase()}"]`)[0].scrollHeight);
   },
 
   // Fires when we connect
@@ -511,9 +520,9 @@ const client = {
   joinChannel: function (channelName) {
     if (!channelName) throw "No channel name provided!";
 
-    var element = $(`<div data-channel="${channelName}" class="tab default"><span class="close">X</span><span class="tab-name">${channelName}</span></div>`);
+    var element = $(`<div data-channel="${channelName.toLowerCase()}" class="tab default"><span class="close">X</span><span class="tab-name">${channelName}</span></div>`);
     this.tabs.push({
-      name: channelName,
+      name: channelName.toLowerCase(),
       autoScroll: true,
       isChannel: channelName.charAt(0) == "#" ? true : false
     });
@@ -525,28 +534,28 @@ const client = {
     $('#text-input').show();
 
     // Append html
-    $("#chat-area").prepend(`<div name='${channelName}' class="chat-container hidden"></div>`);
+    $("#chat-area").prepend(`<div name='${channelName.toLowerCase()}' class="chat-container hidden"></div>`);
     
     // Add tab to the tabslider
     element.appendTo($("#tab-slider"));
 
     // Change the tab to the newly created tab
-    this.changeTab(channelName);
+    this.changeTab(channelName.toLowerCase());
 
     // Add system message
-    this.systemMessage(channelName, "info", __("Attempting to join channel..."));
+    this.systemMessage(channelName.toLowerCase(), "info", __("Attempting to join channel..."));
 
     // Join from the irc client
     this.irc.join(channelName, () => {
-      this.systemMessage(channelName, "success", __("Joined %s!", channelName));
+      this.systemMessage(channelName.toLowerCase(), "success", __("Joined %s!", channelName));
     });
   },
 
   // Joins a user
   joinUser: function (username) {
-    var element = $(`<div data-channel="${username}" class="tab default"><span class="close">X</span><span class="tab-name">${username}</span></div>`);
+    var element = $(`<div data-channel="${username.toLowerCase()}" class="tab default"><span class="close">X</span><span class="tab-name">${username}</span></div>`);
     this.tabs.push({
-      name: username,
+      name: username.toLowerCase(),
       autoScroll: true,
       isChannel: false
     });
@@ -561,27 +570,27 @@ const client = {
     this.updateUserCount();
 
     // Add the chat to the html
-    $("#chat-area").prepend(`<div name='${username}' class="chat-container hidden"></div>`);
+    $("#chat-area").prepend(`<div name='${username.toLowerCase()}' class="chat-container hidden"></div>`);
     
     // Add the tab to the tabslider
     element.appendTo($("#tab-slider"));
 
     // Change the tab to the newly created tab
-    this.changeTab(username);
+    this.changeTab(username.toLowerCase());
 
     // Add a system message
-    this.systemMessage(username, "info", __(`Created chat with %s!`, username));
+    this.systemMessage(username.toLowerCase(), "info", __(`Created chat with %s!`, username));
   },
 
   // Leaves a channel
   closeTab: function (tabName) {
 
     // Remove elements that belong to the tab
-    $(`#chat-area [name="${tabName}"]`).remove();
-    $(`#tab-slider div.tab[data-channel="${tabName}"]`).remove();
+    $(`#chat-area [name="${tabName.toLowerCase()}"]`).remove();
+    $(`#tab-slider div.tab[data-channel="${tabName.toLowerCase()}"]`).remove();
 
     // Find tab index
-    let index = this.tabs.findIndex(tab => tab.name === tabName);
+    let index = this.tabs.findIndex(tab => tab.name === tabName.toLowerCase());
 
     // Leave the irc channel
     if (this.tabs[index].isChannel) {
@@ -636,6 +645,9 @@ const client = {
 
     // Make clicked tab active
     $(`#tab-slider div.tab[data-channel="${tabName}"]`).addClass("active");
+
+    // Remove new class from tab
+    $(`#tab-slider div.tab[data-channel="${tabName}"]`).removeClass("new");
 
     // Show chat container
     $(`#chat-area [name="${tabName}"]`).removeClass("hidden");
