@@ -22,6 +22,9 @@ const client = {
   // Holds the index of the currently selected tab
   activeTab: 0,
 
+  // Contains all the sent messages
+  sentHistory: [],
+
   // Holds the channels to join on login
   defaultChannels: ["#osu", "#english"],
 
@@ -384,6 +387,8 @@ const client = {
 
   // Send message through irc client
   sendMessage: function (channel, message) {
+
+    this.sentHistory.unshift(message);
 
     // Check if the message is a command
     if (message.charAt(0) === "/") return this.processCommand(channel, message);

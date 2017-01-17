@@ -90,15 +90,39 @@ $(document).on("click", "#send-button", () => {
   $("#text-input").val("");
 });
 
+// Used to track where we are in history with up/down arrows
+var sentHistoryIndex = -1;
+
 // If enter was pressed
 $(document).on("keyup", "#text-input", e => {
+
+  // Enter key
   if (e.keyCode === 13) {
     var message = $("#text-input").val();
     if (message === "") return;
 
     client.sendMessage(client.tabs[client.activeTab].name, message);
 
+    sentHistoryIndex = -1;
     $("#text-input").val("");
+  }
+
+  // Up arrow
+  else if (e.keyCode === 38) {
+    if (sentHistoryIndex < client.sentHistory.length - 1) {
+      sentHistoryIndex++;
+      $("#text-input").val(client.sentHistory[sentHistoryIndex]);
+    }
+  }
+
+  // Down arrow
+  else if (e.keyCode === 40) {
+    if (sentHistoryIndex === -1) {
+      $("#text-input").val("");
+    } else {
+      sentHistoryIndex--;
+      $("#text-input").val(client.sentHistory[sentHistoryIndex]);
+    }
   }
 });
 
