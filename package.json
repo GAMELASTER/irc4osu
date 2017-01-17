@@ -6,10 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build-x64": "electron-packager . irc4osu --platform=win32 --arch=x64 --icon=./app/resources/images/logo.ico --overwrite --prune --ignore=build/",
-    "build-x86": "electron-packager . irc4osu --platform=win32 --arch=ia32 --icon=./app/resources/images/logo.ico --overwrite --prune --ignore=build/",
-    "build-osx": "electron-packager . irc4osu --platform=darwin --arch=x64 --icon=./app/resources/images/logo.icns --prune --overwrite --ignore=build/"
-  },
+    "pack": "build --dir",
+    "dist": "build"
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GAMELASTER/irc4osu.git"
@@ -25,7 +24,8 @@
   },
   "homepage": "https://github.com/GAMELASTER/irc4osu#readme",
   "devDependencies": {
-    "electron": "^1.4.4"
+    "electron": "^1.4.4",
+    "electron-builder": "^11.4.4"
   },
   "dependencies": {
     "electron-json-storage": "^2.0.2",
@@ -33,5 +33,14 @@
     "irc": "^0.5.2",
     "os-locale": "git+https://git@github.com/gamelaster/os-locale.git",
     "request": "^2.76.0"
+  },
+  "build": {
+    "appId": "osu.irc4osu",
+    "mac": {
+      "category": "social.networking"
+    },
+    "win": {
+      "iconUrl": "https://raw.githubusercontent.com/arogan-group/irc4osu/master/app/resources/images/logo.ico"
+    }
   }
 }
