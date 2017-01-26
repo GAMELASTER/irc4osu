@@ -1,6 +1,6 @@
 {
   "name": "irc4osu",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "description": "An unofficial IRC client for osu!",
   "main": "app.js",
   "scripts": {
