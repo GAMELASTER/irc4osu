@@ -8,7 +8,7 @@
     "start": "electron .",
     "pack": "build --dir",
     "dist": "build"
-    },
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GAMELASTER/irc4osu.git"
@@ -17,7 +17,11 @@
     "irc",
     "osu"
   ],
-  "author": "GAMELASTER & Noobish",
+  "author": "Noobish",
+  "contributors": [
+    "Uwe Wiemer <hallowatcher@gmail.com> (http://hwchr.com/)",
+    "GAMELASTER <gamelaster@outlook.com> (http://marekkraus.sk/)"
+  ],
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/GAMELASTER/irc4osu/issues"
@@ -28,6 +32,8 @@
     "electron-builder": "^11.4.4"
   },
   "dependencies": {
+    "electron-auto-updater": "^1.0.0",
+    "electron-is-dev": "^0.1.2",
     "electron-json-storage": "^2.0.2",
     "i18n": "^0.8.3",
     "irc": "^0.5.2",

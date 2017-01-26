@@ -6,30 +6,35 @@ const request = require('request');
 const {remote, ipcRenderer} = require("electron");
 const {dialog} = remote;
 
+const isDev = require('electron-is-dev');
+
 // Shared variables
 let tray = remote.getCurrentWindow().tray;
 
-// Check for update on startup
-request({
-  url: "https://api.github.com/repos/arogan-group/irc4osu/releases/latest",
-  json: true,
-  headers: {
-    'User-Agent': 'irc4osu'
-  }
-}, function(err, resp, body) {
-  if (compareVersionNumbers(body.tag_name, require("../../package.json").version) > 0) {
+if (!isDev) {
+
+  // Check for updates
+  ipcRenderer.emit('checkForUpdates');
+
+  // If any updates found
+  ipcRenderer.on('update-available', () => {
     dialog.showMessageBox(null, {
       type: "info",
       buttons: ["Yes", "No"],
       title: __("New update is available"),
-      message: __(`A newer version of irc4osu! has been released! %s\n\nDo you wish to download it?`, body.tag_name)
+      message: `A newer version of irc4osu! was found! Do you want to download and install it now?`
     }, response => {
       if (response == 0) {
-        require('electron').shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
+        ipcRenderer.emit('downloadUpdate');
       }
     });
-  }
-});
+  });
+
+  // Once we finish downloading updates
+  ipcRenderer.on('update-downloaded', () => {
+    ipcRenderer.emit('quitAndInstall');
+  });
+}
 
 // Set translations for elements
 $("#text-input").attr("placeholder", __("Enter a message..."));

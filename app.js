@@ -11,6 +11,8 @@ const {
   ipcMain
 } = electron;
 
+const isDev = require("electron-is-dev");
+
 const fs = require("fs");
 const path = require("path");
 const i18n = require("i18n");
@@ -61,7 +63,9 @@ function createWindow() {
   mainWindow.tray = tray;
 
   mainWindow.loadURL(`file://${__dirname}/app/chat/chat.html`);
-  if(process.argv[0].indexOf("electron") !== -1) mainWindow.webContents.openDevTools({ detach: true });
+  
+  if (isDev)
+    mainWindow.webContents.openDevTools({ detach: true });
   
   mainWindow.on('closed', function() {
     mainWindow = null;
@@ -130,6 +134,41 @@ ipcMain.on('click', function () {
 
 // the signal to exit and wants to start closing windows
 app.on("before-quit", () => willQuit = true);
+
+let {autoUpdater} = require("electron-auto-updater");
+
+// Updates to renderer
+ipcMain.on('checkForUpdates', () => {
+  if (isDev) return;
+
+  autoUpdater.autoDownload = false;
+
+  autoUpdater.on('update-available', () => {
+    mainWindow.webContents.send('update-available');
+  });
+
+  autoUpdater.on('update-downloaded', () => {
+    mainWindow.webContents.send('update-downloaded');
+  });
+
+  autoUpdater.on('download-progress', info => {
+    mainWindow.webContents.send('download-progress', { info: info });
+  });
+
+  autoUpdater.checkForUpdates();
+});
+
+ipcMain.on('downloadUpdate', () => {
+  if (isDev) return;
+
+  autoUpdater.downloadUpdate();
+})
+
+ipcMain.on('quitAndInstall', () => {
+  if (isDev) return;
+
+  autoUpdater.quitAndInstall();
+});
 
 module.exports = {
   __: () => __,
