@@ -11,31 +11,6 @@ const isDev = require('electron-is-dev');
 // Shared variables
 let tray = remote.getCurrentWindow().tray;
 
-if (!isDev) {
-
-  // Check for updates
-  ipcRenderer.emit('checkForUpdates');
-
-  // If any updates found
-  ipcRenderer.on('update-available', () => {
-    dialog.showMessageBox(null, {
-      type: "info",
-      buttons: ["Yes", "No"],
-      title: __("New update is available"),
-      message: `A newer version of irc4osu! was found! Do you want to download and install it now?`
-    }, response => {
-      if (response == 0) {
-        ipcRenderer.emit('downloadUpdate');
-      }
-    });
-  });
-
-  // Once we finish downloading updates
-  ipcRenderer.on('update-downloaded', () => {
-    ipcRenderer.emit('quitAndInstall');
-  });
-}
-
 // Set translations for elements
 $("#text-input").attr("placeholder", __("Enter a message..."));
 $("#login-form input[name='username']").attr("placeholder", __("Username"));

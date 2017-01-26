@@ -18,6 +18,36 @@ const path = require("path");
 const i18n = require("i18n");
 const osLocale = require('os-locale');
 
+if (!isDev) {
+
+  // Check for updates
+  let {autoUpdater} = require("electron-auto-updater");
+  autoUpdater.autoDownload = false;
+
+  autoUpdater.on('update-available', () => {
+    dialog.showMessageBox(null, {
+      type: "info",
+      buttons: ["Yes", "No"],
+      title: __("New update is available"),
+      message: "A newer version of irc4osu! was found!\nDo you want to download and install it now?"
+    }, response => {
+      if (response == 0) {
+        autoUpdater.downloadUpdate();
+      }
+    });
+  });
+
+  autoUpdater.on("download-progress", (info) => {
+    //
+  });
+
+  autoUpdater.on("update-downloaded", () => {
+    autoUpdater.quitAndInstall();
+  });
+
+  autoUpdater.checkForUpdates();
+}
+
 const tray = require('./app/window/tray');
 const menu = require('./app/window/menu');
 
@@ -134,41 +164,6 @@ ipcMain.on('click', function () {
 
 // the signal to exit and wants to start closing windows
 app.on("before-quit", () => willQuit = true);
-
-let {autoUpdater} = require("electron-auto-updater");
-
-// Updates to renderer
-ipcMain.on('checkForUpdates', () => {
-  if (isDev) return;
-
-  autoUpdater.autoDownload = false;
-
-  autoUpdater.on('update-available', () => {
-    mainWindow.webContents.send('update-available');
-  });
-
-  autoUpdater.on('update-downloaded', () => {
-    mainWindow.webContents.send('update-downloaded');
-  });
-
-  autoUpdater.on('download-progress', info => {
-    mainWindow.webContents.send('download-progress', { info: info });
-  });
-
-  autoUpdater.checkForUpdates();
-});
-
-ipcMain.on('downloadUpdate', () => {
-  if (isDev) return;
-
-  autoUpdater.downloadUpdate();
-})
-
-ipcMain.on('quitAndInstall', () => {
-  if (isDev) return;
-
-  autoUpdater.quitAndInstall();
-});
 
 module.exports = {
   __: () => __,
