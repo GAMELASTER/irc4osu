@@ -11,6 +11,7 @@ const notification = require('../notification/notification');
 const path = require("path");
 const {ipcRenderer, remote} = require("electron");
 const {app} = remote;
+const fs = require("fs");
 
 notification.init('renderer');
 
@@ -81,7 +82,9 @@ const client = {
     // Start the client
     this.irc = new irc.Client("irc.ppy.sh", credentials.username, {
       password: credentials.password,
-      autoConnect: false
+      autoConnect: false,
+      autoRejoin: false,
+      retryCount: 0
     });
 
     // Setup the listeners
@@ -232,6 +235,9 @@ const client = {
     // Append html
     $(`#chat-area [name="${args.to.toLowerCase()}"]`).append(html);
 
+    // Append to log
+    this.logMessage(args.to.toLowerCase(), args.nick, message);
+
     // Autoscroll
     if (tab && tab.autoScroll)
       $(`#chat-area [name="${args.to.toLowerCase()}"]`).scrollTop($(`#chat-area [name="${args.to.toLowerCase()}"]`)[0].scrollHeight);
@@ -260,6 +266,9 @@ const client = {
                 <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
     
     $(`#chat-area [name="${args.nick.toLowerCase()}"]`).append(html);
+
+    // Append to log
+    this.logMessage(args.nick.toLowerCase(), args.nick, message);
 
     // Autoscroll
     if (tab && tab.autoScroll)
@@ -331,6 +340,9 @@ const client = {
     if (tab && args.to.toLowerCase() === this.username.toLowerCase() && this.tabs.indexOf(tab) !== this.activeTab)
       $(`#tab-slider div[data-channel*="${tab.name.toLowerCase()}"]`).addClass('new');
 
+    // Append to log
+    this.logMessage(tabName.toLowerCase(), args.nick, message);
+
     // Autoscroll
     if (tab && tab.autoScroll)
       $(`#chat-area [name="${tabName.toLowerCase()}"]`).scrollTop($(`#chat-area [name="${tabName.toLowerCase()}"]`)[0].scrollHeight);
@@ -338,6 +350,8 @@ const client = {
 
   // Fires when we connect
   onConnected: function (credentials) {
+
+    this.updateCredentials(credentials)
 
     // Set connected to true
     this.connected = true;
@@ -383,6 +397,10 @@ const client = {
 
         break;
     }
+
+    // Append to log
+    this.logMessage("error", "System", error.command);
+
   },
 
   // Send message through irc client
@@ -417,6 +435,9 @@ const client = {
   // Possible types: success, info, error
   systemMessage: function (channel, type, message) {
     $(`#chat-area [name="${channel}"]`).append(`<span class="${type}-tag">${message}</span><br>`);
+
+    // Append to log
+    this.logMessage(channel, "System", message);
   },
 
   // Process a command
@@ -829,6 +850,16 @@ const client = {
       $("body").addClass("night");
     else
       $("body").removeClass("night");
+  },
+
+  // Logs a message
+  logMessage: function (channel, name, message) {
+    if (!fs.existsSync(path.join(app.getPath("userData"), "Logs")))
+      fs.mkdirSync(path.join(app.getPath("userData"), "Logs"))
+
+    let thePath = path.join(app.getPath("userData"), "Logs", channel.toLowerCase() + ".txt");
+    let time = new Date();
+    fs.appendFile(thePath, `[${time.toLocaleTimeString()}] ${name}: ${message}\r\n`);
   }
 }
 

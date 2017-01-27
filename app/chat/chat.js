@@ -6,8 +6,6 @@ const request = require('request');
 const {remote, ipcRenderer} = require("electron");
 const {dialog} = remote;
 
-const isDev = require('electron-is-dev');
-
 // Shared variables
 let tray = remote.getCurrentWindow().tray;
 
@@ -44,10 +42,7 @@ $("#login-form").submit(e => {
     password: $("input[name='password']").val()
   }
 
-  // Save credentials to storage
-  client.updateCredentials(credentials, () => {
-    client.init(credentials);
-  });
+  client.init(credentials);
 });
 
 // Click on tab
