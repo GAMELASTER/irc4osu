@@ -17,6 +17,7 @@ const fs = require("fs");
 const path = require("path");
 const i18n = require("i18n");
 const osLocale = require('os-locale');
+const os = require("os");
 
 if (!isDev) {
 
@@ -32,7 +33,12 @@ if (!isDev) {
       message: "A newer version of irc4osu! was found!\nDo you want to download and install it now?"
     }, response => {
       if (response == 0) {
-        autoUpdater.downloadUpdate();
+        // TODO: AutoUpdater only works for signed Mac applications
+        let platform = os.platform()
+        if (platform !== "win32")
+          require('electron').shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
+        else
+          autoUpdater.downloadUpdate();
       }
     });
   });
