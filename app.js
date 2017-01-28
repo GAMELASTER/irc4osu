@@ -11,10 +11,48 @@ const {
   ipcMain
 } = electron;
 
+const isDev = require("electron-is-dev");
+
 const fs = require("fs");
 const path = require("path");
 const i18n = require("i18n");
 const osLocale = require('os-locale');
+const os = require("os");
+
+if (!isDev) {
+
+  // Check for updates
+  let {autoUpdater} = require("electron-auto-updater");
+  autoUpdater.autoDownload = false;
+
+  autoUpdater.on('update-available', () => {
+    dialog.showMessageBox(null, {
+      type: "info",
+      buttons: ["Yes", "No"],
+      title: __("New update is available"),
+      message: "A newer version of irc4osu! was found!\nDo you want to download and install it now?"
+    }, response => {
+      if (response == 0) {
+        // TODO: AutoUpdater only works for signed Mac applications
+        let platform = os.platform()
+        if (platform !== "win32")
+          require('electron').shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
+        else
+          autoUpdater.downloadUpdate();
+      }
+    });
+  });
+
+  autoUpdater.on("download-progress", (info) => {
+    //
+  });
+
+  autoUpdater.on("update-downloaded", () => {
+    autoUpdater.quitAndInstall();
+  });
+
+  autoUpdater.checkForUpdates();
+}
 
 const tray = require('./app/window/tray');
 const menu = require('./app/window/menu');
@@ -61,7 +99,9 @@ function createWindow() {
   mainWindow.tray = tray;
 
   mainWindow.loadURL(`file://${__dirname}/app/chat/chat.html`);
-  if(process.argv[0].indexOf("electron") !== -1) mainWindow.webContents.openDevTools({ detach: true });
+  
+  if (isDev)
+    mainWindow.webContents.openDevTools({ detach: true });
   
   mainWindow.on('closed', function() {
     mainWindow = null;

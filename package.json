@@ -1,11 +1,14 @@
 {
   "name": "irc4osu",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An unofficial IRC client for osu!",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "build --dir",
+    "dist": "build",
+    "dist-wm": "build -w -m"
   },
   "repository": {
     "type": "git",
@@ -15,20 +18,36 @@
     "irc",
     "osu"
   ],
-  "author": "GAMELASTER & Noobish",
+  "author": "Noobish",
+  "contributors": [
+    "Uwe Wiemer <hallowatcher@gmail.com> (http://hwchr.com/)",
+    "GAMELASTER <gamelaster@outlook.com> (http://marekkraus.sk/)"
+  ],
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/GAMELASTER/irc4osu/issues"
   },
   "homepage": "https://github.com/GAMELASTER/irc4osu#readme",
   "devDependencies": {
-    "electron": "^1.4.4"
+    "electron": "^1.4.4",
+    "electron-builder": "^11.4.4"
   },
   "dependencies": {
+    "electron-auto-updater": "^1.0.0",
+    "electron-is-dev": "^0.1.2",
     "electron-json-storage": "^2.0.2",
     "i18n": "^0.8.3",
     "irc": "^0.5.2",
     "os-locale": "git+https://git@github.com/gamelaster/os-locale.git",
     "request": "^2.76.0"
+  },
+  "build": {
+    "appId": "osu.irc4osu",
+    "mac": {
+      "category": "social.networking"
+    },
+    "win": {
+      "iconUrl": "https://raw.githubusercontent.com/arogan-group/irc4osu/master/app/resources/images/logo.ico"
+    }
   }
 }
