@@ -186,6 +186,10 @@ a {
 	background-color: rgb(240, 122, 192);
 }
 
+.tab.new {
+	background-color: rgb(102, 188, 239)
+}
+
 .tab.navigate {
 	background-color: rgb(52, 152, 219);
 }

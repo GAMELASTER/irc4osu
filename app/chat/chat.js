@@ -9,28 +9,6 @@ const {dialog} = remote;
 // Shared variables
 let tray = remote.getCurrentWindow().tray;
 
-// Check for update on startup
-request({
-  url: "https://api.github.com/repos/arogan-group/irc4osu/releases/latest",
-  json: true,
-  headers: {
-    'User-Agent': 'irc4osu'
-  }
-}, function(err, resp, body) {
-  if (compareVersionNumbers(body.tag_name, require("../../package.json").version) > 0) {
-    dialog.showMessageBox(null, {
-      type: "info",
-      buttons: ["Yes", "No"],
-      title: __("New update is available"),
-      message: __(`A newer version of irc4osu! has been released! %s\n\nDo you wish to download it?`, body.tag_name)
-    }, response => {
-      if (response == 0) {
-        require('electron').shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
-      }
-    });
-  }
-});
-
 // Set translations for elements
 $("#text-input").attr("placeholder", __("Enter a message..."));
 $("#login-form input[name='username']").attr("placeholder", __("Username"));
@@ -64,10 +42,7 @@ $("#login-form").submit(e => {
     password: $("input[name='password']").val()
   }
 
-  // Save credentials to storage
-  client.updateCredentials(credentials, () => {
-    client.init(credentials);
-  });
+  client.init(credentials);
 });
 
 // Click on tab
@@ -90,15 +65,39 @@ $(document).on("click", "#send-button", () => {
   $("#text-input").val("");
 });
 
+// Used to track where we are in history with up/down arrows
+var sentHistoryIndex = -1;
+
 // If enter was pressed
 $(document).on("keyup", "#text-input", e => {
+
+  // Enter key
   if (e.keyCode === 13) {
     var message = $("#text-input").val();
     if (message === "") return;
 
     client.sendMessage(client.tabs[client.activeTab].name, message);
 
+    sentHistoryIndex = -1;
     $("#text-input").val("");
+  }
+
+  // Up arrow
+  else if (e.keyCode === 38) {
+    if (sentHistoryIndex < client.sentHistory.length - 1) {
+      sentHistoryIndex++;
+      $("#text-input").val(client.sentHistory[sentHistoryIndex]);
+    }
+  }
+
+  // Down arrow
+  else if (e.keyCode === 40) {
+    if (sentHistoryIndex === -1) {
+      $("#text-input").val("");
+    } else {
+      sentHistoryIndex--;
+      $("#text-input").val(client.sentHistory[sentHistoryIndex]);
+    }
   }
 });
 
