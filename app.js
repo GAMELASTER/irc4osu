@@ -88,7 +88,11 @@ function createWindow() {
     register: lang
   });
 
-  lang.setLocale(osLocale.sync().substring(0, 2));
+  if (isDev) {
+    lang.setLocale("en");
+  } else {
+    lang.setLocale(osLocale.sync().substring(0, 2));
+  }
 
   __ = lang.__;
   mainWindow.__ = __;
