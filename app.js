@@ -110,6 +110,7 @@ function createWindow() {
   mainWindow.on('closed', function() {
     mainWindow = null;
     tray.destroy();
+    app.quit();
   });
 
   mainWindow.on('close', function (event) {
