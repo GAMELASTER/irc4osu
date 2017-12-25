@@ -592,9 +592,9 @@ const client = {
 
   // Joins a user
   joinUser: function (username) {
-    var element = $(`<div data-channel="${username}" class="tab default"><span class="close">X</span><span class="tab-name">${username}</span></div>`);
+    var element = $(`<div data-channel="${username.toLowerCase()}" class="tab default"><span class="close">X</span><span class="tab-name">${username}</span></div>`);
     this.tabs.push({
-      name: username,
+      name: username.toLowerCase(),
       autoScroll: true,
       isChannel: false
     });
@@ -609,16 +609,16 @@ const client = {
     this.updateUserCount();
 
     // Add the chat to the html
-    $("#chat-area").prepend(`<div name='${username}' class="chat-container hidden"></div>`);
+    $("#chat-area").prepend(`<div name='${username.toLowerCase()}' class="chat-container hidden"></div>`);
     
     // Add the tab to the tabslider
     element.appendTo($("#tab-slider"));
 
     // Change the tab to the newly created tab
-    this.changeTab(username);
+    this.changeTab(username.toLowerCase());
 
     // Add a system message
-    this.systemMessage(username, "info", __(`Created chat with %s!`, username));
+    this.systemMessage(username.toLowerCase(), "info", __(`Created chat with %s!`, username));
 
     // Save tabs
     this.saveTabs();

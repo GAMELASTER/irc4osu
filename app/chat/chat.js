@@ -166,6 +166,7 @@ $(document).on("click", ".join-channel", e => {
 $(document).on("click", "#open-friend", e => {
   $("#select-channel-modal").fadeOut(150);
   client.joinUser($("#friend-name").val());
+  $("#friend-name").val("");
 });
 
 // Exit modal
