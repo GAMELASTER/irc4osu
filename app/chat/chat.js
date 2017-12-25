@@ -258,6 +258,30 @@ $(document).on("click", ".link-external", e => {
   require('electron').shell.openExternal($(e.target).closest(".link-external").data("link"));
 });
 
+// User signatures
+var userSignsTimers = {};
+
+$(document).on("mouseover", ".user-tag", e => {
+  var userName = $(e.target).text();
+  userSignsTimers[userName] = setTimeout(function() {
+    $("#user-sign").css({
+      left:  e.pageX + 10,
+      top:   e.pageY + 10
+    });
+    $("#user-sign img").attr("src", `http://marekkraus.sk/irc4osu/getStatusBar.php?nick=${userName}`);
+    $("#user-sign").fadeIn(150);
+  });
+});
+
+$(document).on("mouseout", ".user-tag", e => {
+  var userName = $(e.target).text();
+  $("#user-sign").fadeOut(150, function() {
+    $("#user-sign img").attr("src", "");
+  });
+  clearTimeout(userSignsTimers[userName]);
+  delete userSignsTimers[userName];
+});
+
 function isPositiveInteger(x) {
     // http://stackoverflow.com/a/1019526/11236
     return /^\d+$/.test(x);
