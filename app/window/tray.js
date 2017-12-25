@@ -98,9 +98,6 @@ module.exports = {
                 type: "normal",
                 click: () => {
                     mainWindow.destroy();
-                    if (process.platform == 'darwin') {
-                        app.quit();
-                    }
                 }
             }
         ]);
