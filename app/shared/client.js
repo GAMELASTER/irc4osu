@@ -362,6 +362,9 @@ const client = {
     // Update username
     $("#user-name").text(credentials.username);
 
+    // Set url to avatar
+    $("#avatar").parent().data("link", "https://osu.ppy.sh/u/" + credentials.username);
+
     // Hide login window
     $("#login-modal").fadeOut(150);
 
@@ -816,7 +819,8 @@ const client = {
       storage.set('irc4osu-login', credentials, function (error) {
         if (error) throw error;
 
-        callback();
+        if (callback)
+          callback();
       });
     }
   },
