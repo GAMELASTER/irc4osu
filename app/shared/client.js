@@ -26,9 +26,6 @@ const client = {
   // Contains all the sent messages
   sentHistory: [],
 
-  // Holds the channels to join on login
-  defaultChannels: ["#osu", "#english"],
-
   // Holds all the channelInfos
   channels: [],
 
@@ -138,8 +135,9 @@ const client = {
     // Add all channel info to our array
     channelList.map(e => this.channels.push(e));
 
-    // Update user count for current tab
-    this.updateUserCount(this.tabs[this.activeTab].name);
+    // Update user count for current ta
+    if (this.activeTab && this.activeTab != 0)
+      this.updateUserCount(this.tabs[this.activeTab].name);
   },
 
   // Fires whenever we receive a list of names
@@ -371,10 +369,17 @@ const client = {
     // Channel list with users online
     this.irc.list();
 
-    // Join each default channel
-    this.defaultChannels.forEach(function (channel) {
-      this.joinChannel(channel);
-    }, this);
+    // Loads last state of tabs
+    this.loadTabs((tabs) => {
+      for (var tab of tabs) {
+        if (tab[0] == "#") {
+          this.joinChannel(tab);
+        }
+        else {
+          this.joinUser(tab);
+        }
+      };
+    });
   },
 
   // Fires whenever we receive an action
@@ -580,13 +585,16 @@ const client = {
     this.irc.join(channelName, () => {
       this.systemMessage(channelName.toLowerCase(), "success", __("Joined %s!", channelName));
     });
+
+    // Save tabs
+    this.saveTabs();
   },
 
   // Joins a user
   joinUser: function (username) {
-    var element = $(`<div data-channel="${username.toLowerCase()}" class="tab default"><span class="close">X</span><span class="tab-name">${username}</span></div>`);
+    var element = $(`<div data-channel="${username}" class="tab default"><span class="close">X</span><span class="tab-name">${username}</span></div>`);
     this.tabs.push({
-      name: username.toLowerCase(),
+      name: username,
       autoScroll: true,
       isChannel: false
     });
@@ -601,16 +609,19 @@ const client = {
     this.updateUserCount();
 
     // Add the chat to the html
-    $("#chat-area").prepend(`<div name='${username.toLowerCase()}' class="chat-container hidden"></div>`);
+    $("#chat-area").prepend(`<div name='${username}' class="chat-container hidden"></div>`);
     
     // Add the tab to the tabslider
     element.appendTo($("#tab-slider"));
 
     // Change the tab to the newly created tab
-    this.changeTab(username.toLowerCase());
+    this.changeTab(username);
 
     // Add a system message
-    this.systemMessage(username.toLowerCase(), "info", __(`Created chat with %s!`, username));
+    this.systemMessage(username, "info", __(`Created chat with %s!`, username));
+
+    // Save tabs
+    this.saveTabs();
   },
 
   // Leaves a channel
@@ -660,6 +671,8 @@ const client = {
       this.updateUserCount();
     }
 
+    // Save tabs
+    this.saveTabs();
   },
 
   // Changes active tab
@@ -864,7 +877,37 @@ const client = {
     let thePath = path.join(app.getPath("userData"), "Logs", channel.toLowerCase() + ".txt");
     let time = new Date();
     fs.appendFile(thePath, `[${time.toLocaleTimeString()}] ${name}: ${message}\r\n`);
-  }
+  },
+
+  // Load a tabs
+  loadTabs: function (callback) {
+    storage.has('irc4osu-tabs', (error, hasKey) => {
+      if (error) throw error;
+
+      if (hasKey) {
+        storage.get('irc4osu-tabs', (error, tabs) => {
+          if (error) throw error;
+
+          if (callback) callback(tabs);
+        });
+      } else {
+        if (callback) callback([ "#osu", "#english" ]);
+      }
+    });
+  },
+
+  // Save a tabs
+  saveTabs: function (callback) {
+    var saveTabs = [];
+    for (var tab of this.tabs) {
+      saveTabs.push(tab.name);
+    }
+    storage.set("irc4osu-tabs", saveTabs, (error) => {
+      if (error) throw error;
+
+      if (callback) callback(tabs);
+    });
+  },
 }
 
 module.exports = client;
