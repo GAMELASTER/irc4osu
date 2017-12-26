@@ -294,6 +294,12 @@ $(document).on("mouseout", ".user-tag", e => {
   delete userSignsTimers[userName];
 });
 
+// Change tabs container size on resize
+$(window).resize(() => {
+  $("#tab-slider").width($(window).width() - 325);
+  client.toggleNavigationButtons();
+});
+
 function isPositiveInteger(x) {
     // http://stackoverflow.com/a/1019526/11236
     return /^\d+$/.test(x);
