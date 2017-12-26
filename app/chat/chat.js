@@ -103,7 +103,8 @@ $(document).on("keyup", "#text-input", e => {
 
 // Open join channel modal
 $(document).on("click", "#open-channel-dialog", () => {
-
+  if (!client.connected || client.channels.length == 0)
+    return true;
   // Reset values
   $("#select-channel-modal .channel-row").remove();
   $("#channels-filter").val("");
