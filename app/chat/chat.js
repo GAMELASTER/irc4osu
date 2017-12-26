@@ -101,6 +101,16 @@ $(document).on("keyup", "#text-input", e => {
   }
 });
 
+// If CTRL + TAB pressed
+$(document).keydown(e => {
+  if (e.ctrlKey && e.which == 9) {
+    client.activeTab++;
+    if (client.activeTab == client.tabs.length)
+      client.activeTab = 0;
+    client.changeTab(client.tabs[client.activeTab].name);
+  }
+})
+
 // Open join channel modal
 $(document).on("click", "#open-channel-dialog", () => {
   if (!client.connected || client.channels.length == 0)
