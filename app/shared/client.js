@@ -587,6 +587,9 @@ const client = {
 
     // Save tabs
     this.saveTabs();
+
+    // Toggle navigation buttons if required
+    this.toggleNavigationButtons();
   },
 
   // Joins a user
@@ -621,6 +624,9 @@ const client = {
 
     // Save tabs
     this.saveTabs();
+
+    // Toggle navigation buttons if required
+    this.toggleNavigationButtons();
   },
 
   // Leaves a channel
@@ -672,6 +678,9 @@ const client = {
 
     // Save tabs
     this.saveTabs();
+
+    // Toggle navigation buttons if required
+    this.toggleNavigationButtons();
   },
 
   // Changes active tab
@@ -907,6 +916,16 @@ const client = {
       if (callback) callback(tabs);
     });
   },
+
+  // Toggles navigation by sizes of tabs
+  toggleNavigationButtons: function () {
+    var tabSliderWidth = $("#tab-slider").outerWidth();
+    var tabsWidth = 0;
+    $(".tab").each(function() {
+      tabsWidth += $(this).outerWidth();
+    });
+    $("#tabs-container").toggleClass("show-navigation", tabSliderWidth < tabsWidth);
+  }
 }
 
 module.exports = client;

@@ -192,6 +192,11 @@ a {
 
 .tab.navigate {
 	background-color: rgb(52, 152, 219);
+	display: none !important;
+}
+
+#tabs-container.show-navigation .tab.navigate {
+	display: inline-block !important;
 }
 
 .tab.add {
