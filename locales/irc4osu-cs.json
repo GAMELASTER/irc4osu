@@ -46,5 +46,6 @@
 	"Created chat with %s!": "Vytvořena konverzace s %s!",
 	"Error joining": "Chyba při připojení",
 	"Open DevTools": "Open DevTools",
-	"programmer ^^": "programmer ^^"
+	"programmer ^^": "programmer ^^",
+	"A newer version of irc4osu! was found!\nDo you want to download and install it now?": "A newer version of irc4osu! was found!\nDo you want to download and install it now?"
 }
