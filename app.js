@@ -18,40 +18,25 @@ const path = require("path");
 const i18n = require("i18n");
 const osLocale = require('os-locale');
 const os = require("os");
+const request = require("request");
 
 if (!isDev) {
-
-  // Check for updates
-  let {autoUpdater} = require("electron-auto-updater");
-  autoUpdater.autoDownload = false;
-
-  autoUpdater.on('update-available', () => {
+  request({
+    url: "https://marekkraus.sk/irc4osu/getLatestVersion.php"
+  }, (err, resp, body) => {
+    if (body == require("./package.json").version)
+      return;
     dialog.showMessageBox(null, {
       type: "info",
       buttons: ["Yes", "No"],
       title: __("New update is available"),
-      message: "A newer version of irc4osu! was found!\nDo you want to download and install it now?"
+      message: __("A newer version of irc4osu! was found!\nDo you want to download and install it now?")
     }, response => {
       if (response == 0) {
-        // TODO: AutoUpdater only works for signed Mac applications
-        let platform = os.platform()
-        if (platform !== "win32")
-          require('electron').shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
-        else
-          autoUpdater.downloadUpdate();
+        require('electron').shell.openExternal("https://github.com/arogan-group/irc4osu/releases/latest");
       }
     });
   });
-
-  autoUpdater.on("download-progress", (info) => {
-    //
-  });
-
-  autoUpdater.on("update-downloaded", () => {
-    autoUpdater.quitAndInstall();
-  });
-
-  autoUpdater.checkForUpdates();
 }
 
 const tray = require('./app/window/tray');
