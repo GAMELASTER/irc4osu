@@ -21,7 +21,7 @@ const client = {
   tabs: [],
 
   // Holds the index of the currently selected tab
-  activeTab: 0,
+  activeTab: -1,
 
   // Contains all the sent messages
   sentHistory: [],
@@ -135,8 +135,8 @@ const client = {
     // Add all channel info to our array
     channelList.map(e => this.channels.push(e));
 
-    // Update user count for current ta
-    if (this.activeTab && this.activeTab != 0)
+    // Update user count for current tab
+    if (this.activeTab != -1)
       this.updateUserCount(this.tabs[this.activeTab].name);
   },
 
@@ -366,9 +366,6 @@ const client = {
     // Hide login window
     $("#login-modal").fadeOut(150);
 
-    // Channel list with users online
-    this.irc.list();
-
     // Loads last state of tabs
     this.loadTabs((tabs) => {
       for (var tab of tabs) {
@@ -378,7 +375,9 @@ const client = {
         else {
           this.joinUser(tab);
         }
-      };
+      }
+      // Channel list with users online
+      this.irc.list();
     });
   },
 
