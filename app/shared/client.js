@@ -195,7 +195,7 @@ const client = {
 
       // Add notify to html
       var replace = this.username;
-	    var r = new RegExp(this.username, "gi");
+      var r = new RegExp(this.username, "gi");
       message = message.replace(r, `<span class="mention-tag">${this.username}</span>`);
 
       if (tab && this.tabs.indexOf(tab) !== this.activeTab)
