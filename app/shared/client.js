@@ -194,7 +194,9 @@ const client = {
     if (message.toLowerCase().indexOf(this.username.toLowerCase()) !== -1 || message.toLowerCase().indexOf(escapedUsername.toLowerCase()) !== -1) {
 
       // Add notify to html
-      message = message.replace(this.username, `<span class="mention-tag">${this.username}</span>`);
+      var replace = this.username;
+      var r = new RegExp(this.username, "gi");
+      message = message.replace(r, `<span class="mention-tag">${this.username}</span>`);
 
       if (tab && this.tabs.indexOf(tab) !== this.activeTab)
         $(`#tab-slider div[data-channel*="${tab.name.toLowerCase()}"]`).addClass('new');
