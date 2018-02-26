@@ -230,7 +230,7 @@ const client = {
 
     // Build html
     var html = `<span class='time-tag'>[${hours}:${minutes}]</span>
-              <a href="#" class="user-tag ${user} -external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
+              <a href="#" class="user-tag ${user} link-external" data-link="https://osu.ppy.sh/u/${args.nick}">${args.nick}</a>: ${message}<br />`;
 
     // Append html
     $(`#chat-area [name="${args.to.toLowerCase()}"]`).append(html);
@@ -522,25 +522,24 @@ const client = {
 
     // Replace each match with a functional link
     while((match = pattern.exec(message)) !== null) {
-		if(match[0].startsWith("[") && match[0].endsWith("]"))
+	if(match[0].startsWith("[") && match[0].endsWith("]"))
+	{
+		var temp  = match[0].substring(1,match[0].length-1)
+		var parts = temp.split(" ");
+		var tail  = parts.slice(1).join(" ");
+		var result = parts.slice(0,1);
+		result.push(tail);
+		message = message.replace(match[0], `<a href='#' title='${result[1]}' class='link link-external' data-link='${result[0]}'>${result[1]}</a>`);
+		match = pattern.exec(message);
+	}
+	else
+	{
+		if(match[0].startsWith("http"))
 		{
-			var temp  = match[0].substring(1,match[0].length-1)
-			var parts = temp.split(" ");
-			var tail  = parts.slice(1).join(" ");
-			var result = parts.slice(0,1);
-			result.push(tail);
-			message = message.replace(match[0], `<a href='#' title='${result[1]}' class='link link-external' data-link='${result[0]}'>${result[1]}</a>`);
+			message = message.replace(match[0], `<a href='#' title='${match[0]}' class='link link-external' data-link='${match[0]}'>${match[0]}</a>`);
 			match = pattern.exec(message);
 		}
-		else
-		{
-			if(match[0].startsWith("http"))
-			{
-				message = message.replace(match[0], `<a href='#' title='${match[0]}' class='link link-external' data-link='${match[0]}'>${match[0]}</a>`);
-				match = pattern.exec(message);
-			}
-		}
-        
+	}
     }
 
     return message;
