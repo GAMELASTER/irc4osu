@@ -892,12 +892,16 @@ const client = {
   // Load a tabs
   loadTabs: function (callback) {
     storage.has('irc4osu-tabs', (error, hasKey) => {
-      if (error) throw error;
-
+      if (error) {
+          callback([ "#osu", "#english" ]);
+          alert('Unable to load previously opened tab list. Loaded default tabs.'); //Needs Translating
+      }
       if (hasKey) {
         storage.get('irc4osu-tabs', (error, tabs) => {
-          if (error) throw error;
-
+          if (error) {
+            callback([ "#osu", "#english" ]);
+             alert('Unable to load previously opened tab list. Loaded default tabs.'); //Needs Translating
+          }
           if (callback) callback(tabs);
         });
       } else {
