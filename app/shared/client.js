@@ -518,7 +518,7 @@ const client = {
     message = $("<div/>").text(message).html();
 
     // Search for all links in a message
-    var pattern = /(\[(https?:\/\/[^\]\s]+)\s(.*?)\]|(https?:\/\/[^\]\s]+))/g;
+    var pattern = /(\[(https?:\/\/[^\]\s]+)\s(.*?)\]|(https?:\/\/[^\]\s]+))/gi;
     var match;
     // Temporary var to store message, prevent infinite loop
     var output = message;
