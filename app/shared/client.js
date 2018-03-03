@@ -518,29 +518,21 @@ const client = {
     message = $("<div/>").text(message).html();
 
     // Search for all links in a message
-    var pattern = /(\[?(https?:\/\/[^\]\s]+) (.*)\]|(https?:\/\/[^\]\s]+))/g;
-
+    var pattern = /(\[(https?:\/\/[^\]\s]+)\s(.*?)\]|(https?:\/\/[^\]\s]+))/gi;
+    var match;
+    // Temporary var to store message, prevent infinite loop
+    var output = message;
     // Replace each match with a functional link
-    while((match = pattern.exec(message)) !== null) {
-	if(match[0].startsWith("[") && match[0].endsWith("]"))
-	{
-		var temp  = match[0].substring(1,match[0].length-1)
-		var parts = temp.split(" ");
-		var tail  = parts.slice(1).join(" ");
-		var result = parts.slice(0,1);
-		result.push(tail);
-		message = message.replace(match[0], `<a href='#' title='${result[1]}' class='link link-external' data-link='${result[0]}'>${result[1]}</a>`);
-		match = pattern.exec(message);
+    while(match = pattern.exec(message)) !== null) {
+	if(match[2]===undefined && match[3]===undefined && match[4]!==undefined) {
+		output = output.replace(match[0], `<a href='#' title='${match[4]}' class='link link-external' data-link='${match[4]}'>${match[4]}</a>`);
 	}
-	else
-	{
-		if(match[0].startsWith("http"))
-		{
-			message = message.replace(match[0], `<a href='#' title='${match[0]}' class='link link-external' data-link='${match[0]}'>${match[0]}</a>`);
-			match = pattern.exec(message);
-		}
-	}
+        if(match[4]===undefined && match[2]!==undefined && match[3]!==undefined) {
+	        output = output.replace(match[0], `<a href='#' title='${match[3]}' class='link link-external' data-link='${match[4]}'>${match[3]}</a>`);
+        }
     }
+    // Update message
+    message = output;
 
     return message;
   },
