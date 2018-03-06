@@ -45,7 +45,7 @@
 	"Joined %s!": "Sei entrato in %s!",
 	"Created chat with %s!": "Chat creata con %s!",
 	"Error joining": "Errore nell'accesso",
-	"Open DevTools": "Open DevTools",
+	"Open DevTools": "Apri DevTools",
 	"programmer ^^": "programmer ^^",
-	"A newer version of irc4osu! was found!\nDo you want to download and install it now?": "A newer version of irc4osu! was found!\nDo you want to download and install it now?"
+	"A newer version of irc4osu! was found!\nDo you want to download and install it now?": "È stata trovata una nuova versione di irc4osu! Vuoi scaricarla ed installarla ora?"
 }
