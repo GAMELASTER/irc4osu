@@ -899,11 +899,11 @@ const client = {
   // Load a tabs
   loadTabs: function (callback) {
     storage.has('irc4osu-tabs', (error, hasKey) => {
-      if (error) throw error;
+      if (error) callback([ "#osu", "#english" ]);
 
       if (hasKey) {
         storage.get('irc4osu-tabs', (error, tabs) => {
-          if (error) throw error;
+          if (error)  callback([ "#osu", "#english" ]);
 
           if (callback) callback(tabs);
         });
