@@ -743,7 +743,9 @@ const client = {
 
     // Make sure cache exists
     if (!fs.existsSync(this.avatarCache)) {
-      fs.mkdir(this.avatarCache);
+      fs.mkdir(this.avatarCache,(err) => {
+	if (err) throw err;
+	});
     }
 
     // Get the path to the image
@@ -893,7 +895,9 @@ const client = {
 
     let thePath = path.join(app.getPath("userData"), "Logs", channel.toLowerCase() + ".txt");
     let time = new Date();
-    fs.appendFile(thePath, `[${time.toLocaleTimeString()}] ${name}: ${message}\r\n`);
+    fs.appendFile(thePath, `[${time.toLocaleTimeString()}] ${name}: ${message}\r\n`, (err) => {
+	if(err) throw err;
+    });
   },
 
   // Load a tabs
